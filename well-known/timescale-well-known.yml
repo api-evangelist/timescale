@@ -1,0 +1,107 @@
+generated: '2026-08-05'
+method: probed
+source: live GET of /.well-known/* on every apis.yml and OpenAPI servers[] host
+hosts:
+- host: https://www.tigerdata.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: timescale-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    file: ../llms/timescale-llms.txt
+- host: https://console.cloud.tigerdata.com
+  note: >-
+    SOFT-404. This host is a single-page app whose catch-all answers HTTP 200 with the
+    same 4117-byte HTML shell for EVERY path, including a control path that cannot
+    exist (/.well-known/definitely-not-real-xyz123 -> 200, identical body). No
+    /.well-known/ document is actually published here; every 200 below is the SPA
+    shell and is recorded as a non-hit.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    hit: false
+    reason: soft-404 SPA shell (text/html)
+  - path: /.well-known/agent-card.json
+    status: 200
+    hit: false
+    reason: soft-404 SPA shell (text/html)
+  - path: /.well-known/agent.json
+    status: 200
+    hit: false
+    reason: soft-404 SPA shell (text/html)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    hit: false
+    reason: soft-404 SPA shell (text/html)
+  - path: /.well-known/definitely-not-real-xyz123
+    status: 200
+    hit: false
+    reason: control path — proves the 200s above are a catch-all, not published documents
+- host: https://api.ghost.build
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://ghost.build
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/timescale-ghost-llms.txt
+  - path: /agents.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/timescale-ghost-agents.txt
+- host: https://mcp.tigerdata.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    note: the /docs MCP endpoint on this host answers tools/list anonymously — no OAuth challenge is issued
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+summary:
+  security_txt: true
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false
+  llms_txt: true

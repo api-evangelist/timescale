@@ -1,0 +1,76 @@
+# Ghost
+> Give every agent its own database.
+- Website: https://ghost.build
+- Docs: https://ghost.build/docs/#introduction
+- API reference: https://ghost.build/docs/#api-reference
+- Agents reference: https://ghost.build/agents.txt
+## Install
+`curl -fsSL https://install.ghost.build | sh`
+## Start Here
+- Getting started: https://ghost.build/docs/#introduction - Install Ghost, create a database, and start using the CLI.
+- CLI overview: https://ghost.build/docs/#cli-reference - CLI reference for ghost
+- Create a database: https://ghost.build/docs/#ghost-create - CLI reference for ghost create
+- Fork a database: https://ghost.build/docs/#ghost-fork - CLI reference for ghost fork
+- Run SQL: https://ghost.build/docs/#ghost-sql - CLI reference for ghost sql
+- Install the MCP server: https://ghost.build/docs/#ghost-mcp-install - CLI reference for ghost mcp install
+- Start the MCP server: https://ghost.build/docs/#ghost-mcp-start - CLI reference for ghost mcp start
+- HTTP API: https://ghost.build/docs/#api-reference - HTTP endpoints for auth, spaces, databases, and API key management.
+- How to Analyze a Dataset with Ghost and an AI Agent: https://ghost.build/tutorials/movielens-analysis/ - Analyzing data is usually a chore: load the CSV into a spreadsheet, clean up the data, and then do custom analyses.
+- Learn the basics of Ghost: https://ghost.build/tutorials/learn-the-basics/ - Run ghost tutorial to step through this tutorial live in the CLI.
+- Ship an app on Ghost + Fly.io for ~$2/month: https://ghost.build/tutorials/todo-app-on-fly/ - Putting a real public app on the internet shouldn't cost $25/month for managed Postgres alone — before you've added compute or shipped a feature. Ghost gives you the database, Fly.io gives you the host, and your AI agent does the plumbing.
+## Core Capabilities
+## Key CLI Commands
+- `api-key` - Manage API keys
+- `completion` - Generate the autocompletion script for the specified shell
+- `config` - List current configuration
+- `connect` - Get connection string for a database
+- `create` - Create a new Postgres database
+- `create-dedicated` - Create a dedicated database
+- `delete` - Delete a database
+- `feedback` - Submit feedback, a bug report, or a support request
+- `fork` - Fork a database
+- `fork-dedicated` - Fork a database as dedicated
+- `help` - Help about any command
+- `id` - Show the authenticated user or API key
+## MCP Tools
+- `ghost_connect`
+- `ghost_create`
+- `ghost_create_dedicated`
+- `ghost_delete`
+- `ghost_feedback`
+- `ghost_fork`
+- `ghost_fork_dedicated`
+- `ghost_id`
+- `ghost_invoice`
+- `ghost_invoice_list`
+- `ghost_list`
+- `ghost_login`
+- `ghost_logs`
+- `ghost_password`
+- `ghost_pause`
+- `ghost_pricing`
+- `ghost_rename`
+- `ghost_resume`
+- `ghost_schema`
+- `ghost_share`
+- `ghost_share_list`
+- `ghost_share_revoke`
+- `ghost_sql`
+- `ghost_usage`
+- `search_docs`
+- `view_skill`
+## MCP Prompts
+- `design-postgis-tables`
+- `design-postgres-tables`
+- `find-hypertable-candidates`
+- `migrate-postgres-tables-to-hypertables`
+- `pgvector-semantic-search`
+- `postgres`
+- `postgres-hybrid-text-search`
+- `setup-timescaledb-hypertables`
+## More Pages
+- Home: https://ghost.build/ - Give every agent its own database.
+- Tutorials: https://ghost.build/tutorials/ - Build with Ghost, step by step.
+- Learn: https://ghost.build/learn - Get started with Ghost.
+- What's New: https://ghost.build/whatsnew.html - What's New
+- Built with Ghost: https://ghost.build/built-with-ghost.html - Built with Ghost

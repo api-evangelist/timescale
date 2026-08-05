@@ -1,0 +1,124 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/, well-known/, security/, https://www.tigerdata.com/security
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'both specs declare openapi 3.0.3 and parse cleanly (39 + 48 operations)'
+- id: openapi-3.1
+  conforms: false
+  evidence: both documents are pinned to 3.0.3
+- id: oauth2
+  conforms: false
+  evidence: >-
+    OAuth bearer tokens are accepted by the Tiger Cloud API (the getAuthInfo response
+    discriminates `oauth` callers) but no OAuth2 securityScheme is declared, no
+    authorization/token URL is published, and /.well-known/oauth-authorization-server
+    returns 404 on every host probed
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on www.tigerdata.com; the 200
+    on console.cloud.tigerdata.com is a soft-404 SPA shell (control path proved it)
+- id: rfc8414-oauth-metadata
+  conforms: false
+  evidence: 404 on every host probed
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors are a flat vendor JSON envelope on application/json; no
+    application/problem+json anywhere in either spec
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: https://www.tigerdata.com/.well-known/security.txt returns 200 with Contact,
+    Expires, Encryption, Policy, Preferred-Languages and Canonical fields
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header support documented; no API deprecation policy page
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returned 404 on every host probed
+- id: http-basic-auth
+  conforms: true
+  evidence: Tiger Cloud REST quickstart publishes `curl -u access_key:secret_key`
+- id: http-bearer-auth
+  conforms: true
+  evidence: Ghost declares a BearerAuth http/bearer scheme applied document-wide
+- id: mcp
+  conforms: true
+  version: '2025-06-18'
+  evidence: >-
+    POST tools/list to https://mcp.tigerdata.com/docs returned 200 text/event-stream;
+    initialize reported protocolVersion 2025-06-18, serverInfo pg-aiguide 1.0.0, and
+    capabilities for both tools and prompts. Two further MCP servers ship inside the
+    Tiger CLI and the Ghost CLI over stdio.
+- id: a2a
+  conforms: false
+  evidence: /.well-known/agent-card.json and /.well-known/agent.json returned 404 on
+    www.tigerdata.com, tigerdata.com, api.ghost.build, ghost.build and mcp.tigerdata.com;
+    the 200s on console.cloud.tigerdata.com are SPA soft-404s
+- id: asyncapi
+  conforms: false
+  applicable: false
+  evidence: no event, webhook or streaming surface exists on either API, so the asyncapi
+    family is not applicable rather than failed
+- id: json-api
+  conforms: false
+  evidence: plain JSON resource bodies, no JSON:API document structure
+- id: odata
+  conforms: false
+- id: scim2
+  conforms: false
+  evidence: member and invite management is a bespoke Ghost surface, not SCIM
+- id: idempotency-key
+  conforms: false
+  evidence: the string "idempot" appears 0 times across both OpenAPI documents; no
+    idempotency contract is published
+- id: cursor-pagination
+  conforms: partial
+  evidence: getServiceLogs implements cursor + last_cursor and deprecates its `page`
+    parameter; every other collection endpoint on both APIs returns an unbounded array
+- id: tls-1.2-plus
+  conforms: true
+  evidence: 'security/timescale-domain-security.yml — TLSv1.3 on www.tigerdata.com,
+    console.cloud.tigerdata.com and ghost.build; the security page states TLS 1.2+ in
+    transit and AES-256 at rest'
+- id: hsts
+  conforms: partial
+  evidence: 'HSTS present on www.tigerdata.com (max-age 63072000) and
+    console.cloud.tigerdata.com (31536000); absent on ghost.build'
+- id: dnssec
+  conforms: partial
+  evidence: enabled on tigerdata.com, absent on ghost.build
+- id: dmarc
+  conforms: partial
+  evidence: 'tigerdata.com p=quarantine; ghost.build has SPF but no DMARC record'
+- id: soc2-type2
+  conforms: true
+  evidence: 'https://www.tigerdata.com/security — "SOC 2 report is available to all
+    customers on Tiger Cloud Scale or Enterprise Plans"'
+- id: hipaa
+  conforms: true
+  evidence: https://www.tigerdata.com/security — available on the Enterprise Plan
+- id: gdpr
+  conforms: true
+  evidence: https://www.tigerdata.com/security + https://www.tigerdata.com/legal/data-processing-addendum
+    + https://www.tigerdata.com/legal/subprocessors
+- id: ccpa
+  conforms: true
+  evidence: https://www.tigerdata.com/security
+- id: pci-dss
+  conforms: false
+  evidence: 'not held by Tiger Data — card payments are delegated to Stripe, a PCI
+    Service Provider Level 1. Recorded as inherited, not as a Tiger Data certification.'
+- id: iso-27001
+  conforms: false
+  evidence: not named on the security page
+- id: fedramp
+  conforms: false
+  evidence: not named on the security page
+compliance_program:
+  published: true
+  url: https://www.tigerdata.com/security
+  certifications: [SOC 2 Type 2, HIPAA, GDPR, CCPA]
+  subprocessors: https://www.tigerdata.com/legal/subprocessors
+  dpa: https://www.tigerdata.com/legal/data-processing-addendum
+  audits: regular external security audits and penetration testing; results available on request

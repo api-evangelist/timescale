@@ -1,0 +1,67 @@
+generated: '2026-08-05'
+method: searched
+source: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-cli, https://github.com/timescale/tiger-cli, https://ghost.build/agents.txt
+clis:
+- name: tiger
+  product: Tiger CLI
+  language: go
+  repo: https://github.com/timescale/tiger-cli
+  docs: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-cli
+  license_note: the CLI's API client is generated with oapi-codegen from the same
+    openapi.yaml harvested into openapi/timescale-tiger-cloud-openapi-original.yml
+  install:
+  - {method: script, command: 'curl -fsSL https://cli.tigerdata.com | sh', platforms: [macos, linux, wsl]}
+  - {method: script, command: 'irm https://cli.tigerdata.com/install.ps1 | iex', platforms: [windows]}
+  - {method: homebrew, command: brew install --cask timescale/tap/tiger-cli}
+  - {method: apt, command: sudo apt-get install tiger-cli, repo: https://packagecloud.io/timescale/tiger-cli}
+  - {method: yum, command: sudo yum install tiger-cli, repo: https://packagecloud.io/timescale/tiger-cli}
+  - {method: go, command: go install github.com/timescale/tiger-cli/cmd/tiger@latest}
+  self_update: tiger upgrade
+  commands:
+  - group: auth
+    subcommands: [login, logout, status]
+  - group: service
+    subcommands: [create, list, get, fork, resize, start, stop, update-password, delete, logs]
+    backed_by: openapi/timescale-tiger-cloud-openapi-original.yml
+  - group: db
+    subcommands: [connect, connection-string, create role, schema, save-password, test-connection]
+    backed_by: PostgreSQL wire protocol (not the REST API)
+  - group: mcp
+    subcommands: [install, list, get, start]
+    note: starts the embedded MCP server; see mcp/timescale-mcp.yml
+  - group: config
+    subcommands: [show, set, unset, reset]
+  - group: version
+    subcommands: []
+  key_flows:
+  - name: authenticate and list services
+    steps: ['tiger auth login', 'tiger service list']
+  - name: give an AI assistant typed Tiger Cloud tools
+    steps: ['tiger mcp install', 'tiger mcp start']
+    note: '--read-only withholds service_create, service_fork, service_start, service_stop,
+      service_resize and service_update_password'
+  - name: open a psql session against a managed service
+    steps: ['tiger service list', 'tiger db connect']
+- name: ghost
+  product: Ghost CLI
+  repo: https://github.com/timescale/ghost
+  docs: https://ghost.build/docs/#cli-reference
+  install:
+  - {method: script, command: 'curl -fsSL https://install.ghost.build | sh'}
+  backed_by: openapi/timescale-ghost-openapi-original.yml
+  commands:
+  - group: root
+    subcommands: [init, api-key, completion, config, connect, create, create-dedicated,
+      delete, feedback, fork, fork-dedicated, help, id, list, logs, password, pause,
+      rename, resume, schema, share, sql, tutorial, usage]
+  - group: mcp
+    subcommands: [install, start]
+  key_flows:
+  - name: first run
+    steps: ['ghost init', 'ghost create', 'ghost list']
+  - name: give an agent its own database
+    steps: ['ghost create', 'ghost mcp install', 'ghost connect']
+  - name: branch a database
+    steps: ['ghost fork']
+  source_note: command list read verbatim from https://ghost.build/agents.txt and
+    https://ghost.build/llms.txt

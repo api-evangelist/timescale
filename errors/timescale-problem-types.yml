@@ -1,0 +1,70 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/timescale-tiger-cloud-openapi-original.yml, openapi/timescale-ghost-openapi-original.yml
+format: vendor-json
+rfc9457: false
+note: >-
+  Neither API uses RFC 9457 application/problem+json. Both return a flat vendor JSON
+  envelope on application/json. Tiger Cloud collapses every failure into a single
+  wildcard `4XX` response (ClientError) rather than enumerating 400/401/403/404/409;
+  Ghost uses a `default` response (ErrorResponse) for the same purpose. This means
+  neither spec tells a client which status codes an operation can actually return —
+  the single largest error-semantics gap in this provider.
+envelopes:
+- api: Tiger Cloud API
+  schema: Error
+  media_type: application/json
+  response_component: '#/components/responses/ClientError'
+  fields:
+  - {name: code, type: string, note: machine-readable error code, e.g. UNAUTHORIZED}
+  - {name: message, type: string, note: human-readable summary}
+  - {name: details, type: string, required: false, note: 'additional context, often the
+      actionable part — e.g. "bearer auth is not enabled on this server" for a generic
+      UNAUTHORIZED. Absent on errors with no extra detail.'}
+  observed:
+    url: https://console.cloud.tigerdata.com/public/api/v1/
+    fetched: '2026-08-05'
+    http_status: 401
+    body: '{"code":"UNAUTHORIZED","message":"Invalid or missing authentication credentials","details":"missing Authorization header"}'
+- api: Ghost API
+  schema: ErrorResponse
+  media_type: application/json
+  response_component: default response on every operation except GET /health
+problems:
+- status: 4XX
+  code: UNAUTHORIZED
+  title: Invalid or missing authentication credentials
+  detail_example: missing Authorization header
+  api: Tiger Cloud API
+  remediation: >-
+    Send HTTP Basic credentials (access key as username, secret key as password) or an
+    OAuth bearer token. See authentication/timescale-authentication.yml.
+  evidence: live probe of https://console.cloud.tigerdata.com/public/api/v1/ returned 401 with this exact body
+  applies_to: all 39 Tiger Cloud operations
+- status: 4XX
+  code: null
+  title: Client error response (4xx status codes)
+  api: Tiger Cloud API
+  source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#* (all 39 operations)'
+  remediation: >-
+    The spec declares one wildcard 4XX per operation and does not enumerate the
+    concrete statuses. Clients must branch on the `code` string, not on the HTTP status.
+- status: default
+  code: null
+  title: Ghost error response
+  api: Ghost API
+  source_operation: 'openapi/timescale-ghost-openapi-original.yml#* (47 of 48 operations)'
+  remediation: >-
+    A `default` response carrying ErrorResponse. GET /health is the only operation with
+    no error response declared.
+coverage:
+  operations_total: 87
+  operations_with_an_enumerated_error_status: 0
+  operations_with_a_wildcard_or_default_error: 86
+  operations_with_no_error_response: 1
+  five_xx_documented: 0
+gaps:
+- No 5xx response is documented on any of the 87 operations.
+- No error-code registry is published in the docs; the only observed code (UNAUTHORIZED)
+  came from a live probe, not from a reference page.
+- No Retry-After, rate-limit, or 429 semantics are documented anywhere.

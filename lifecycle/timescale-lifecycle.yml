@@ -1,0 +1,67 @@
+generated: '2026-08-05'
+method: searched
+source: https://www.tigerdata.com/docs/get-started/news/new, https://www.tigerdata.com/legal/service-level-agreement, openapi/
+versioning:
+  scheme: uri-path
+  apis:
+  - {api: Tiger Cloud API, current: v1, base: 'https://console.cloud.tigerdata.com/public/api/v1'}
+  - {api: Ghost API, current: v0, base: 'https://api.ghost.build/v0'}
+  database_engine:
+    product: TimescaleDB
+    scheme: semver
+    docs: https://www.tigerdata.com/docs/get-started/news/release-notes
+    recent: ['2.28 (2026-07-02 on Tiger Cloud)', '2.27.2 (2026-06-22 on Tiger Cloud)',
+      '2.27 (2026-05-19)', '2.26.3 (2026-04-14)', '2.26.0 (2026-03-24)', '2.25 (2026-01-29)']
+  preview_marker:
+    extension: x-preview
+    where: Tiger Cloud OpenAPI, on the two metrics operations
+    operations: [getServiceMetricsAvailableSeries, getServiceMetricsSeries]
+    note: the CLI/MCP surface only registers these when an experimental flag is set at startup
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No RFC 8594 Sunset/Deprecation header support is documented, and no formal API
+    deprecation policy page exists. Removals are announced in the changelog only — for
+    example the 2026-07-24 entry "Live migration has been removed", which retired the
+    live-migration Docker image in favour of Livesync logical replication with no
+    documented deprecation window.
+  in_spec:
+    deprecated_operations: []
+    deprecated_parameters:
+    - 'openapi/timescale-tiger-cloud-openapi-original.yml#getServiceLogs -> query parameter `page` (deprecated: true), superseded by `cursor`'
+sla:
+  url: https://www.tigerdata.com/legal/service-level-agreement
+  http_status: 200
+  uptime_target: null
+  note: SLA document is published; specific uptime percentages were not extracted in this pass
+support_agreement: https://www.tigerdata.com/legal/support-agreement
+status_page:
+  url: https://status.tigerdata.com/
+  http_status: 403
+  note: >-
+    A real status page — the 403 is a Cloudflare interstitial ("Just a moment...") on an
+    automated request, not an absence. The migration to this host is announced in the
+    changelog, which also notes subscribable incident notifications. Previously
+    status.timescale.com, which no longer resolves.
+maintenance:
+  docs: https://www.tigerdata.com/docs/deploy/tiger-cloud/tiger-cloud-aws/upgrades
+  model: scheduled maintenance windows for engine upgrades on Tiger Cloud
+changelog:
+  url: https://www.tigerdata.com/docs/get-started/news/new
+  release_notes: https://www.tigerdata.com/docs/get-started/news/release-notes
+  artifact: changelog/timescale-changelog.yml
+rebrand:
+  from: Timescale
+  to: Tiger Data
+  year: 2025
+  domains:
+    current: tigerdata.com
+    legacy_redirects: [timescale.com -> tigerdata.com, docs.timescale.com -> tigerdata.com/docs]
+    still_live_under_legacy_name: [console.cloud.timescale.com]
+  note: >-
+    The console still runs on the timescale.com domain while the OpenAPI servers[] entry
+    points at console.cloud.tigerdata.com. Both hosts answer the same paths with the same
+    401 envelope — a live split-brand surface rather than a completed migration.

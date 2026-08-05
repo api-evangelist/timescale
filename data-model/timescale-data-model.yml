@@ -1,0 +1,184 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/timescale-tiger-cloud-openapi-original.yml, openapi/timescale-ghost-openapi-original.yml
+note: >-
+  Derived from OpenAPI $ref links and id-reference fields. Neither API publishes an
+  object-reference page with id prefixes, so id shapes below are only recorded where the
+  spec states them.
+domains:
+- domain: tiger-cloud
+  api: Tiger Cloud API
+  root: Project
+  entities:
+  - name: Project
+    schema: Project
+    id_field: id
+    fields: [id, name]
+    operations: [getProjects]
+  - name: Service
+    schema: Service
+    id_field: service_id
+    id_shape: 10-character alphanumeric string
+    fields: [service_id, project_id, name, region_code, service_type, created,
+      initial_password, status, resources, metadata, endpoint, vpcEndpoint, forked_from,
+      ha_replicas, connection_pooler, read_replica_sets]
+    enums:
+      service_type: [TIMESCALEDB, POSTGRES, VECTOR]
+      status: [QUEUED, DELETING, CONFIGURING, READY, DELETED, UNSTABLE, PAUSING, PAUSED,
+        RESUMING, UPGRADING, OPTIMIZING]
+    operations: [getServices, createService, getService, deleteService, startService,
+      stopService, resizeService, forkService, updatePassword, setEnvironment,
+      attachServiceToVPC, detachServiceFromVPC, enablePooler, disablePooler, setHAReplica]
+  - name: ReadReplicaSet
+    schema: ReadReplicaSet
+    id_field: id
+    fields: [id, name, status, nodes, cpu_millis, memory_gbs, metadata, endpoint,
+      connection_pooler]
+    operations: [getReplicaSets, createReplicaSet, deleteReplicaSet, resizeReplicaSet,
+      enableReplicaPooler, disableReplicaPooler, setReplicaEnvironment]
+  - name: VPC
+    schema: VPC
+    id_field: id
+    fields: [id, name, cidr, region_code]
+    operations: [getVPCs, createVPC, getVPC, deleteVPC, renameVPC]
+  - name: Peering
+    schema: Peering
+    id_field: id
+    fields: [id, peer_account_id, peer_region_code, peer_vpc_id, provisioned_id, status,
+      error_message]
+    operations: [getVPCPeerings, createVPCPeering, getVPCPeering, deleteVPCPeering]
+  - name: Endpoint
+    schema: Endpoint
+    fields: [host, port]
+    value_object: true
+  - name: ConnectionPooler
+    schema: ConnectionPooler
+    fields: [endpoint]
+    value_object: true
+  - name: HAReplica
+    schema: HAReplica
+    fields: [sync_replica_count, replica_count]
+    value_object: true
+  - name: ForkSpec
+    schema: ForkSpec
+    fields: [project_id, service_id, is_standby]
+    value_object: true
+  - name: ServiceLogEntry
+    schema: ServiceLogEntry
+    fields: [timestamp, message, severity]
+  - name: MetricSeries
+    schema: MetricSeries
+    fields: [labels, data]
+  - name: AuthInfo
+    schema: AuthInfo
+    fields: [type, apiKey, oauth]
+    enums: {type: [apiKey, oauth]}
+  relationships:
+  - {from: Project, to: Service, kind: has_many, via: project_id}
+  - {from: Project, to: VPC, kind: has_many, via: 'path scoping /projects/[project_id]/vpcs'}
+  - {from: Service, to: Project, kind: belongs_to, via: project_id}
+  - {from: Service, to: ReadReplicaSet, kind: has_many, via: read_replica_sets}
+  - {from: Service, to: Endpoint, kind: has_one, via: endpoint}
+  - {from: Service, to: ConnectionPooler, kind: has_one, via: connection_pooler}
+  - {from: Service, to: HAReplica, kind: has_one, via: ha_replicas}
+  - {from: Service, to: ForkSpec, kind: has_one, via: forked_from}
+  - {from: ForkSpec, to: Service, kind: belongs_to, via: service_id, note: self-referential
+      lineage — a forked service points back at its parent}
+  - {from: Service, to: VPC, kind: has_one, via: 'vpcEndpoint / ServiceVPCInput.vpc_id
+      (attachServiceToVPC)'}
+  - {from: VPC, to: Peering, kind: has_many, via: 'path scoping /vpcs/[vpc_id]/peerings'}
+  - {from: ReadReplicaSet, to: Endpoint, kind: has_one, via: endpoint}
+  - {from: ReadReplicaSet, to: ConnectionPooler, kind: has_one, via: connection_pooler}
+  - {from: Service, to: ServiceLogEntry, kind: has_many, via: getServiceLogs}
+  - {from: Service, to: MetricSeries, kind: has_many, via: getServiceMetricsSeries}
+- domain: ghost
+  api: Ghost API
+  root: Space
+  entities:
+  - name: Space
+    schema: Space / SpaceDetail
+    id_field: id
+    fields: [id, name, role, owner]
+    operations: [listSpaces, createSpace, getSpace, renameSpace, leaveSpace, spaceStatus]
+  - name: Database
+    schema: Database
+    id_field: id
+    addressed_by: database_ref (id or name)
+    fields: [id, name, type, size, status, host, port, password, storage_mib]
+    enums:
+      type: [standard, dedicated]
+      size: ['1x', '2x', '4x', '8x']
+      status: [queued, configuring, running, pausing, paused, resuming, deleting, deleted,
+        upgrading, unstable, unknown]
+    operations: [listDatabases, createDatabase, getDatabase, deleteDatabase, forkDatabase,
+      pauseDatabase, resumeDatabase, renameDatabase, updatePassword, databaseLogs,
+      shareDatabase]
+  - name: Member
+    schema: Member
+    id_field: user_id
+    fields: [user_id, name, email, role]
+    enums: {role: [owner, admin, developer, viewer]}
+    operations: [listMembers, removeMember, updateMemberRole]
+  - name: Invite
+    schema: Invite / ReceivedInvite
+    id_field: email
+    fields: [email, role, status, created_at]
+    enums: {status: [pending, declined]}
+    operations: [listInvites, createInvite, cancelInvite, listReceivedInvites,
+      acceptInvite, declineInvite]
+  - name: ApiKey
+    schema: ApiKey / ApiKeyCredentials
+    id_field: prefix
+    fields: [prefix, name, created_at]
+    credential_fields: [api_key, access_key, secret_key]
+    operations: [listApiKeys, createApiKey, deleteApiKey]
+  - name: SpaceUsage
+    schema: SpaceUsage
+    fields: [storage_mib, storage_limit_mib, compute_minutes, free_compute_minutes,
+      compute_limit_minutes, overages_enabled, cost_to_date, estimated_total_cost,
+      billing_period_start, billing_period_end]
+    operations: [spaceUsage, updateOverages]
+  - name: Invoice
+    id_field: invoice_id
+    operations: [listInvoices, getInvoice]
+  - name: PaymentMethod
+    id_field: payment_id
+    operations: [listPaymentMethods, createPaymentMethodSetup, getPaymentMethod,
+      deletePaymentMethod, setPaymentMethodPrimary, cancelPaymentMethodDeletion]
+    external: Stripe Setup Intent — createPaymentMethodSetup returns a client secret and
+      a hosted payment page URL
+  - name: Share
+    id_field: share_token
+    operations: [shareDatabase, listShares, revokeShare]
+  - name: User
+    schema: UserInfo
+    fields: [id, email, name]
+  relationships:
+  - {from: Space, to: Database, kind: has_many, via: 'path scoping /spaces/[space_id]/databases'}
+  - {from: Space, to: Member, kind: has_many, via: 'path scoping /spaces/[space_id]/members'}
+  - {from: Space, to: Invite, kind: has_many, via: 'path scoping /spaces/[space_id]/invites'}
+  - {from: Space, to: ApiKey, kind: has_many, via: 'path scoping /spaces/[space_id]/api_keys'}
+  - {from: Space, to: SpaceUsage, kind: has_one, via: spaceUsage}
+  - {from: Space, to: Invoice, kind: has_many, via: listInvoices}
+  - {from: Space, to: PaymentMethod, kind: has_many, via: listPaymentMethods}
+  - {from: Space, to: Share, kind: has_many, via: listShares}
+  - {from: Database, to: Share, kind: has_many, via: shareDatabase}
+  - {from: Database, to: Database, kind: has_many, via: 'forkDatabase — self-referential
+      lineage, though the Ghost spec does not carry a forked_from field the way Tiger
+      Cloud does'}
+  - {from: Member, to: User, kind: belongs_to, via: user_id}
+  - {from: ApiKey, to: User, kind: belongs_to, via: 'user_id (ApiKeyInfo)'}
+  - {from: ApiKey, to: Space, kind: belongs_to, via: 'space_id (ApiKeyInfo)'}
+cross_domain:
+  note: >-
+    Tiger Cloud and Ghost are two separate control planes over the same underlying
+    managed-Postgres capability, with no shared identifiers and no cross-references in
+    either spec. Both express the same three primitives — provision, fork, pause/resume —
+    under different names (Service vs Database, Project vs Space).
+  parallels:
+  - {tiger_cloud: Project, ghost: Space}
+  - {tiger_cloud: Service, ghost: Database}
+  - {tiger_cloud: 'forkService / ForkSpec', ghost: forkDatabase}
+  - {tiger_cloud: 'stopService / startService', ghost: 'pauseDatabase / resumeDatabase'}
+  - {tiger_cloud: 'client credentials (console)', ghost: 'ApiKey (createApiKey, gt_ prefix)'}
+render: null

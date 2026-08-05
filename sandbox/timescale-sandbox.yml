@@ -1,0 +1,73 @@
+generated: '2026-08-05'
+method: searched
+source: https://www.tigerdata.com/docs/get-started, https://ghost.build/docs/, openapi/
+honest_summary: >-
+  Tiger Data publishes NO test-mode API credentials, no magic test identifiers, and no
+  fixture or trigger tooling. There is no test/live key split — a client credential
+  authenticates against real, billable infrastructure. What exists instead is a hosted
+  console, a no-credit-card free trial, a first-class DEV environment tag, and
+  zero-copy forks as the branching primitive. Recorded as-is; nothing below is invented.
+test_live_separation:
+  key_prefixes: none — Tiger Cloud client credentials carry no mode marker, and Ghost
+    API keys use a single gt_ prefix for all keys
+  modes: none
+  environment_tag:
+    supported: true
+    enum: [DEV, PROD]
+    schema: EnvironmentTag
+    set_with: [setEnvironment, setReplicaEnvironment]
+    settable_at_creation: true
+    note: >-
+      A label on a service, not an isolation boundary or a billing mode. It marks intent
+      so tooling and humans can distinguish non-production services; it does not change
+      how the API behaves.
+console:
+  url: https://console.cloud.tigerdata.com/
+  legacy_host: https://console.cloud.timescale.com/
+  signup: https://console.cloud.timescale.com/signup
+  free_trial: yes — no credit card required
+  features: SQL editor with an AI SQL assistant, service explorer, chunk timeline
+    visualization, client-credential management, Cmd+K command palette
+magic_test_values:
+  cards: none published
+  bank_accounts: none published
+  identifiers: none published
+  note: Tiger Data is not a payments provider; Ghost delegates card capture to a Stripe
+    Setup Intent (createPaymentMethodSetup) and publishes no test cards of its own
+time_simulation:
+  test_clocks: false
+  closest:
+    feature: point-in-time recovery / PITR fork
+    schema: ForkStrategy
+    enum: [LAST_SNAPSHOT, NOW, PITR]
+    operation: forkService
+    note: forkService with fork_strategy PITR and a target_time reconstructs a service as
+      of a past instant — a real time-travel primitive, though for recovery and branching
+      rather than for test simulation
+fixtures_and_branching:
+  zero_copy_fork:
+    tiger_cloud: forkService
+    ghost: forkDatabase
+    note: the intended way to get a safe, disposable copy of production data to test
+      against — this is the provider's answer to a sandbox
+  ghost_tutorial:
+    command: ghost tutorial
+    docs: https://ghost.build/tutorials/learn-the-basics/
+    note: an interactive in-CLI walkthrough, published in ghost.build/agents.txt
+free_tiers:
+  ghost:
+    included_compute_hours_per_month: published in the getPricing response
+      (StandardComputePrice.included_compute_hours_per_month)
+    included_storage: published as StoragePrice.included_gib_per_database
+    note: the pricing surface is a public API operation (GET /pricing) rather than only a
+      marketing page — GET /health and GET /pricing are the anonymous entry points
+health_probe:
+  url: https://api.ghost.build/v0/health
+  http_status: 200
+  fetched: '2026-08-05'
+  note: the only anonymously callable Ghost operation; useful as a liveness fixture
+gaps:
+- No test-mode credential exists, so an agent or CI pipeline cannot exercise the Tiger
+  Cloud or Ghost write path without provisioning billable infrastructure.
+- No request fixtures, mock server, or recorded-response bundle is published for either
+  OpenAPI.

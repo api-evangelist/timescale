@@ -1,0 +1,113 @@
+generated: '2026-08-05'
+method: derived
+source: openapi/timescale-tiger-cloud-openapi-original.yml, openapi/timescale-ghost-openapi-original.yml, https://www.tigerdata.com/docs/get-started/quickstart/rest-api
+scope: Tiger Cloud API (v1) and Ghost API (v0)
+authentication:
+  tiger_cloud: 'HTTP Basic with client credentials (access key : secret key), or an OAuth bearer token'
+  ghost: 'Authorization: Bearer <JWT or gt_-prefixed API key>'
+  artifact: authentication/timescale-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    Neither spec declares an Idempotency-Key parameter and the string "idempot" does
+    not appear anywhere in either OpenAPI document (0 matches across 87 operations).
+    The docs publish no idempotency contract. Retrying a POST such as createService or
+    createDatabase is therefore not safe by contract.
+  partial_mitigation: >-
+    Most mutating operations are action-shaped and effectively convergent
+    (startService, stopService, pauseDatabase, resumeDatabase, enablePooler,
+    setEnvironment), so a repeat call converges rather than duplicating. But the
+    creating operations — createService, createVPC, createVPCPeering, createReplicaSet,
+    createSpace, createDatabase, createApiKey, createInvite — have no dedupe key.
+  note: >-
+    NO `type: Idempotency` pointer is emitted in apis.yml for this provider. Emitting
+    one would assert an idempotency contract that Tiger Data does not publish.
+asynchrony:
+  style: 202 Accepted + poll the resource
+  tiger_cloud:
+    accepted_operations: [createService, deleteService, startService, stopService,
+      attachServiceToVPC, detachServiceFromVPC, resizeService, forkService, setHAReplica,
+      createReplicaSet, deleteReplicaSet, resizeReplicaSet]
+    response_body: the Service (or ReplicaSet) resource, immediately, with a DeployStatus
+    poll_with: getService
+    status_field: status (DeployStatus)
+    status_enum: [QUEUED, DELETING, CONFIGURING, READY, DELETED, UNSTABLE, PAUSING,
+      PAUSED, RESUMING, UPGRADING, OPTIMIZING]
+  ghost:
+    accepted_operations: [createDatabase, deleteDatabase, forkDatabase, pauseDatabase, resumeDatabase]
+  no_operation_resource: neither API exposes a job/operation resource or a Location header
+    to follow; the caller must poll the target resource itself
+pagination:
+  tiger_cloud:
+    style: cursor (log streams only)
+    applies_to: [getServiceLogs]
+    request_params: [cursor, since, until, node]
+    deprecated_params: [page]
+    response_fields: [last_cursor]
+    note: >-
+      Collection endpoints (getServices, getProjects, getVPCs, getReplicaSets) return
+      unbounded arrays with no pagination parameters at all.
+  ghost:
+    style: none
+    note: every list operation (listSpaces, listDatabases, listMembers, listInvites,
+      listApiKeys, listShares, listInvoices, listPaymentMethods) returns an unbounded array
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+metadata:
+  supported: false
+  closest: 'setEnvironment / setReplicaEnvironment attach an EnvironmentTag (a single
+    controlled label such as PROD/DEV) to a service, not free-form metadata.'
+request_tracing:
+  request_id_header: null
+  evidence: no request-id / correlation-id header is declared in either spec or documented
+versioning:
+  scheme: uri-path
+  tiger_cloud: {current: v1, base: 'https://console.cloud.tigerdata.com/public/api/v1'}
+  ghost: {current: v0, base: 'https://api.ghost.build/v0'}
+  preview_marker: 'operations marked x-preview: true in the Tiger Cloud spec (the metrics
+    endpoints) are gated behind an experimental flag in the CLI/MCP surface'
+  artifact: lifecycle/timescale-lifecycle.yml
+error_envelope:
+  format: vendor JSON (not RFC 9457)
+  tiger_cloud: '{code, message, details?}'
+  ghost: ErrorResponse
+  artifact: errors/timescale-problem-types.yml
+rate_limiting:
+  documented: false
+  headers: none declared
+  status_429: not documented on any operation
+  artifact: null
+content_negotiation:
+  request: application/json
+  response: application/json
+  streaming: none (no SSE/websocket surface on either REST API; the MCP endpoint at
+    mcp.tigerdata.com/docs uses text/event-stream, but that is JSON-RPC, not REST)
+events_webhooks:
+  supported: false
+  evidence: >-
+    "webhook" and "callback" appear 0 times in either OpenAPI document, and no event,
+    notification or subscription surface is documented on tigerdata.com/docs or
+    ghost.build/docs. No AsyncAPI artifact is emitted and no Webhooks pointer is wired —
+    this provider genuinely has no event surface.
+resource_identifiers:
+  tiger_cloud:
+  - {entity: service, form: 10-character alphanumeric string, param: service_id}
+  - {entity: project, param: project_id}
+  - {entity: vpc, param: vpc_id}
+  - {entity: peering, param: peering_id}
+  - {entity: replica set, param: replica_set_id}
+  ghost:
+  - {entity: space, param: space_id}
+  - {entity: database, param: database_ref, note: a ref, so name or id are both accepted}
+  - {entity: api key, param: prefix, note: keys are addressed by prefix, never by full secret}
+  - {entity: share, param: share_token}
+  - {entity: invite, param: email}
+cross_links:
+  errors: errors/timescale-problem-types.yml
+  lifecycle: lifecycle/timescale-lifecycle.yml
+  authentication: authentication/timescale-authentication.yml
+  data_model: data-model/timescale-data-model.yml
+  conformance: conformance/timescale-conformance.yml

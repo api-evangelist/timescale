@@ -1,0 +1,74 @@
+generated: '2026-08-05'
+method: searched
+source: openapi/timescale-ghost-openapi-original.yml
+docs: https://www.tigerdata.com/docs/get-started/quickstart/rest-api
+docs_credentials: https://www.tigerdata.com/docs/use-timescale/latest/security/client-credentials
+summary:
+  types: [http]
+  http_schemes: [basic, bearer]
+  api_key_in: []
+  oauth2_flows: []
+  note: >-
+    The Tiger Cloud OpenAPI declares NO securitySchemes block at all — auth is
+    described only in prose in the operation descriptions and in the docs. The schemes
+    below were upgraded from derived to searched using the published quickstart, which
+    shows the exact credential form. Only the Ghost spec declares a scheme natively.
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  api: Tiger Cloud API
+  description: >-
+    HTTP Basic authentication with Tiger Cloud client credentials: the public access
+    key as the username and the secret key as the password. The docs publish the
+    environment-variable names TIGERDATA_PROJECT_ID, TIGERDATA_ACCESS_KEY and
+    TIGERDATA_SECRET_KEY and the request form
+    `curl -u "${TIGERDATA_ACCESS_KEY}:${TIGERDATA_SECRET_KEY}"`. Credentials are
+    created in Tiger Console; the secret key is displayed once and cannot be
+    retrieved again.
+  sources: [https://www.tigerdata.com/docs/get-started/quickstart/rest-api]
+  spec_declared: false
+- name: bearerAuth (Tiger Cloud OAuth)
+  type: http
+  scheme: bearer
+  api: Tiger Cloud API
+  description: >-
+    OAuth user bearer token, used by Tiger Console and by the Tiger CLI after
+    `tiger auth login`. The getAuthInfo (GET /auth/info) response discriminates the
+    two credential shapes with a `type` field whose enum is ["apiKey", "oauth"] —
+    `apiKey` for personal-access-token callers, `oauth` for OAuth user callers. The
+    logout operation revokes the caller's refresh token server-side and applies only
+    to OAuth bearer callers.
+  sources: [openapi/timescale-tiger-cloud-openapi-original.yml]
+  spec_declared: false
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  api: Ghost API
+  description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'
+  sources: [openapi/timescale-ghost-openapi-original.yml]
+  spec_declared: true
+  applied: 'document-level security: [{BearerAuth: []}]; only GET /health opts out with security: []'
+key_management:
+  tiger_cloud:
+    where: Tiger Console → client credentials
+    scoping: a personal access token is scoped to a single project; getProjects returns
+      only that project for PAT callers, all projects for OAuth callers
+    rotation: secret key shown once at creation, not retrievable afterwards
+  ghost:
+    where: 'POST /spaces/{space_id}/api_keys (createApiKey)'
+    prefix: gt_
+    scoping: per space
+    revocation: 'DELETE /spaces/{space_id}/api_keys/{prefix} (deleteApiKey) — keys are
+      addressed by prefix, not by full value'
+mfa_sso:
+  mfa: available; Scale and Enterprise projects can require MFA or SSO for every project
+    member (changelog entry dated 2026-07-23)
+  sso_saml: Enterprise plan
+  source: https://www.tigerdata.com/security
+oauth_scopes: none published — no OAuth2 securityScheme and no scope reference page;
+  scopes/ is intentionally absent
+gaps:
+- The Tiger Cloud spec omits securitySchemes entirely, so any generated client or agent
+  must read prose to authenticate.
+- Neither spec documents token lifetime, refresh, or rate limits.

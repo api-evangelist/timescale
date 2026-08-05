@@ -1,0 +1,315 @@
+generated: '2026-08-05'
+method: derived
+source: mcp/timescale-mcp.yml + openapi/timescale-tiger-cloud-openapi-original.yml + openapi/timescale-ghost-openapi-original.yml
+summaries:
+  what: >-
+    Binds every published Tiger Data MCP tool to the OpenAPI operation(s) that back
+    it, so each tool inherits a real inputSchema from the spec instead of a guessed
+    one. Three MCP surfaces exist: a hosted anonymous docs server, the Tiger CLI's
+    embedded server (Tiger Cloud API), and the Ghost CLI's embedded server (Ghost API).
+surfaces:
+  openapi:
+  - file: openapi/timescale-tiger-cloud-openapi-original.yml
+    title: Tiger Cloud API 1.0.0
+    server: https://console.cloud.tigerdata.com/public/api/v1
+    operations: 39
+    gated: false
+    note: spec is public in github.com/timescale/tiger-cli; the live server requires HTTP Basic client credentials
+  - file: openapi/timescale-ghost-openapi-original.yml
+    title: Ghost API 0.1.0
+    server: https://api.ghost.build/v0
+    operations: 48
+    gated: false
+    note: spec is public in github.com/timescale/ghost; /health answers 200 anonymously
+  graphql: null
+  mcp:
+  - url: https://mcp.tigerdata.com/docs
+    gated: false
+    introspected: true
+    note: tools/list returned 200 anonymously; real inputSchema captured
+  - url: null
+    name: tiger-mcp (stdio, inside Tiger CLI)
+    gated: true
+    introspected: false
+    note: local stdio server; tool names + read-only gating read from github.com/timescale/tiger-cli/internal/mcp and the Tiger MCP docs reference
+  - url: null
+    name: ghost-mcp (stdio, inside Ghost CLI)
+    gated: true
+    introspected: false
+    note: tool names read from https://ghost.build/llms.txt; inputSchemas require an authenticated local introspection
+crosswalk:
+- tool: service_list
+  server: tiger-mcp
+  category: services
+  rest: [getServices]
+  binding: rest
+  confidence: high
+- tool: service_get
+  server: tiger-mcp
+  category: services
+  rest: [getService]
+  binding: rest
+  confidence: high
+- tool: service_create
+  server: tiger-mcp
+  category: services
+  rest: [createService]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode; 202 async operation
+- tool: service_fork
+  server: tiger-mcp
+  category: services
+  rest: [forkService]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode
+- tool: service_resize
+  server: tiger-mcp
+  category: services
+  rest: [resizeService]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode
+- tool: service_start
+  server: tiger-mcp
+  category: services
+  rest: [startService]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode
+- tool: service_stop
+  server: tiger-mcp
+  category: services
+  rest: [stopService]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode
+- tool: service_update_password
+  server: tiger-mcp
+  category: services
+  rest: [updatePassword]
+  binding: rest
+  confidence: high
+  note: withheld in --read-only mode
+- tool: service_logs
+  server: tiger-mcp
+  category: observability
+  rest: [getServiceLogs]
+  binding: rest
+  confidence: high
+- tool: service_metrics_available
+  server: tiger-mcp
+  category: observability
+  rest: [getServiceMetricsAvailableSeries]
+  binding: rest
+  confidence: high
+  note: experimental gate at server startup; operation carries x-preview in the spec
+- tool: service_metrics_series
+  server: tiger-mcp
+  category: observability
+  rest: [getServiceMetricsSeries]
+  binding: rest
+  confidence: high
+  note: experimental gate at server startup
+- tool: ghost_list
+  server: ghost-mcp
+  category: databases
+  rest: [listDatabases]
+  binding: rest
+  confidence: high
+- tool: ghost_create
+  server: ghost-mcp
+  category: databases
+  rest: [createDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_create_dedicated
+  server: ghost-mcp
+  category: databases
+  rest: [createDatabase]
+  binding: rest
+  confidence: medium
+  note: same operation with a dedicated-tier request body variant; mapped by name/semantics, not by an introspected schema
+- tool: ghost_fork
+  server: ghost-mcp
+  category: databases
+  rest: [forkDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_fork_dedicated
+  server: ghost-mcp
+  category: databases
+  rest: [forkDatabase]
+  binding: rest
+  confidence: medium
+  note: dedicated-tier variant of the same operation
+- tool: ghost_delete
+  server: ghost-mcp
+  category: databases
+  rest: [deleteDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_pause
+  server: ghost-mcp
+  category: databases
+  rest: [pauseDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_resume
+  server: ghost-mcp
+  category: databases
+  rest: [resumeDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_rename
+  server: ghost-mcp
+  category: databases
+  rest: [renameDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_password
+  server: ghost-mcp
+  category: databases
+  rest: [updatePassword]
+  binding: rest
+  confidence: high
+- tool: ghost_logs
+  server: ghost-mcp
+  category: observability
+  rest: [databaseLogs]
+  binding: rest
+  confidence: high
+- tool: ghost_share
+  server: ghost-mcp
+  category: sharing
+  rest: [shareDatabase]
+  binding: rest
+  confidence: high
+- tool: ghost_share_list
+  server: ghost-mcp
+  category: sharing
+  rest: [listShares]
+  binding: rest
+  confidence: high
+- tool: ghost_share_revoke
+  server: ghost-mcp
+  category: sharing
+  rest: [revokeShare]
+  binding: rest
+  confidence: high
+- tool: ghost_usage
+  server: ghost-mcp
+  category: billing
+  rest: [spaceUsage]
+  binding: rest
+  confidence: high
+- tool: ghost_pricing
+  server: ghost-mcp
+  category: billing
+  rest: [getPricing]
+  binding: rest
+  confidence: high
+- tool: ghost_invoice
+  server: ghost-mcp
+  category: billing
+  rest: [getInvoice]
+  binding: rest
+  confidence: high
+- tool: ghost_invoice_list
+  server: ghost-mcp
+  category: billing
+  rest: [listInvoices]
+  binding: rest
+  confidence: high
+- tool: ghost_id
+  server: ghost-mcp
+  category: auth
+  rest: [authInfo]
+  binding: rest
+  confidence: high
+- tool: ghost_feedback
+  server: ghost-mcp
+  category: support
+  rest: [submitFeedback]
+  binding: rest
+  confidence: high
+- tool: ghost_login
+  server: ghost-mcp
+  category: auth
+  rest: [authInfo]
+  binding: rest
+  confidence: low
+  note: >-
+    the CLI login flow is browser/device based; only the post-login identity check
+    maps to a REST operation. Mapped by semantics, not by an introspected schema.
+mcp_only:
+- tool: search_docs
+  servers: [tiger-docs-mcp, tiger-mcp, ghost-mcp]
+  reason: >-
+    Hybrid BM25 + vector documentation search. No public REST operation exists; the
+    live inputSchema (source/query/limit/semanticWeight) was captured directly from
+    tools/list and is stored in mcp/timescale-docs-mcp-tools.json.
+- tool: view_skill
+  servers: [tiger-docs-mcp, tiger-mcp, ghost-mcp]
+  reason: Returns a TimescaleDB/PostgreSQL best-practice skill document. No REST equivalent.
+- tool: db_execute_query
+  servers: [tiger-mcp]
+  reason: >-
+    Runs a single SQL statement against a service over the PostgreSQL wire protocol,
+    not over the Tiger Cloud REST API. There is no REST query endpoint.
+- tool: db_schema
+  servers: [tiger-mcp]
+  reason: Returns a service database schema as readable text; PostgreSQL wire protocol, no REST equivalent.
+- tool: ghost_sql
+  servers: [ghost-mcp]
+  reason: Executes SQL against a Ghost database over the PostgreSQL wire protocol; no REST equivalent.
+- tool: ghost_schema
+  servers: [ghost-mcp]
+  reason: Reads a Ghost database schema over the PostgreSQL wire protocol; no REST equivalent.
+- tool: ghost_connect
+  servers: [ghost-mcp]
+  reason: >-
+    Returns a connection string. The Ghost spec exposes connection details as fields
+    on the database object rather than as a dedicated operation, so this is a
+    client-side composite.
+rest_only:
+- capability: VPCs and peering (Tiger Cloud)
+  operations: [getVPCs, createVPC, getVPC, deleteVPC, renameVPC, getVPCPeerings, createVPCPeering, getVPCPeering, deleteVPCPeering]
+  note: no MCP tool exposes VPC networking — agents cannot reach this surface
+- capability: Read replica sets (Tiger Cloud)
+  operations: [getReplicaSets, createReplicaSet, deleteReplicaSet, resizeReplicaSet, enableReplicaPooler, disableReplicaPooler, setReplicaEnvironment]
+  note: no MCP tool
+- capability: Connection pooler + HA + environment (Tiger Cloud)
+  operations: [enablePooler, disablePooler, setHAReplica, setEnvironment, attachServiceToVPC, detachServiceFromVPC]
+  note: no MCP tool
+- capability: Service deletion (Tiger Cloud)
+  operations: [deleteService]
+  note: >-
+    deliberately absent from the MCP tool set — the destructive service operation has
+    no agent-facing tool, which is a defensible agentic-access posture
+- capability: Projects and auth (Tiger Cloud)
+  operations: [getProjects, getAuthInfo, logout]
+- capability: Analytics (Tiger Cloud + Ghost)
+  operations: [identifyUser, trackEvent, analyticsIdentify, analyticsTrack]
+  note: internal telemetry operations, not product surface
+- capability: Spaces, members, invites (Ghost)
+  operations: [listSpaces, createSpace, getSpace, renameSpace, spaceStatus, listMembers, removeMember, updateMemberRole, leaveSpace, listInvites, createInvite, cancelInvite, listReceivedInvites, acceptInvite, declineInvite]
+  note: no MCP tool — space/tenancy administration is console/CLI-only for agents
+- capability: API key management (Ghost)
+  operations: [listApiKeys, createApiKey, deleteApiKey]
+  note: no MCP tool — credential minting is deliberately out of agent reach
+- capability: Payment methods and overages (Ghost)
+  operations: [listPaymentMethods, createPaymentMethodSetup, getPaymentMethod, deletePaymentMethod, setPaymentMethodPrimary, cancelPaymentMethodDeletion, updateOverages]
+  note: no MCP tool
+- capability: Health (Ghost)
+  operations: [health]
+coverage:
+  tools_named: 39
+  tools_bound_to_rest: 32
+  mcp_only: 7
+  rest_operations_total: 87
+  rest_operations_with_a_tool: 30
+  rest_operations_without_a_tool: 57
+  mcp_servers: 3
+  mcp_servers_introspected_live: 1

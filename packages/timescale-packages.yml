@@ -1,0 +1,109 @@
+generated: '2026-08-05'
+method: searched
+source: npm, PyPI, RubyGems, pkg.go.dev, Terraform Registry, packagecloud, github.com/timescale
+notes: >-
+  Timescale/Tiger Data does not ship a general-purpose REST client SDK for the Tiger
+  Cloud API — the first-party programmatic client is the Go-based Tiger CLI, whose
+  internal API client is generated with oapi-codegen from the same openapi.yaml
+  harvested into openapi/. The published libraries below are database-side helpers
+  (TypeScript ORM plugins, Python vector/AI libraries, a Ruby ActiveRecord gem) plus
+  the CLI distribution channels. Third-party lookalikes were checked and excluded:
+  npm `tiger-cli` is an unrelated Angular scaffolder and PyPI `timescaledb` is a
+  community client by jmitchel3, neither is first-party.
+packages:
+- language: go
+  registry: pkg.go.dev
+  name: github.com/timescale/tiger-cli
+  url: https://pkg.go.dev/github.com/timescale/tiger-cli
+  install: go install github.com/timescale/tiger-cli/cmd/tiger@latest
+  official: true
+  role: CLI + embedded MCP server; contains the oapi-codegen client for the Tiger Cloud API
+- language: shell
+  registry: install-script
+  name: tiger-cli
+  url: https://cli.tigerdata.com/
+  install: curl -fsSL https://cli.tigerdata.com | sh
+  official: true
+  role: Primary Tiger CLI install path (macOS/Linux/WSL); PowerShell variant at https://cli.tigerdata.com/install.ps1
+- language: shell
+  registry: homebrew
+  name: timescale/tap/tiger-cli
+  url: https://github.com/timescale/homebrew-tap
+  install: brew install --cask timescale/tap/tiger-cli
+  official: true
+  role: Homebrew cask for Tiger CLI; the tap also carries timescaledb, timescaledb-toolkit and timescaledb-tools formulas
+- language: shell
+  registry: packagecloud
+  name: tiger-cli
+  url: https://packagecloud.io/timescale/tiger-cli
+  install: sudo apt-get install tiger-cli
+  official: true
+  role: Debian/Ubuntu (.deb) and Red Hat/Fedora (.rpm) repositories for Tiger CLI
+- language: shell
+  registry: install-script
+  name: ghost
+  url: https://install.ghost.build/
+  install: curl -fsSL https://install.ghost.build | sh
+  official: true
+  role: Ghost CLI (ghost.build) — the client for the Ghost API, ships its own MCP server
+- language: javascript
+  registry: npm
+  name: "@timescaledb/core"
+  url: https://www.npmjs.com/package/@timescaledb/core
+  install: npm install @timescaledb/core
+  official: true
+  source: https://github.com/timescale/timescaledb-ts
+  role: Core TimescaleDB building blocks for TypeScript
+- language: javascript
+  registry: npm
+  name: "@timescaledb/typeorm"
+  url: https://www.npmjs.com/package/@timescaledb/typeorm
+  install: npm install @timescaledb/typeorm
+  official: true
+  source: https://github.com/timescale/timescaledb-ts
+  role: Official TimescaleDB plugin for TypeORM
+- language: javascript
+  registry: npm
+  name: "@timescaledb/utils"
+  url: https://www.npmjs.com/package/@timescaledb/utils
+  install: npm install @timescaledb/utils
+  official: true
+  source: https://github.com/timescale/timescaledb-ts
+  role: Formatting and escaping utilities for the TypeScript packages
+- language: python
+  registry: pypi
+  name: timescale-vector
+  url: https://pypi.org/project/timescale-vector/
+  install: pip install timescale-vector
+  official: true
+  source: https://github.com/timescale/python-vector
+  role: Python library for storing and querying vector data in Postgres
+- language: python
+  registry: pypi
+  name: pgai
+  url: https://pypi.org/project/pgai/
+  install: pip install pgai
+  official: true
+  source: https://github.com/timescale/pgai
+  role: AI/RAG workflows inside PostgreSQL
+- language: ruby
+  registry: rubygems
+  name: timescaledb
+  url: https://rubygems.org/gems/timescaledb
+  install: gem install timescaledb
+  official: true
+  source: https://github.com/timescale/timescaledb-ruby
+  role: TimescaleDB functions for ActiveRecord models
+- language: hcl
+  registry: terraform
+  name: timescale/timescale
+  url: https://registry.terraform.io/providers/timescale/timescale/latest
+  install: 'terraform { required_providers { timescale = { source = "timescale/timescale" } } }'
+  official: true
+  source: https://github.com/timescale/terraform-provider-timescale
+  role: Terraform provider for Tiger Cloud services — the declarative peer of the Tiger Cloud REST API
+excluded:
+- name: tiger-cli (npm)
+  reason: unrelated Angular scaffolding tool, not published by Timescale
+- name: timescaledb (PyPI)
+  reason: community client by jmitchel3, repo github.com/jmitchel3/timescaledb-python

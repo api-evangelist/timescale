@@ -42,5 +42,28 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Timescale is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/timescale_stock/
+Timescale — rebranded as **Tiger Data** in 2025 — is the PostgreSQL data platform company
+behind TimescaleDB, the open-source PostgreSQL extension for time-series and real-time
+analytics, and Tiger Cloud, a fully managed PostgreSQL cloud service on AWS and Azure.
+
+## APIs profiled
+
+| API | Base URL | Spec |
+|---|---|---|
+| Tiger Cloud API | `https://console.cloud.tigerdata.com/public/api/v1` | OpenAPI 3.0.3, 39 operations |
+| Ghost API | `https://api.ghost.build/v0` | OpenAPI 3.0.3, 48 operations |
+| Tiger Docs MCP Server | `https://mcp.tigerdata.com/docs` | MCP 2025-06-18, anonymous `tools/list` |
+
+Neither OpenAPI is published at a documentation URL. Both were harvested from the
+company's own public GitHub repositories, where `oapi-codegen` generates each CLI's API
+client from them:
+`timescale/tiger-cli/openapi.yaml` and `timescale/ghost/openapi.yaml`.
+
+## Links
+
+- Website — https://www.tigerdata.com/
+- Documentation — https://www.tigerdata.com/docs
+- REST API reference — https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+- Ghost — https://ghost.build/
+- GitHub — https://github.com/timescale
+- Secondary-market listing — https://forgeglobal.com/timescale_stock/

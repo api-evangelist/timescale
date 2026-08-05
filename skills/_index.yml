@@ -1,0 +1,33 @@
+generated: '2026-08-05'
+method: generated
+source: openapi/timescale-tiger-cloud-openapi-original.yml, openapi/timescale-ghost-openapi-original.yml, conventions/timescale-conventions.yml, errors/timescale-problem-types.yml
+note: >-
+  Every operationId referenced in these skills was grepped against the harvested specs and
+  verified to exist verbatim. The skills carry the conventions the specs do NOT state —
+  Basic auth (no securitySchemes block), 202-then-poll async, the absence of any
+  idempotency key, and the single-wildcard error envelope.
+skills:
+- file: timescale-provision-tiger-cloud-service.md
+  name: Provision a Tiger Cloud PostgreSQL service
+  api: openapi/timescale-tiger-cloud-openapi-original.yml
+  operations: [getAuthInfo, getProjects, createService, getService, getServices]
+- file: timescale-fork-a-service-for-testing.md
+  name: Fork a Tiger Cloud service to get a disposable copy of production data
+  api: openapi/timescale-tiger-cloud-openapi-original.yml
+  operations: [getServices, getService, forkService, resizeService, stopService, startService]
+- file: timescale-observe-a-service.md
+  name: Read Tiger Cloud service logs and metrics
+  api: openapi/timescale-tiger-cloud-openapi-original.yml
+  operations: [getService, getServiceLogs, getServiceMetricsAvailableSeries, getServiceMetricsSeries]
+- file: timescale-ghost-database-for-an-agent.md
+  name: Give an agent its own Ghost Postgres database
+  api: openapi/timescale-ghost-openapi-original.yml
+  operations: [authInfo, getPricing, createSpace, createApiKey, createDatabase, getDatabase, listDatabases, forkDatabase, pauseDatabase, resumeDatabase, shareDatabase, spaceUsage]
+provider_published_skills:
+  found: false
+  note: >-
+    No AGENTS.md or packaged skill files are published for the REST APIs. Tiger Data does
+    ship a "skills" concept, but it is PostgreSQL/TimescaleDB authoring guidance served
+    through the MCP `view_skill` tool and the eight MCP prompts (design-postgres-tables,
+    setup-timescaledb-hypertables, ...) — database design advice, not API operating
+    instructions. Those are catalogued in mcp/timescale-mcp.yml.

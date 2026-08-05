@@ -1,0 +1,75 @@
+generated: '2026-08-05'
+method: searched
+source: https://www.tigerdata.com/docs/get-started/news/new
+release_notes: https://www.tigerdata.com/docs/get-started/news/release-notes
+scheme: dated entries (no version numbers on platform changes); TimescaleDB engine
+  releases carry semver
+current_engine_version: TimescaleDB 2.28 (on Tiger Cloud as of 2026-07-02)
+window: 2026-05-19 through 2026-07-27 (12 most recent entries at time of harvest)
+entries:
+- date: '2026-07-27'
+  title: Cmd+K command palette in Tiger Console
+  type: addition
+  breaking: false
+- date: '2026-07-24'
+  title: Live migration has been removed
+  type: removal
+  breaking: true
+  detail: The live-migration Docker image is no longer supported; replaced by Livesync
+    replication built on standard PostgreSQL logical replication.
+- date: '2026-07-23'
+  title: Enforce MFA or SSO for all project members
+  type: addition
+  breaking: false
+  detail: Scale and Enterprise customers can mandate MFA or SSO for every project member.
+- date: '2026-07-17'
+  title: Cross-region backups on Azure
+  type: addition
+  breaking: false
+- date: '2026-07-02'
+  title: TimescaleDB v2.28 now on Tiger Cloud
+  type: release
+  breaking: false
+  detail: Continuous aggregate schema evolution, direct statistics maintenance,
+    vectorized execution expansions, sparse-index improvements.
+- date: '2026-07-01'
+  title: Chunk timeline visualization
+  type: addition
+  breaking: false
+  detail: Explorer shows hypertable chunks, sizes, and rowstore vs columnstore composition.
+- date: '2026-07-01'
+  title: Updated service creation flow on Tiger Cloud
+  type: change
+  breaking: false
+- date: '2026-06-26'
+  title: Automated chunk tuning is now GA
+  type: ga
+  breaking: false
+- date: '2026-06-24'
+  title: New Azure regions for Tiger Cloud services
+  type: addition
+  breaking: false
+  detail: germanywestcentral (Frankfurt) and southeastasia (Singapore).
+- date: '2026-06-22'
+  title: TimescaleDB v2.27.2 now on Tiger Cloud
+  type: release
+  breaking: false
+  detail: Stability and security patch — access-control gaps, compressed-data
+    correctness, upgrade compatibility.
+- date: '2026-06-09'
+  title: Updates to the Goals flow in Tiger Console
+  type: change
+  breaking: false
+- date: '2026-05-19'
+  title: TimescaleDB v2.27 now on Tiger Cloud
+  type: release
+  breaking: false
+  detail: Bloom filter pruning for writes, expanded vectorized execution, continuous
+    aggregate query rewrites, chunk exclusion improvements.
+observations:
+  api_changes_in_window: 0
+  note: >-
+    The changelog is active and well dated, but in the 2.5-month window harvested it
+    records console, engine and platform changes exclusively — not one entry describes a
+    change to the Tiger Cloud REST API or the Ghost API. API consumers have no versioned
+    change feed of their own.

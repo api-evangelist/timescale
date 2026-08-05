@@ -1,0 +1,16 @@
+generated: '2026-08-05'
+method: searched
+probe: true
+source: https://www.tigerdata.com/security
+url: https://www.tigerdata.com/security
+certifications:
+- SOC 2
+- HIPAA
+- GDPR
+evidence:
+- source: https://www.tigerdata.com/security
+  keywords:
+  - soc 2
+  - soc2
+  - hipaa
+  - gdpr

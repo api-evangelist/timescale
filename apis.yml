@@ -1,23 +1,197 @@
 aid: timescale
 name: Timescale
-description: 'Timescale is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Timescale — rebranded as Tiger Data in 2025 — is the PostgreSQL data
+  platform company behind TimescaleDB, the open-source PostgreSQL extension for time-series
+  and real-time analytics, and Tiger Cloud, a fully managed PostgreSQL cloud service
+  on AWS and Azure. The platform adds hypertables (automatic time-based partitioning),
+  Hypercore hybrid row-columnar storage, native columnar compression, continuous aggregates,
+  tiered storage to S3, database forks, read replica sets and connection pooling on
+  top of standard PostgreSQL. The company also ships pg_textsearch (BM25 full-text
+  search in Postgres), pgvectorscale and pgai for vector and AI workloads, the Tiger
+  Cloud REST API for programmatic service management, the Tiger CLI with a built-in
+  MCP server, and Ghost, an agent-oriented Postgres provisioning service at ghost.build.'
 url: https://raw.githubusercontent.com/api-evangelist/timescale/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-05'
 modified: '2026-08-05'
+image: https://www.tigerdata.com/favicon.ico
 tags:
 - Company
-apis: []
+- Database
+- PostgreSQL
+- Time Series
+- Analytics
+- Cloud Infrastructure
+- Data Platform
+- Vector Search
+- Developer Tools
+- Open Source
+apis:
+- name: Tiger Cloud API
+  description: The Tiger Cloud REST API creates, resizes, forks, starts, stops and
+    configures managed PostgreSQL services, read replica sets, VPCs and VPC peerings
+    over HTTP. Authentication is a project-scoped personal access token (client key
+    + secret) or an OAuth bearer token; the /auth/info operation reports which credential
+    type the caller presented.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Database
+  - Cloud Infrastructure
+  - Provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-tiger-cloud-openapi-original.yml
+  - type: Overlay
+    url: overlays/timescale-tiger-cloud-overlay.yaml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+- name: Ghost API
+  description: Ghost (ghost.build) is Tiger Data's agent-oriented Postgres service —
+    "give every agent its own database". The v0 REST API manages spaces, members and
+    invites, databases (create, fork, pause, resume, rename, share), API keys, usage
+    and billing. Authentication is a bearer JWT or a gt_-prefixed API key token.
+  humanURL: https://ghost.build/docs/#api-reference
+  baseURL: https://api.ghost.build/v0
+  tags:
+  - Database
+  - Agents
+  - Provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-ghost-openapi-original.yml
+  - type: Overlay
+    url: overlays/timescale-ghost-overlay.yaml
+  - type: Documentation
+    url: https://ghost.build/docs/
+- name: Tiger Docs MCP Server
+  description: A publicly reachable, anonymous Model Context Protocol server (server
+    name pg-aiguide) serving hybrid semantic + BM25 search over Tiger Cloud, TimescaleDB,
+    PostgreSQL and PostGIS documentation, plus a skills catalog for PostgreSQL and
+    TimescaleDB work. tools/list responds without credentials.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
+  baseURL: https://mcp.tigerdata.com/docs
+  tags:
+  - MCP
+  - Documentation
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/timescale-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/timescale-tool-crosswalk.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/timescale-agentic-access.yml
+- type: TrustCenter
+  url: security/timescale-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/timescale-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/timescale-domain-security.yml
+- type: Authentication
+  url: authentication/timescale-authentication.yml
+- type: Security
+  url: https://www.tigerdata.com/security/vulnerability-disclosure
+- type: Compliance
+  url: https://www.tigerdata.com/security
+- type: Conformance
+  url: conformance/timescale-conformance.yml
+- type: Packages
+  url: packages/timescale-packages.yml
+- type: SDKs
+  url: packages/timescale-packages.yml
+- type: Python SDK
+  url: https://pypi.org/project/timescale-vector/
+- type: JavaScript SDK
+  url: https://www.npmjs.com/package/@timescaledb/typeorm
+- type: Ruby SDK
+  url: https://rubygems.org/gems/timescaledb
+- type: CLI
+  url: cli/timescale-cli.yml
+- type: MCPServer
+  url: mcp/timescale-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/timescale-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/timescale-well-known.yml
+- type: SecurityTxt
+  url: well-known/timescale-security.txt
+- type: LLMsTxt
+  url: llms/timescale-llms.txt
+- type: Conventions
+  url: conventions/timescale-conventions.yml
+- type: ErrorCatalog
+  url: errors/timescale-problem-types.yml
+- type: DataModel
+  url: data-model/timescale-data-model.yml
+- type: Lifecycle
+  url: lifecycle/timescale-lifecycle.yml
+- type: StatusPage
+  url: https://status.tigerdata.com/
+- type: ChangeLog
+  url: changelog/timescale-changelog.yml
+- type: ReleaseNotes
+  url: https://www.tigerdata.com/docs/get-started/news/new
+- type: Sandbox
+  url: sandbox/timescale-sandbox.yml
+- type: Console
+  url: https://console.cloud.tigerdata.com/
+- type: Overlay
+  url: overlays/timescale-tiger-cloud-overlay.yaml
 - type: Website
+  url: https://www.tigerdata.com/
+- type: DeveloperPortal
+  url: https://www.tigerdata.com/docs
+- type: Documentation
+  url: https://www.tigerdata.com/docs
+- type: APIReference
+  url: https://www.tigerdata.com/docs/reference
+- type: GettingStarted
+  url: https://www.tigerdata.com/docs/get-started
+- type: Support
+  url: https://www.tigerdata.com/support
+- type: Blog
+  url: https://www.tigerdata.com/blog
+- type: GitHubOrganization
+  url: https://github.com/timescale
+- type: Pricing
+  url: https://www.tigerdata.com/pricing
+- type: SignUp
+  url: https://console.cloud.timescale.com/signup
+- type: Login
+  url: https://console.cloud.timescale.com/login
+- type: TermsOfService
+  url: https://www.tigerdata.com/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.tigerdata.com/legal/privacy
+- type: SLA
+  url: https://www.tigerdata.com/legal/service-level-agreement
+- type: SecondaryMarket
   url: https://forgeglobal.com/timescale_stock/
+x-enrichment:
+  date: '2026-08-05'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: null
+  detail: Both OpenAPI specs were harvested from the company's own public GitHub repos
+    (tiger-cli, ghost) after the docs host returned HTML shells, and the hosted MCP server
+    at mcp.tigerdata.com/docs answered tools/list anonymously.
+  evidence:
+  - url: https://raw.githubusercontent.com/timescale/tiger-cli/main/openapi.yaml
+    status: 200
+  - url: https://mcp.tigerdata.com/docs
+    status: 200
+  checked: '2026-08-05'
