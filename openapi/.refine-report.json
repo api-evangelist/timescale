@@ -1,0 +1,47 @@
+{
+  "provider": "timescale",
+  "sources": [
+    "timescale-analytics-api-openapi.yml",
+    "timescale-auth-api-openapi.yml",
+    "timescale-feedback-api-openapi.yml",
+    "timescale-health-api-openapi.yml",
+    "timescale-invites-api-openapi.yml",
+    "timescale-pricing-api-openapi.yml",
+    "timescale-projects-api-openapi.yml",
+    "timescale-read-replica-sets-api-openapi.yml",
+    "timescale-services-api-openapi.yml",
+    "timescale-spaces-api-openapi.yml",
+    "timescale-vpcs-api-openapi.yml"
+  ],
+  "outputs": [
+    "timescale-analytics-api-openapi.yml",
+    "timescale-auth-api-openapi.yml",
+    "timescale-feedback-api-openapi.yml",
+    "timescale-health-api-openapi.yml",
+    "timescale-invites-api-openapi.yml",
+    "timescale-pricing-api-openapi.yml",
+    "timescale-projects-api-openapi.yml",
+    "timescale-read-replica-sets-api-openapi.yml",
+    "timescale-services-api-openapi.yml",
+    "timescale-spaces-api-openapi.yml",
+    "timescale-vpcs-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "timescale-analytics-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-auth-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-feedback-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-health-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-invites-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-pricing-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-projects-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-read-replica-sets-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-services-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-spaces-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "timescale-vpcs-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

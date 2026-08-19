@@ -1,0 +1,235 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tiger Cloud Read Replica Sets API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Read Replica Sets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Read Replica Sets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all read replica sets associated with a primary service within a project."
+        },
+        {
+          "info": {
+            "name": "Create a Read Replica Set",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new read replica set for a service. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Delete a Read Replica Set",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets/:replica_set_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "replica_set_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the read replica set."
+              }
+            ]
+          },
+          "docs": "Deletes a specific read replica set. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Resize a Read Replica Set",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets/:replica_set_id/resize",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "replica_set_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the read replica set."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Changes the resource allocation for a specific read replica set."
+        },
+        {
+          "info": {
+            "name": "Enable Connection Pooler for a Read Replica",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets/:replica_set_id/enablePooler",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "replica_set_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the read replica set."
+              }
+            ]
+          },
+          "docs": "Activates the connection pooler for a specific read replica set."
+        },
+        {
+          "info": {
+            "name": "Disable Connection Pooler for a Read Replica",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets/:replica_set_id/disablePooler",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "replica_set_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the read replica set."
+              }
+            ]
+          },
+          "docs": "Deactivates the connection pooler for a specific read replica set."
+        },
+        {
+          "info": {
+            "name": "Set Environment for a Read Replica",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/replicaSets/:replica_set_id/setEnvironment",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "replica_set_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the read replica set."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the environment type for the read replica set."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

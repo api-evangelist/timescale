@@ -1,0 +1,1680 @@
+openapi: 3.2.0
+info:
+  title: Ghost Spaces API
+  version: 0.1.0
+  description: Ghost database management API
+servers:
+- url: https://api.ghost.build/v0
+  description: Production
+security:
+- BearerAuth: []
+tags:
+- name: Spaces
+paths:
+  /spaces:
+    get:
+      operationId: listSpaces
+      summary: List spaces
+      description: 'Returns Ghost spaces accessible to the authenticated user.
+
+        For user JWTs, returns all Ghost spaces the user is a member of.
+
+        For API keys, returns the single space the key is scoped to.
+
+        '
+      responses:
+        '200':
+          description: List of spaces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Space'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    post:
+      operationId: createSpace
+      summary: Create a space
+      description: 'Creates a new Ghost space. Requires user authentication (JWT).
+
+        API keys cannot be used to create spaces.
+
+        When no name is provided, the space is named after its owner
+
+        (e.g. "Jane Doe''s space").
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSpaceRequest'
+      responses:
+        '201':
+          description: Space created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Space'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}:
+    get:
+      operationId: getSpace
+      summary: Get a space
+      description: 'Returns details about a single space, including the owner and the
+
+        caller''s role. For user JWTs the role and owner are populated; for API
+
+        keys they are omitted (the members lookup that resolves the owner is not
+
+        available to API keys).
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Space details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceDetail'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/rename:
+    post:
+      operationId: renameSpace
+      summary: Rename a space
+      description: 'Renames a space. Requires user authentication (JWT).
+
+        API keys cannot be used to rename spaces.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameSpaceRequest'
+      responses:
+        '200':
+          description: Space renamed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenameSpaceResult'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/usage:
+    get:
+      operationId: spaceUsage
+      summary: Get space usage
+      description: Returns compute usage, storage usage, and billing/cost information for a space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Space usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceUsage'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/status:
+    get:
+      operationId: spaceStatus
+      deprecated: true
+      summary: Get space usage (deprecated)
+      description: Deprecated alias for `GET /spaces/{space_id}/usage`. Use the `/usage` endpoint instead.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Space usage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceUsage'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/members:
+    get:
+      operationId: listMembers
+      summary: List space members
+      description: 'Lists the members of a space.
+
+        Requires user authentication (JWT). API keys cannot manage members.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of space members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/members/{user_id}:
+    delete:
+      operationId: removeMember
+      summary: Remove a member
+      description: 'Removes a member from a space. The space owner cannot be removed,
+
+        and callers cannot remove themselves.
+
+        Requires user authentication (JWT). API keys cannot manage members.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/MemberUserId'
+      responses:
+        '200':
+          description: Member removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/members/{user_id}/role:
+    put:
+      operationId: updateMemberRole
+      summary: Update a member's role
+      description: 'Changes a member''s role within a space. The `owner` role cannot be
+
+        granted, the owner''s role cannot be changed, and callers cannot
+
+        change their own role.
+
+        Requires user authentication (JWT). API keys cannot manage members.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/MemberUserId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Member role updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/leave:
+    post:
+      operationId: leaveSpace
+      summary: Leave a space
+      description: 'Removes the authenticated user from the space. Requires user
+
+        authentication (JWT). API keys cannot leave a space. The space owner
+
+        cannot leave their own space.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Left the space
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaveSpaceResult'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/invites:
+    get:
+      operationId: listInvites
+      summary: List sent invites
+      description: 'Lists the pending invites that have been sent for a space.
+
+        Requires user authentication (JWT). API keys cannot manage invites.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of pending invites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invite'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    post:
+      operationId: createInvite
+      summary: Invite a user to a space
+      description: 'Invites a user to a space by email address. The invitee accepts the
+
+        invitation with their own Ghost account.
+
+        Requires user authentication (JWT). API keys cannot manage invites.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteRequest'
+      responses:
+        '201':
+          description: Invite created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invite'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/invites/{email}:
+    delete:
+      operationId: cancelInvite
+      summary: Cancel a sent invite
+      description: 'Cancels the pending invite sent to the given email address for a space.
+
+        Requires user authentication (JWT). API keys cannot manage invites.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/InviteEmail'
+      responses:
+        '200':
+          description: Invite cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invite'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/api_keys:
+    get:
+      operationId: listApiKeys
+      summary: List API keys
+      description: 'Lists all API keys for the specified space.
+
+        Requires user authentication (JWT). API keys cannot list other API keys.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of API keys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    post:
+      operationId: createApiKey
+      summary: Create an API key
+      description: 'Creates a new API key (client credentials) for the specified space.
+
+        Requires user authentication (JWT). API keys cannot create other API keys.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '201':
+          description: API key created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyCredentials'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/api_keys/{prefix}:
+    delete:
+      operationId: deleteApiKey
+      summary: Delete an API key
+      description: 'Deletes an API key from the specified space.
+
+        Requires user authentication (JWT). API keys cannot delete other API keys.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/ApiKeyPrefix'
+      responses:
+        '204':
+          description: API key deleted
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases:
+    get:
+      operationId: listDatabases
+      summary: List databases
+      description: Lists all databases in a space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of databases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatabaseWithUsage'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    post:
+      operationId: createDatabase
+      summary: Create a database
+      description: Creates a new database in a space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseRequest'
+      responses:
+        '202':
+          description: Database created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}:
+    get:
+      operationId: getDatabase
+      summary: Get a database
+      description: Gets a single database by ID or name.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      responses:
+        '200':
+          description: Database details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    delete:
+      operationId: deleteDatabase
+      summary: Delete a database
+      description: Deletes a database.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      responses:
+        '202':
+          description: Database deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/fork:
+    post:
+      operationId: forkDatabase
+      summary: Fork a database
+      description: Forks an existing database.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForkDatabaseRequest'
+      responses:
+        '202':
+          description: Database forked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/pause:
+    post:
+      operationId: pauseDatabase
+      summary: Pause a database
+      description: Pauses a running database.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      responses:
+        '202':
+          description: Database paused
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/resume:
+    post:
+      operationId: resumeDatabase
+      summary: Resume a database
+      description: Resumes a paused database.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      responses:
+        '202':
+          description: Database resumed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Database'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/rename:
+    post:
+      operationId: renameDatabase
+      summary: Rename a database
+      description: Renames a database.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenameDatabaseRequest'
+      responses:
+        '204':
+          description: Database renamed
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/password:
+    post:
+      operationId: updatePassword
+      summary: Update database password
+      description: Resets the database password.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordRequest'
+      responses:
+        '204':
+          description: Password updated
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/logs:
+    get:
+      operationId: databaseLogs
+      summary: Get database logs
+      description: 'Fetch logs for a specific database. Returns up to 500 log entries in
+
+        reverse chronological order. Supports cursor-based pagination via the
+
+        `cursor` parameter and the `last_cursor` field in the response.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'Opaque pagination cursor returned as `last_cursor` in a previous
+
+          response. When provided, returns the next page of logs older than
+
+          the cursor position.
+
+          '
+      - name: until
+        in: query
+        required: false
+        description: Upper bound timestamp — return logs at or before this time (RFC3339 format, e.g., 2024-01-15T10:00:00Z). Defaults to now.
+        schema:
+          type: string
+          format: date-time
+      - name: since
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Lower bound timestamp — fetch logs after this time (RFC3339 format, e.g., 2024-01-15T09:00:00Z)
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: 'Full-text search terms to filter log lines. Repeat the parameter
+
+          for multiple values (e.g. `?search=slow+query&search=ERROR`).
+
+          '
+      - name: severity
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: 'Severity levels to filter results. Repeat the parameter for multiple
+
+          values (e.g. `?severity=ERROR&severity=WARNING`). Common values
+
+          include `LOG`, `WARNING`, `ERROR`, and `FATAL`; PostgreSQL may also
+
+          emit `DEBUG*`, `INFO`, `NOTICE`, and `PANIC`.
+
+          '
+      responses:
+        '200':
+          description: Database logs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/databases/{database_ref}/share:
+    post:
+      operationId: shareDatabase
+      summary: Share a database
+      description: Creates a shareable snapshot of a database. Returns a share token that can be used to create a new database from the snapshot in another space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/DatabaseRef'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareDatabaseRequest'
+      responses:
+        '201':
+          description: Share created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseShare'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/shares:
+    get:
+      operationId: listShares
+      summary: List database shares
+      description: Lists all shared snapshots for a space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of shares
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatabaseShare'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/shares/{share_token}:
+    delete:
+      operationId: revokeShare
+      summary: Revoke a database share
+      description: Revokes a shared snapshot, deleting the underlying storage snapshot. The share is identified by its share token.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/ShareToken'
+      responses:
+        '200':
+          description: Share revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatabaseShare'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/invoices:
+    get:
+      operationId: listInvoices
+      summary: List invoices
+      description: 'Lists the most recent invoices for a space.
+
+        Requires a user JWT; API keys are not authorized.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoicesResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/invoices/{invoice_id}:
+    get:
+      operationId: getInvoice
+      summary: Get invoice detail
+      description: 'Returns the line-item breakdown for a single invoice, looked up by the
+
+        invoice ID returned from `listInvoices`.
+
+        Requires a user JWT; API keys are not authorized.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/InvoiceId'
+      responses:
+        '200':
+          description: Invoice detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/payment:
+    get:
+      operationId: listPaymentMethods
+      summary: List payment methods
+      description: Lists payment methods on file for a space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: List of payment methods
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethodsResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    post:
+      operationId: createPaymentMethodSetup
+      summary: Create payment method setup
+      description: Creates a Stripe Setup Intent for payment method collection and returns the client secret and payment page URL.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Payment setup created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentSetupResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/payment/{payment_id}:
+    get:
+      operationId: getPaymentMethod
+      summary: Get a payment method
+      description: Returns a single payment method by ID.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '200':
+          description: Payment method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+    delete:
+      operationId: deletePaymentMethod
+      summary: Delete a payment method
+      description: Deletes a payment method.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '204':
+          description: Payment method deleted
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/payment/{payment_id}/primary:
+    put:
+      operationId: setPaymentMethodPrimary
+      summary: Set primary payment method
+      description: Sets a payment method as the primary payment method for the space.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '204':
+          description: Payment method set as primary
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/payment/{payment_id}/deletion:
+    delete:
+      operationId: cancelPaymentMethodDeletion
+      summary: Cancel pending payment method deletion
+      description: Cancels a pending deletion for a payment method.
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      - $ref: '#/components/parameters/PaymentId'
+      responses:
+        '204':
+          description: Pending deletion cancelled
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+  /spaces/{space_id}/overages:
+    put:
+      operationId: updateOverages
+      summary: Update compute overage settings
+      description: 'Enables or disables compute overage billing for the space, optionally
+
+        setting a monthly compute-minute cap above which standard databases
+
+        auto-pause. Requires a user JWT and a payment method on file.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOverageSettingsRequest'
+      responses:
+        '204':
+          description: Overage settings updated
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Spaces
+components:
+  schemas:
+    ShareDatabaseRequest:
+      type: object
+      description: Options for creating a database share.
+      properties:
+        expires_at:
+          type: string
+          format: date-time
+          description: Time after which the share expires. If omitted, the share does not expire.
+    SpaceDetail:
+      type: object
+      description: Detailed information about a single Ghost space.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Space ID.
+        name:
+          type: string
+          description: Space name.
+        role:
+          allOf:
+          - $ref: '#/components/schemas/MemberRole'
+          description: The caller's role in the space. Populated for user authentication; omitted for API key authentication.
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Member'
+          description: The space owner. Populated for user authentication; omitted for API key authentication.
+    LogsResponse:
+      type: object
+      description: A page of database log entries.
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogEntry'
+          description: Log entries, most recent first.
+        last_cursor:
+          type: string
+          description: 'Opaque cursor for the next page of results. Present when more log
+
+            entries exist older than the last entry in this response. Pass
+
+            this value as the `cursor` query parameter to retrieve the next
+
+            page. Absent when there are no further results.
+
+            '
+    ApiKey:
+      type: object
+      description: An API key in a space.
+      required:
+      - prefix
+      - name
+      - created_at
+      properties:
+        prefix:
+          type: string
+          description: Stable prefix identifier for the API key (starts with `gt_`), identifying the key without exposing the secret.
+        name:
+          type: string
+          description: User-provided label for the API key.
+        created_at:
+          type: string
+          format: date-time
+          description: Time the API key was created.
+    InvoicesResponse:
+      type: object
+      description: A list of invoices for a space.
+      required:
+      - invoices
+      properties:
+        invoices:
+          type: array
+          description: Recent invoices, most recent first.
+          items:
+            $ref: '#/components/schemas/Invoice'
+    PaymentSetupResponse:
+      type: object
+      description: Stripe Setup Intent details for collecting a new payment method.
+      required:
+      - client_secret
+      - payment_url
+      properties:
+        client_secret:
+          type: string
+          description: Stripe Setup Intent client secret.
+        payment_url:
+          type: string
+          description: URL of the hosted payment page for collecting card details.
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    DatabaseStatus:
+      type: string
+      description: Current lifecycle status of the database.
+      enum:
+      - queued
+      - configuring
+      - running
+      - pausing
+      - paused
+      - resuming
+      - deleting
+      - deleted
+      - upgrading
+      - unstable
+      - unknown
+    CreateDatabaseRequest:
+      type: object
+      description: Request to create a new database in a space.
+      properties:
+        name:
+          type: string
+          description: Name for the new database. Auto-generated if omitted.
+        type:
+          $ref: '#/components/schemas/DatabaseType'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+        share_token:
+          type: string
+          description: Share token from a database share (begins with `gs_`). When provided, creates the new database from the shared snapshot.
+    UpdateMemberRoleRequest:
+      type: object
+      description: Request to change a member's role within a space.
+      required:
+      - role
+      properties:
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    PaymentMethod:
+      type: object
+      description: A payment method on file for a space.
+      required:
+      - id
+      - primary
+      - pending_deletion
+      - brand
+      - last4
+      - exp_month
+      - exp_year
+      properties:
+        id:
+          type: string
+          description: Payment method ID.
+        primary:
+          type: boolean
+          description: True if this is the primary payment method for the space.
+        pending_deletion:
+          type: boolean
+          description: True if deletion has been scheduled for this payment method. The deletion can be cancelled until processed.
+        brand:
+          type: string
+          description: Card brand (e.g. `visa`, `mastercard`).
+        last4:
+          type: string
+          description: Last four digits of the card number.
+        exp_month:
+          type: integer
+          description: Card expiration month (1-12).
+        exp_year:
+          type: integer
+          description: Card expiration year (four digits).
+    UpdateOverageSettingsRequest:
+      type: object
+      description: Request body for updating compute overage settings on a space.
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+          description: Set to true to enable overages, false to disable.
+        compute_limit_minutes:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 6001
+          description: 'Optional when `enabled` is true: the monthly compute-minute limit
+
+            above which standard databases auto-pause. Must be greater than
+
+            the free-tier limit (6000 minutes). Omit or set to `null` for no
+
+            limit — the user is billed for all overage usage with no upper
+
+            bound. Must be omitted (or `null`) when `enabled` is false; on
+
+            disable the server resets the limit to the free-tier default.
+
+            '
+    ForkDatabaseRequest:
+      type: object
+      description: Request body for forking a database. Fields default to the source database's values when omitted.
+      properties:
+        name:
+          type: string
+          description: Name for the forked database. Auto-generated from the source name if omitted.
+        type:
+          $ref: '#/components/schemas/DatabaseType'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+    Invoice:
+      type: object
+      description: Invoice summary.
+      required:
+      - id
+      - invoice_number
+      - invoice_date
+      - total
+      - status
+      properties:
+        id:
+          type: string
+          description: Opaque invoice ID used to look up invoice details.
+        invoice_number:
+          type: string
+          description: Human-readable invoice number (e.g. "INV-12345").
+        invoice_date:
+          type: string
+          format: date-time
+          description: Date the invoice was issued.
+        total:
+          type: number
+          format: double
+          description: Invoice total.
+        status:
+          $ref: '#/components/schemas/InvoiceStatus'
+    InvoiceStatus:
+      type: string
+      description: 'Invoice status:
+
+        - `paid` — invoice has been paid.
+
+        - `issued` — invoice has been issued and is within its net-terms payment window (not yet paid, not yet delinquent).
+
+        - `delinquent` — payment has failed and the invoice needs to be resolved by the user.
+
+        '
+      enum:
+      - paid
+      - issued
+      - delinquent
+    RenameSpaceRequest:
+      type: object
+      description: Request to rename a space.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: New name for the space.
+    UpdatePasswordRequest:
+      type: object
+      description: Request to reset the database password.
+      required:
+      - password
+      properties:
+        password:
+          type: string
+          description: New PostgreSQL password for the default user.
+    LogEntry:
+      type: object
+      description: A single database log entry.
+      required:
+      - timestamp
+      - message
+      - severity
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the log entry (RFC3339 format, with nanosecond precision)
+        message:
+          type: string
+          description: Log message text
+        severity:
+          type: string
+          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
+    Invite:
+      type: object
+      description: An invite sent for a space.
+      required:
+      - email
+      - role
+      - status
+      - created_at
+      properties:
+        email:
+          type: string
+          description: Email address the invite was sent to.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        created_at:
+          type: string
+          format: date-time
+          description: When the invite was created.
+    RenameDatabaseRequest:
+      type: object
+      description: Request to rename a database.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: New name for the database.
+    DatabaseShare:
+      type: object
+      description: A shareable snapshot of a database. Can be used to create a new database from the snapshot in another space.
+      required:
+      - share_token
+      - database_id
+      - database_name
+      - created_at
+      properties:
+        share_token:
+          type: string
+          description: Token passed to `createDatabase` (via `share_token`) to create a new database from the shared snapshot in another space. Also used to revoke the share via `revokeShare`. Always begins with `gs_`.
+        database_id:
+          type: string
+          description: ID of the source database.
+        database_name:
+          type: string
+          description: Name of the source database.
+        created_at:
+          type: string
+          format: date-time
+          description: Time the share was created.
+        expires_at:
+          type: string
+          format: date-time
+          description: Time the share expires. Absent if the share does not expire.
+        revoked_at:
+          type: string
+          format: date-time
+          description: Time the share was revoked. Absent if the share is still active.
+    ApiKeyCredentials:
+      type: object
+      description: Credentials for a newly created API key. The secret portion cannot be retrieved again later.
+      required:
+      - api_key
+      - access_key
+      - secret_key
+      properties:
+        api_key:
+          type: string
+          description: 'Bearer token for the key. Use as `Authorization: Bearer <api_key>`.'
+        access_key:
+          type: string
+          deprecated: true
+          description: Use as the username in HTTP Basic auth.
+        secret_key:
+          type: string
+          deprecated: true
+          description: Use as the password in HTTP Basic auth.
+    RenameSpaceResult:
+      type: object
+      description: Result of renaming a space.
+      required:
+      - id
+      - old_name
+      - new_name
+      properties:
+        id:
+          type: string
+          description: Space ID.
+        old_name:
+          type: string
+          description: Space name before the rename.
+        new_name:
+          type: string
+          description: Space name after the rename.
+    DatabaseType:
+      type: string
+      description: 'Database deployment model.
+
+        - `standard` — shared-resource databases subject to the space''s compute and storage limits.
+
+        - `dedicated` — per-instance paid databases with guaranteed resources, exempt from space-level auto-pause.
+
+        '
+      enum:
+      - standard
+      - dedicated
+      default: standard
+    PaymentMethodsResponse:
+      type: object
+      description: A list of payment methods on file for a space.
+      required:
+      - payment_methods
+      properties:
+        payment_methods:
+          type: array
+          description: Payment methods on file for the space.
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+    CreateSpaceRequest:
+      type: object
+      description: Request to create a new space.
+      properties:
+        name:
+          type: string
+          description: Name for the new space. When omitted, the space is named after its owner (e.g. "Jane Doe's space").
+    InvoiceLineItem:
+      type: object
+      description: A single line item on an invoice.
+      required:
+      - product_type
+      - quantity
+      - unit_price
+      - line_total
+      properties:
+        database_id:
+          type: string
+          description: Ghost database ID this line item is attributed to, if any.
+        product_type:
+          type: string
+          description: Product category (e.g. storage, compute).
+        detailed_spec:
+          type: string
+          description: Additional spec details (e.g. tier, size).
+        quantity:
+          type: number
+          format: double
+          description: Quantity billed. Units depend on `product_type`.
+        unit_price:
+          type: number
+          format: double
+          description: Price per unit of `quantity`.
+        line_total:
+          type: number
+          format: double
+          description: Total charge for this line (`quantity` × `unit_price`).
+    LeaveSpaceResult:
+      type: object
+      description: Result of leaving a space.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the user left.
+        space_name:
+          type: string
+          description: Name of the space the user left.
+    InviteStatus:
+      type: string
+      description: 'Status of a sent invite. `pending` means it''s still awaiting a
+
+        response; `declined` means the invitee declined it. A declined invite
+
+        still occupies the email''s slot for the space (one pending-or-declined
+
+        invite per email), so it must be cancelled before that email can be
+
+        re-invited.
+
+        '
+      enum:
+      - pending
+      - declined
+    DatabaseSize:
+      type: string
+      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
+      enum:
+      - 1x
+      - 2x
+      - 4x
+      - 8x
+    CreateApiKeyRequest:
+      type: object
+      description: Request to create a new API key in a space.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: User-provided label for the new API key.
+    MemberRole:
+      type: string
+      description: 'A member''s role within a space. The `owner` role belongs to the user
+
+        who created the space; every space has exactly one owner, so `owner`
+
+        is never accepted as an input when granting a role. On the `Space`
+
+        schema, this is the caller''s own role in the space, omitted for
+
+        API-key authentication (API keys are space-scoped and carry no
+
+        member identity).
+
+        '
+      enum:
+      - owner
+      - admin
+      - developer
+      - viewer
+    Member:
+      type: object
+      description: A member of a Ghost space.
+      required:
+      - user_id
+      - name
+      - email
+      - role
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          description: User ID of the member.
+        name:
+          type: string
+          description: Display name of the member.
+        email:
+          type: string
+          description: Email address of the member.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    CreateInviteRequest:
+      type: object
+      description: Request to invite a user to a space.
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: Email address to invite.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    SpaceUsage:
+      type: object
+      description: Space-level usage and cost for the current billing cycle.
+      required:
+      - storage_mib
+      - storage_limit_mib
+      - compute_minutes
+      - free_compute_minutes
+      - overages_enabled
+      properties:
+        storage_mib:
+          type: integer
+          format: int64
+          description: Total storage used across all databases in the space, in MiB.
+        storage_limit_mib:
+          type: integer
+          format: int64
+          description: Storage quota for the space, in MiB.
+        compute_minutes:
+          type: integer
+          format: int64
+          description: Total compute minutes used across all databases in the space during the current billing cycle.
+        free_compute_minutes:
+          type: integer
+          format: int64
+          description: 'Compute minutes included per billing cycle at no additional charge,
+
+            shared across all standard databases in the space. Usage beyond this
+
+            is billed only when `overages_enabled` is true.
+
+            '
+        compute_limit_minutes:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: 'Compute-minute quota for the space. When exceeded, all standard
+
+            databases in the space are automatically paused. `null` means no
+
+            limit — only possible when `overages_enabled` is true.
+
+            '
+        overages_enabled:
+          type: boolean
+          description: Whether the space has compute overages enabled.
+        cost_to_date:
+          type: number
+          format: double
+          description: Gross cost accrued so far this billing cycle.
+        estimated_total_cost:
+          type: number
+          format: double
+          description: Projected gross total for the current billing cycle based on usage to date.
+        billing_period_start:
+          type: string
+          format: date-time
+          description: Start of the current billing cycle.
+        billing_period_end:
+          type: string
+          format: date-time
+          description: End of the current billing cycle.
+    Database:
+      type: object
+      description: A Ghost database.
+      required:
+      - id
+      - name
+      - type
+      - status
+      - host
+      - port
+      properties:
+        id:
+          type: string
+          description: Database ID.
+        name:
+          type: string
+          description: Database name. Unique within the space.
+        type:
+          $ref: '#/components/schemas/DatabaseType'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+        status:
+          $ref: '#/components/schemas/DatabaseStatus'
+        host:
+          type: string
+          description: PostgreSQL hostname for connections.
+        port:
+          type: integer
+          description: PostgreSQL port for connections.
+        password:
+          type:
+          - string
+          - 'null'
+          description: PostgreSQL password for the default user. Returned on every GET for authorized callers.
+        storage_mib:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Current disk usage in MiB. Null if not yet available.
+    InvoiceDetail:
+      type: object
+      description: Line-item breakdown of an invoice.
+      required:
+      - line_items
+      properties:
+        line_items:
+          type: array
+          description: Line items that make up the invoice.
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
+    Space:
+      type: object
+      description: A Ghost space.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Space ID.
+        name:
+          type: string
+          description: Space name.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    DatabaseWithUsage:
+      description: A Ghost database with current billing-cycle usage included.
+      allOf:
+      - $ref: '#/components/schemas/Database'
+      - type: object
+        properties:
+          compute_minutes:
+            type:
+            - integer
+            - 'null'
+            format: int64
+            description: Compute minutes used by this database during the current billing cycle. Only populated for `standard` databases.
+  parameters:
+    InvoiceId:
+      name: invoice_id
+      in: path
+      required: true
+      description: Invoice ID returned from `listInvoices`.
+      schema:
+        type: string
+    PaymentId:
+      name: payment_id
+      in: path
+      required: true
+      description: Payment method ID.
+      schema:
+        type: string
+    ShareToken:
+      name: share_token
+      in: path
+      required: true
+      description: Share token returned from `listShares` or `shareDatabase` (begins with `gs_`).
+      schema:
+        type: string
+        pattern: ^gs_[A-Za-z0-9_-]+$
+    InviteEmail:
+      name: email
+      in: path
+      required: true
+      description: Email address the invite was sent to.
+      schema:
+        type: string
+    SpaceId:
+      name: space_id
+      in: path
+      required: true
+      description: Ghost space ID.
+      schema:
+        type: string
+    MemberUserId:
+      name: user_id
+      in: path
+      required: true
+      description: User ID of the space member.
+      schema:
+        type: integer
+        format: int64
+    ApiKeyPrefix:
+      name: prefix
+      in: path
+      required: true
+      description: API key prefix (e.g. `gt_...`).
+      schema:
+        type: string
+    DatabaseRef:
+      name: database_ref
+      in: path
+      required: true
+      description: Database ID or name.
+      schema:
+        type: string
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'

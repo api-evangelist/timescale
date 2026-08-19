@@ -1,0 +1,324 @@
+openapi: 3.2.0
+info:
+  title: Tiger Cloud Read Replica Sets API
+  description: 'A RESTful API for Tiger Cloud platform.
+
+    '
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.tigerdata.com/legal/terms
+  contact:
+    name: Tiger Data Support
+    url: https://www.tigerdata.com/contact
+servers:
+- url: https://console.cloud.tigerdata.com/public/api/v1
+  description: API server for Tiger Cloud
+tags:
+- name: Read Replica Sets
+paths:
+  /projects/{project_id}/services/{service_id}/replicaSets:
+    get:
+      operationId: getReplicaSets
+      tags:
+      - Read Replica Sets
+      summary: Get Read Replica Sets
+      description: Retrieves a list of all read replica sets associated with a primary service within a project.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          description: A list of read replica sets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReadReplicaSet'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+    post:
+      operationId: createReplicaSet
+      tags:
+      - Read Replica Sets
+      summary: Create a Read Replica Set
+      description: Creates a new read replica set for a service. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadReplicaSetCreate'
+      responses:
+        '202':
+          description: Read replica set creation request has been accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadReplicaSet'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/replicaSets/{replica_set_id}:
+    delete:
+      operationId: deleteReplicaSet
+      tags:
+      - Read Replica Sets
+      summary: Delete a Read Replica Set
+      description: Deletes a specific read replica set. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - $ref: '#/components/parameters/ReplicaSetId'
+      responses:
+        '202':
+          description: Deletion request has been accepted.
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/replicaSets/{replica_set_id}/resize:
+    post:
+      operationId: resizeReplicaSet
+      tags:
+      - Read Replica Sets
+      summary: Resize a Read Replica Set
+      description: Changes the resource allocation for a specific read replica set.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - $ref: '#/components/parameters/ReplicaSetId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResizeInput'
+      responses:
+        '202':
+          description: Resize request has been accepted and is in progress.
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/replicaSets/{replica_set_id}/enablePooler:
+    post:
+      operationId: enableReplicaPooler
+      tags:
+      - Read Replica Sets
+      summary: Enable Connection Pooler for a Read Replica
+      description: Activates the connection pooler for a specific read replica set.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - $ref: '#/components/parameters/ReplicaSetId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/replicaSets/{replica_set_id}/disablePooler:
+    post:
+      operationId: disableReplicaPooler
+      tags:
+      - Read Replica Sets
+      summary: Disable Connection Pooler for a Read Replica
+      description: Deactivates the connection pooler for a specific read replica set.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - $ref: '#/components/parameters/ReplicaSetId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/replicaSets/{replica_set_id}/setEnvironment:
+    post:
+      operationId: setReplicaEnvironment
+      tags:
+      - Read Replica Sets
+      summary: Set Environment for a Read Replica
+      description: Sets the environment type for the read replica set.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - $ref: '#/components/parameters/ReplicaSetId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEnvironmentInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+components:
+  parameters:
+    ServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: The unique identifier of the service.
+      schema:
+        type: string
+        example: d1k5vk7hf2
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
+    ReplicaSetId:
+      name: replica_set_id
+      in: path
+      required: true
+      description: The unique identifier of the read replica set.
+      schema:
+        type: string
+        example: alb8jicdpr
+  schemas:
+    ReadReplicaSet:
+      type: object
+      properties:
+        id:
+          type: string
+          example: alb8jicdpr
+        name:
+          type: string
+          example: reporting-replica-1
+        status:
+          type: string
+          enum:
+          - creating
+          - active
+          - resizing
+          - deleting
+          - error
+          example: active
+        nodes:
+          type: integer
+          description: Number of nodes in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: Memory allocation in gigabytes.
+          example: 1
+        metadata:
+          type: object
+          description: Additional metadata for the read replica set
+          properties:
+            environment:
+              type: string
+              description: Environment tag for the read replica set
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        connection_pooler:
+          $ref: '#/components/schemas/ConnectionPooler'
+    SetEnvironmentInput:
+      type: object
+      required:
+      - environment
+      properties:
+        environment:
+          type: string
+          description: The target environment for the service.
+          enum:
+          - PROD
+          - DEV
+      example:
+        environment: PROD
+    ResizeInput:
+      type: object
+      required:
+      - cpu_millis
+      - memory_gbs
+      properties:
+        cpu_millis:
+          type: string
+          description: The new CPU allocation in milli-cores.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The new memory allocation in gigabytes.
+          example: '4'
+    ConnectionPooler:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
+    Endpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
+    ReadReplicaSetCreate:
+      type: object
+      required:
+      - name
+      - nodes
+      - cpu_millis
+      - memory_gbs
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the read replica.
+          example: my-reporting-replica
+        nodes:
+          type: integer
+          description: Number of nodes to create in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: The initial CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: The initial memory allocation in gigabytes.
+          example: 1
+  responses:
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.

@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tiger Cloud Projects API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List projects accessible to the authenticated caller",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects"
+          },
+          "docs": "Returns the projects the caller can access. PAT callers see only the\nproject their PAT is scoped to; OAuth user callers see all projects\nthey belong to.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

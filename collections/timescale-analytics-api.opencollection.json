@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Timescale Analytics API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Identify user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/analytics/identify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Identifies a user for analytics."
+        },
+        {
+          "info": {
+            "name": "Track event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/analytics/track",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Tracks an analytics event."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

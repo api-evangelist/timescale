@@ -1,0 +1,1007 @@
+openapi: 3.2.0
+info:
+  title: Tiger Cloud Services API
+  description: 'A RESTful API for Tiger Cloud platform.
+
+    '
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.tigerdata.com/legal/terms
+  contact:
+    name: Tiger Data Support
+    url: https://www.tigerdata.com/contact
+servers:
+- url: https://console.cloud.tigerdata.com/public/api/v1
+  description: API server for Tiger Cloud
+tags:
+- name: Services
+  description: Manage services, read replicas, and their associated actions.
+paths:
+  /projects/{project_id}/services:
+    get:
+      operationId: getServices
+      tags:
+      - Services
+      summary: List All Services
+      description: Retrieves a list of all services within a specific project.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: A list of services.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+    post:
+      operationId: createService
+      tags:
+      - Services
+      summary: Create a Service
+      description: Creates a new database service within a project. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCreate'
+      responses:
+        '202':
+          description: Service creation request has been accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}:
+    get:
+      operationId: getService
+      tags:
+      - Services
+      summary: Get a Service
+      description: Retrieves the details of a specific service by its ID.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          description: Service details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+    delete:
+      operationId: deleteService
+      tags:
+      - Services
+      summary: Delete a Service
+      description: Deletes a specific service. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '202':
+          description: Deletion request has been accepted.
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/start:
+    post:
+      operationId: startService
+      tags:
+      - Services
+      summary: Start a Service
+      description: Starts a stopped service within a project. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '202':
+          description: Service start request has been accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/stop:
+    post:
+      operationId: stopService
+      tags:
+      - Services
+      summary: Stop a Service
+      description: Stops a running service within a project. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '202':
+          description: Service stop request has been accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/attachToVPC:
+    post:
+      operationId: attachServiceToVPC
+      tags:
+      - Services
+      summary: Attach Service to VPC
+      description: Associates a service with a VPC.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceVPCInput'
+      responses:
+        '202':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/detachFromVPC:
+    post:
+      operationId: detachServiceFromVPC
+      tags:
+      - Services
+      summary: Detach Service from VPC
+      description: Disassociates a service from its VPC.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceVPCInput'
+      responses:
+        '202':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/resize:
+    post:
+      operationId: resizeService
+      tags:
+      - Services
+      summary: Resize a Service
+      description: Changes the CPU and memory allocation for a specific service within a project. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResizeInput'
+      responses:
+        '202':
+          description: Resize request has been accepted and is in progress.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/enablePooler:
+    post:
+      operationId: enablePooler
+      tags:
+      - Services
+      summary: Enable Connection Pooler for a Service
+      description: Activates the connection pooler for a specific service within a project.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/disablePooler:
+    post:
+      operationId: disablePooler
+      tags:
+      - Services
+      summary: Disable Connection Pooler for a Service
+      description: Deactivates the connection pooler for a specific service within a project.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/forkService:
+    post:
+      operationId: forkService
+      tags:
+      - Services
+      summary: Fork a Service
+      description: Creates a new, independent service within a project by taking a snapshot of an existing one.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForkServiceCreate'
+      responses:
+        '202':
+          description: Fork request accepted. The response contains the details of the new service being created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/updatePassword:
+    post:
+      operationId: updatePassword
+      tags:
+      - Services
+      summary: Update Service Password
+      description: Sets a new master password for the service within a project.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordInput'
+      responses:
+        '204':
+          description: Password updated successfully. No content returned.
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/setEnvironment:
+    post:
+      operationId: setEnvironment
+      tags:
+      - Services
+      summary: Set Environment for a Service
+      description: Sets the environment type for the service.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetEnvironmentInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/SuccessMessage'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/logs:
+    get:
+      operationId: getServiceLogs
+      tags:
+      - Services
+      summary: Get service logs
+      description: 'Fetch logs for a specific service. Returns up to 500 log entries from
+
+        available logs. Supports pagination.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      - name: node
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Specific service node to fetch logs from (for multi-node services)
+      - name: page
+        in: query
+        required: false
+        deprecated: true
+        schema:
+          type: integer
+        description: Page number for pagination (0-based)
+      - name: until
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Fetch logs before this timestamp (RFC3339 format, e.g., 2024-01-15T10:00:00Z)
+      - name: since
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Fetch logs after this timestamp (RFC3339 format, e.g., 2024-01-15T09:00:00Z).
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Opaque pagination cursor returned as lastCursor in a previous response. When provided, returns the next page of logs older than the cursor position.
+      responses:
+        '200':
+          description: Service logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceLogs'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/metrics/available-series:
+    get:
+      operationId: getServiceMetricsAvailableSeries
+      x-preview: true
+      tags:
+      - Services
+      summary: List available metric series
+      description: '**Preview — this endpoint is experimental and may change without notice.**
+
+
+        Returns the names of all metric series available for a service.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      responses:
+        '200':
+          description: Available metric series names.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/metrics/series:
+    post:
+      operationId: getServiceMetricsSeries
+      x-preview: true
+      tags:
+      - Services
+      summary: Get a metric series
+      description: '**Preview — this endpoint is experimental and may change without notice.**
+
+
+        Returns time-series data points for a named metric within a time window.
+
+        Use getServiceMetricsAvailableSeries to discover valid metric names.
+
+
+        Parameters are sent as a JSON body so callers can pass an unbounded
+
+        filter set without query-string length pressure. The response is a list
+
+        of MetricSeries, each carrying its label set as a structured map
+
+        alongside its per-bucket data points.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricsSeriesRequest'
+      responses:
+        '200':
+          description: Metric series matching the request.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetricSeries'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+  /projects/{project_id}/services/{service_id}/setHA:
+    post:
+      operationId: setHAReplica
+      tags:
+      - Services
+      summary: Change HA configuration for a Service
+      description: Changes the HA configuration for a specific service. This is an asynchronous operation.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/ServiceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetHAReplicaInput'
+      responses:
+        '202':
+          description: HA replica configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+components:
+  schemas:
+    ForkStrategy:
+      type: string
+      enum:
+      - LAST_SNAPSHOT
+      - NOW
+      - PITR
+      description: 'Strategy for creating the fork:
+
+        - LAST_SNAPSHOT: Use existing snapshot for fast fork
+
+        - NOW: Create new snapshot for up-to-date fork
+
+        - PITR: Point-in-time recovery using target_time
+
+        '
+    ConnectionPooler:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+    Service:
+      type: object
+      properties:
+        service_id:
+          type: string
+          description: The unique identifier for the service.
+        project_id:
+          type: string
+          description: The project this service belongs to.
+        name:
+          type: string
+          description: The name of the service.
+        region_code:
+          type: string
+          description: The cloud region where the service is hosted.
+          example: us-east-1
+        service_type:
+          $ref: '#/components/schemas/ServiceType'
+          description: The type of the service.
+        created:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        initial_password:
+          type: string
+          description: The initial password for the service.
+          format: password
+          example: a-very-secure-initial-password
+        status:
+          $ref: '#/components/schemas/DeployStatus'
+          description: Current status of the service
+        resources:
+          type: array
+          description: List of resources allocated to the service
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Resource identifier
+              spec:
+                type: object
+                description: Resource specification
+                properties:
+                  cpu_millis:
+                    type: integer
+                    description: CPU allocation in millicores
+                  memory_gbs:
+                    type: integer
+                    description: Memory allocation in gigabytes
+                  volume_type:
+                    type: string
+                    description: Type of storage volume
+        metadata:
+          type: object
+          description: Additional metadata for the service
+          properties:
+            environment:
+              type: string
+              description: Environment tag for the service
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        vpcEndpoint:
+          type:
+          - object
+          - 'null'
+          description: VPC endpoint configuration if available
+        forked_from:
+          $ref: '#/components/schemas/ForkSpec'
+        ha_replicas:
+          $ref: '#/components/schemas/HAReplica'
+        connection_pooler:
+          $ref: '#/components/schemas/ConnectionPooler'
+        read_replica_sets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadReplicaSet'
+    DeployStatus:
+      type: string
+      enum:
+      - QUEUED
+      - DELETING
+      - CONFIGURING
+      - READY
+      - DELETED
+      - UNSTABLE
+      - PAUSING
+      - PAUSED
+      - RESUMING
+      - UPGRADING
+      - OPTIMIZING
+    ServiceCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the service.
+          example: my-production-db
+        addons:
+          type: array
+          items:
+            type: string
+            enum:
+            - time-series
+            - ai
+          description: List of addons to enable for the service. 'time-series' enables TimescaleDB, 'ai' enables AI/vector extensions.
+          example:
+          - time-series
+          - ai
+        region_code:
+          type: string
+          description: The region where the service will be created. If not provided, we'll choose the best region for you.
+          example: us-east-1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas to create (all replicas are asynchronous by default).
+          example: 2
+        cpu_millis:
+          type: string
+          description: The initial CPU allocation in milli-cores, or 'shared' for a shared-resource service.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The initial memory allocation in gigabytes, or 'shared' for a shared-resource service.
+          example: '4'
+        environment_tag:
+          $ref: '#/components/schemas/EnvironmentTag'
+          description: The environment tag for the service, 'DEV' by default.
+          default: DEV
+    UpdatePasswordInput:
+      type: object
+      required:
+      - password
+      properties:
+        password:
+          type: string
+          description: The new password.
+          format: password
+          example: a-very-secure-new-password
+    ResizeInput:
+      type: object
+      required:
+      - cpu_millis
+      - memory_gbs
+      properties:
+        cpu_millis:
+          type: string
+          description: The new CPU allocation in milli-cores.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The new memory allocation in gigabytes.
+          example: '4'
+    ServiceLogs:
+      type: object
+      required:
+      - logs
+      properties:
+        logs:
+          type: array
+          items:
+            type: string
+          description: Array of log message strings. Preserved for backwards compatibility.
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceLogEntry'
+          description: Structured log entries with timestamp and severity metadata. Only present on the cursor-based path.
+        lastCursor:
+          type: string
+          description: Opaque cursor for the next page of results. Present when more log entries exist older than the last entry in this response. Absent when there are no further results.
+    ForkSpec:
+      type: object
+      properties:
+        project_id:
+          type: string
+          example: asda1b2c3
+        service_id:
+          type: string
+          example: bbss422fg
+        is_standby:
+          type: boolean
+          example: false
+    ForkServiceCreate:
+      type: object
+      required:
+      - fork_strategy
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the forked service. If not provided, will use parent service name with "-fork" suffix.
+          example: my-production-db-fork
+        cpu_millis:
+          type: string
+          description: The initial CPU allocation in milli-cores, or 'shared' for a shared-resource service. If not provided, will inherit from parent service.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The initial memory allocation in gigabytes, or 'shared' for a shared-resource service. If not provided, will inherit from parent service.
+          example: '4'
+        fork_strategy:
+          $ref: '#/components/schemas/ForkStrategy'
+          description: Strategy for creating the fork. This field is required.
+        target_time:
+          type: string
+          format: date-time
+          description: Target time for point-in-time recovery. Required when fork_strategy is PITR.
+          example: '2024-01-01T00:00:00Z'
+        environment_tag:
+          $ref: '#/components/schemas/EnvironmentTag'
+          description: The environment tag for the forked service, 'DEV' by default.
+          default: DEV
+      description: 'Create a fork of an existing service. Service type, region code, and storage are always inherited from the parent service.
+
+        HA replica count is always set to 0 for forked services.
+
+        '
+    ServiceType:
+      type: string
+      enum:
+      - TIMESCALEDB
+      - POSTGRES
+      - VECTOR
+    ReadReplicaSet:
+      type: object
+      properties:
+        id:
+          type: string
+          example: alb8jicdpr
+        name:
+          type: string
+          example: reporting-replica-1
+        status:
+          type: string
+          enum:
+          - creating
+          - active
+          - resizing
+          - deleting
+          - error
+          example: active
+        nodes:
+          type: integer
+          description: Number of nodes in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: Memory allocation in gigabytes.
+          example: 1
+        metadata:
+          type: object
+          description: Additional metadata for the read replica set
+          properties:
+            environment:
+              type: string
+              description: Environment tag for the read replica set
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        connection_pooler:
+          $ref: '#/components/schemas/ConnectionPooler'
+    SetEnvironmentInput:
+      type: object
+      required:
+      - environment
+      properties:
+        environment:
+          type: string
+          description: The target environment for the service.
+          enum:
+          - PROD
+          - DEV
+      example:
+        environment: PROD
+    MetricLabelFilter:
+      x-preview: true
+      type: object
+      description: A single key/value label match applied to a metric series query.
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          description: Label key to match against, e.g. `role` or `job_id`.
+          example: role
+        value:
+          type: string
+          description: Label value to match. Case sensitivity follows the underlying metric's storage convention.
+          example: primary
+    Endpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
+    MetricsSeriesRequest:
+      x-preview: true
+      type: object
+      description: 'Parameters for a single getServiceMetricsSeries query. Sent as a JSON
+
+        body so callers can pass an unbounded filter set without query-string
+
+        length pressure.
+
+        '
+      required:
+      - name
+      - from
+      - to
+      properties:
+        name:
+          type: string
+          description: Metric series name. Use getServiceMetricsAvailableSeries to discover valid values.
+          example: timescale_cloud_system_cpu_usage_millicores
+        from:
+          type: string
+          format: date-time
+          description: Start of the time window (RFC3339; nanosecond precision accepted).
+          example: '2026-06-25T10:00:00Z'
+        to:
+          type: string
+          format: date-time
+          description: End of the time window (RFC3339; nanosecond precision accepted).
+          example: '2026-06-25T11:00:00Z'
+        bucket_seconds:
+          type: integer
+          minimum: 60
+          description: 'Aggregation bucket size in seconds. Optional: when omitted the
+
+            server picks a default that matches the window (roughly 1m for
+
+            windows up to 1h, 1h for up to 30d, 1d beyond that). Minimum is
+
+            60s (finer buckets don''t add resolution given scrape intervals).
+
+            Must be coarse enough for the window''s tier; requests that ask
+
+            for a finer bucket than the tier can produce are rejected.
+
+            '
+          example: 3600
+        fn:
+          type: string
+          enum:
+          - RATE
+          - INCREASE
+          - SUM
+          - AVG
+          - MIN
+          - MAX
+          - COUNT
+          - P50
+          - P90
+          - P99
+          - LAST
+          description: "Aggregation function applied per bucket. Optional: when omitted,\nthe server picks the default for the metric (currently `LAST`).\n\nNot accepted on the following metrics — requests are rejected\nwith `INVALID_REQUEST`:\n  - `timescale_cloud_system_cpu_total_millicores`\n  - `timescale_cloud_system_cpu_usage_millicores`\n  - `timescale_cloud_system_disk_io_read_bytes`\n  - `timescale_cloud_system_disk_io_read_ops`\n  - `timescale_cloud_system_disk_io_total_bytes`\n  - `timescale_cloud_system_disk_io_total_ops`\n  - `timescale_cloud_system_disk_io_write_bytes`\n  - `timescale_cloud_system_disk_io_write_ops`\n  - `timescale_cloud_system_disk_usage_bytes`\n  - `timescale_cloud_system_memory_total_bytes`\n  - `timescale_cloud_system_memory_usage_bytes`\n  - `timescale_cloud_database_qps`\n  - `timescale_cloud_database_num_connections`\n  - `timescale_cloud_database_job_duration_usecs`\n  - `timescale_cloud_database_job_success`\n"
+          example: RATE
+        filters:
+          type: array
+          description: 'Label filters applied to the series query. Recognized label names
+
+            depend on the metric. The most common is `role` (value `primary` or
+
+            `replica`). When `role` is omitted, some metrics default to primary
+
+            and others return data for all roles (one series per role); pass an
+
+            explicit role for deterministic results. Role label values in the
+
+            response are lowercased.
+
+            '
+          items:
+            $ref: '#/components/schemas/MetricLabelFilter'
+    MetricSeries:
+      x-preview: true
+      type: object
+      description: One labeled time series — the label set plus its per-bucket data points.
+      required:
+      - labels
+      - data
+      properties:
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Label set identifying this series. The key set depends on the
+
+            metric (e.g. `role`, `ordinal`).
+
+            '
+        data:
+          type: array
+          description: Per-bucket data points for this label set.
+          items:
+            $ref: '#/components/schemas/MetricDataPoint'
+    ServiceLogEntry:
+      type: object
+      required:
+      - timestamp
+      - message
+      - severity
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the log entry (RFC3339 format)
+        message:
+          type: string
+          description: Log message text
+        severity:
+          type: string
+          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
+    SetHAReplicaInput:
+      type: object
+      properties:
+        sync_replica_count:
+          type: integer
+          description: Number of synchronous high-availability replicas.
+          example: 1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas (all replicas are asynchronous by default).
+          example: 1
+      description: At least one of sync_replica_count or replica_count must be provided.
+    EnvironmentTag:
+      type: string
+      enum:
+      - DEV
+      - PROD
+      description: The environment tag for the service.
+    MetricDataPoint:
+      x-preview: true
+      type: object
+      description: A single time/value pair within a MetricSeries.
+      required:
+      - time
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: The bucket start timestamp.
+          example: '2026-06-25T10:00:00Z'
+        value:
+          type: number
+          format: double
+          description: 'The aggregated value at this bucket. Buckets without collected
+
+            data are omitted from the parent series'' `data` array; the API
+
+            does not currently emit null values.
+
+            '
+          example: 247.5
+    HAReplica:
+      type: object
+      properties:
+        sync_replica_count:
+          type: integer
+          description: Number of synchronous high-availability replicas.
+          example: 1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas (all replicas are asynchronous by default).
+          example: 1
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
+    ServiceVPCInput:
+      type: object
+      required:
+      - vpc_id
+      properties:
+        vpc_id:
+          type: string
+          description: The ID of the VPC to attach the service to.
+          example: '1234567890'
+  responses:
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: The unique identifier of the service.
+      schema:
+        type: string
+        example: d1k5vk7hf2
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae

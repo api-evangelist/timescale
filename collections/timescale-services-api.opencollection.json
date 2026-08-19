@@ -1,0 +1,522 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tiger Cloud Services API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Services",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List All Services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all services within a specific project."
+        },
+        {
+          "info": {
+            "name": "Create a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new database service within a project. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Get a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific service by its ID."
+        },
+        {
+          "info": {
+            "name": "Delete a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Deletes a specific service. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Start a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/start",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Starts a stopped service within a project. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Stop a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/stop",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Stops a running service within a project. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Attach Service to VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/attachToVPC",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Associates a service with a VPC."
+        },
+        {
+          "info": {
+            "name": "Detach Service from VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/detachFromVPC",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Disassociates a service from its VPC."
+        },
+        {
+          "info": {
+            "name": "Resize a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/resize",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Changes the CPU and memory allocation for a specific service within a project. This is an asynchronous operation."
+        },
+        {
+          "info": {
+            "name": "Enable Connection Pooler for a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/enablePooler",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Activates the connection pooler for a specific service within a project."
+        },
+        {
+          "info": {
+            "name": "Disable Connection Pooler for a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/disablePooler",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "Deactivates the connection pooler for a specific service within a project."
+        },
+        {
+          "info": {
+            "name": "Fork a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/forkService",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new, independent service within a project by taking a snapshot of an existing one."
+        },
+        {
+          "info": {
+            "name": "Update Service Password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/updatePassword",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets a new master password for the service within a project."
+        },
+        {
+          "info": {
+            "name": "Set Environment for a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/setEnvironment",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the environment type for the service."
+        },
+        {
+          "info": {
+            "name": "Get service logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/logs",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              },
+              {
+                "name": "node",
+                "value": "",
+                "type": "query",
+                "description": "Specific service node to fetch logs from (for multi-node services)"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination (0-based)"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Fetch logs before this timestamp (RFC3339 format, e.g., 2024-01-15T10:00:00Z)"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Fetch logs after this timestamp (RFC3339 format, e.g., 2024-01-15T09:00:00Z)."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque pagination cursor returned as lastCursor in a previous response. When provided, returns the next page of logs older than the cursor position."
+              }
+            ]
+          },
+          "docs": "Fetch logs for a specific service. Returns up to 500 log entries from\navailable logs. Supports pagination.\n"
+        },
+        {
+          "info": {
+            "name": "List available metric series",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/metrics/available-series",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ]
+          },
+          "docs": "**Preview — this endpoint is experimental and may change without notice.**\n\nReturns the names of all metric series available for a service.\n"
+        },
+        {
+          "info": {
+            "name": "Get a metric series",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/metrics/series",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Preview — this endpoint is experimental and may change without notice.**\n\nReturns time-series data points for a named metric within a time window.\nUse getServiceMetricsAvailableSeries to discover valid metric names.\n\nParameters are sent as a JSON body so callers can pass an unbounded\nfilter set without query-string length pressure. The response is a list\nof MetricSeries, each carrying its label set as a structured map\nalongside its per-bucket data points.\n"
+        },
+        {
+          "info": {
+            "name": "Change HA configuration for a Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/services/:service_id/setHA",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "service_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the service."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Changes the HA configuration for a specific service. This is an asynchronous operation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

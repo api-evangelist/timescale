@@ -1,0 +1,255 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tiger Cloud VP Cs API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "VPCs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List All VPCs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all Virtual Private Clouds (VPCs)."
+        },
+        {
+          "info": {
+            "name": "Create a VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Virtual Private Cloud (VPC)."
+        },
+        {
+          "info": {
+            "name": "Get a VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific VPC by its ID."
+        },
+        {
+          "info": {
+            "name": "Delete a VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              }
+            ]
+          },
+          "docs": "Deletes a specific VPC."
+        },
+        {
+          "info": {
+            "name": "Rename a VPC",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id/rename",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the name of a specific VPC."
+        },
+        {
+          "info": {
+            "name": "List VPC Peerings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id/peerings",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all VPC peering connections for a given VPC."
+        },
+        {
+          "info": {
+            "name": "Create a VPC Peering",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id/peerings",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new VPC peering connection."
+        },
+        {
+          "info": {
+            "name": "Get a VPC Peering",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id/peerings/:peering_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              },
+              {
+                "name": "peering_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC peering connection."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific VPC peering connection."
+        },
+        {
+          "info": {
+            "name": "Delete a VPC Peering",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://console.cloud.tigerdata.com/public/api/v1/projects/:project_id/vpcs/:vpc_id/peerings/:peering_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "vpc_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC."
+              },
+              {
+                "name": "peering_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the VPC peering connection."
+              }
+            ]
+          },
+          "docs": "Deletes a specific VPC peering connection."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

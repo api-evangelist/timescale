@@ -1,0 +1,188 @@
+openapi: 3.2.0
+info:
+  title: Ghost Invites API
+  version: 0.1.0
+  description: Ghost database management API
+servers:
+- url: https://api.ghost.build/v0
+  description: Production
+security:
+- BearerAuth: []
+tags:
+- name: Invites
+paths:
+  /invites:
+    get:
+      operationId: listReceivedInvites
+      summary: List received invites
+      description: 'Lists the pending invites the authenticated user has received, across
+
+        all spaces. Requires user authentication (JWT).
+
+        '
+      responses:
+        '200':
+          description: List of pending received invites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReceivedInvite'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Invites
+  /invites/{space_id}/accept:
+    post:
+      operationId: acceptInvite
+      summary: Accept a received invite
+      description: 'Accepts the invite the authenticated user has received to the given
+
+        space, joining it. Requires user authentication (JWT).
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Invite accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteActionResult'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Invites
+  /invites/{space_id}/decline:
+    post:
+      operationId: declineInvite
+      summary: Decline a received invite
+      description: 'Declines the invite the authenticated user has received to the given
+
+        space. Requires user authentication (JWT).
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/SpaceId'
+      responses:
+        '200':
+          description: Invite declined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteActionResult'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Invites
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    MemberRole:
+      type: string
+      description: 'A member''s role within a space. The `owner` role belongs to the user
+
+        who created the space; every space has exactly one owner, so `owner`
+
+        is never accepted as an input when granting a role. On the `Space`
+
+        schema, this is the caller''s own role in the space, omitted for
+
+        API-key authentication (API keys are space-scoped and carry no
+
+        member identity).
+
+        '
+      enum:
+      - owner
+      - admin
+      - developer
+      - viewer
+    ReceivedInvite:
+      type: object
+      description: A pending invite the authenticated user has received.
+      required:
+      - space_id
+      - space_name
+      - inviter_email
+      - inviter_name
+      - role
+      - created_at
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the user is invited to.
+        space_name:
+          type: string
+          description: Name of the space the user is invited to.
+        inviter_email:
+          type: string
+          description: Email address of the user who sent the invite.
+        inviter_name:
+          type: string
+          description: Display name of the user who sent the invite.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+        created_at:
+          type: string
+          format: date-time
+          description: When the invite was created.
+    InviteActionResult:
+      type: object
+      description: Result of accepting or declining a received invite.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the invite was for.
+        space_name:
+          type: string
+          description: Name of the space the invite was for.
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+  parameters:
+    SpaceId:
+      name: space_id
+      in: path
+      required: true
+      description: Ghost space ID.
+      schema:
+        type: string
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'

@@ -1,0 +1,104 @@
+openapi: 3.2.0
+info:
+  title: Ghost Feedback API
+  version: 0.1.0
+  description: Ghost database management API
+servers:
+- url: https://api.ghost.build/v0
+  description: Production
+security:
+- BearerAuth: []
+tags:
+- name: Feedback
+paths:
+  /feedback:
+    post:
+      operationId: submitFeedback
+      summary: Submit feedback
+      description: Submits feedback or bug report.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Feedback
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    StatusResponse:
+      type: object
+      description: Generic success response.
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Status string (e.g. `success`).
+    FeedbackRequest:
+      type: object
+      description: User-submitted feedback or bug report.
+      required:
+      - message
+      - source
+      - version
+      - os
+      properties:
+        message:
+          type: string
+          description: Feedback message from the user.
+        source:
+          type: string
+          description: Source of the feedback request (e.g. `cli`, `mcp`).
+        version:
+          type: string
+          description: Version of the client submitting the feedback.
+        os:
+          type: string
+          description: Operating system of the client submitting the feedback.
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'

@@ -1,0 +1,82 @@
+openapi: 3.2.0
+info:
+  title: Tiger Cloud Projects API
+  description: 'A RESTful API for Tiger Cloud platform.
+
+    '
+  version: 1.0.0
+  license:
+    name: Proprietary
+    url: https://www.tigerdata.com/legal/terms
+  contact:
+    name: Tiger Data Support
+    url: https://www.tigerdata.com/contact
+servers:
+- url: https://console.cloud.tigerdata.com/public/api/v1
+  description: API server for Tiger Cloud
+tags:
+- name: Projects
+paths:
+  /projects:
+    get:
+      operationId: getProjects
+      tags:
+      - Projects
+      summary: List projects accessible to the authenticated caller
+      description: 'Returns the projects the caller can access. PAT callers see only the
+
+        project their PAT is scoped to; OAuth user callers see all projects
+
+        they belong to.
+
+        '
+      responses:
+        '200':
+          description: List of accessible projects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+        4XX:
+          $ref: '#/components/responses/ClientError'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
+    Project:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: rp1pz7uyae
+        name:
+          type: string
+          example: My Production Project
+  responses:
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

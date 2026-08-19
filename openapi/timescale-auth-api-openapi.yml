@@ -1,0 +1,186 @@
+openapi: 3.2.0
+info:
+  title: Timescale Auth API
+  version: '1.0'
+  description: 'Operations tagged Auth across 2 of this provider''s published API definitions: timescale-ghost-openapi-original.yml, timescale-tiger-cloud-openapi-original.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.ghost.build/v0
+  description: Production
+- url: https://console.cloud.tigerdata.com/public/api/v1
+  description: API server for Tiger Cloud
+tags:
+- name: Auth
+paths:
+  /auth/info:
+    servers:
+    - url: https://api.ghost.build/v0
+      description: Production
+    get:
+      operationId: authInfo
+      summary: Get authentication info
+      description: Returns info about the authenticated API key.
+      responses:
+        '200':
+          description: Authentication info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthInfo'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Auth
+      security:
+      - BearerAuth: []
+  /auth/logout:
+    servers:
+    - url: https://api.ghost.build/v0
+      description: Production
+    post:
+      operationId: logout
+      summary: Log out
+      description: 'Logs the user out by revoking the given refresh token.
+
+        Requires user authentication (JWT). API keys and project access tokens
+
+        cannot be used with this endpoint.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '204':
+          description: Logged out successfully
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+      - Auth
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    ApiKeyInfo:
+      type: object
+      description: Information about the API key used for authentication.
+      required:
+      - prefix
+      - name
+      - created_at
+      - space_id
+      - space_name
+      - user_id
+      - user_email
+      - user_name
+      properties:
+        prefix:
+          type: string
+          description: Stable prefix identifier for the API key (starts with `gt_`), identifying the key without exposing the secret.
+        name:
+          type: string
+          description: User-provided label for the API key.
+        created_at:
+          type: string
+          format: date-time
+          description: Time the API key was created.
+        space_id:
+          type: string
+          description: Space the API key is scoped to.
+        space_name:
+          type: string
+          description: Name of the space the API key is scoped to.
+        user_id:
+          type: string
+          description: ID of the user who created the API key.
+        user_email:
+          type: string
+          description: Email of the user who created the API key.
+        user_name:
+          type: string
+          description: Name of the user who created the API key.
+    AuthInfo:
+      type: object
+      description: Information about the authenticated caller.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Type of authentication used.
+          enum:
+          - api_key
+          - user
+        api_key:
+          $ref: '#/components/schemas/ApiKeyInfo'
+        user:
+          $ref: '#/components/schemas/UserInfo'
+    UserInfo:
+      type: object
+      description: Authenticated user details.
+      required:
+      - id
+      - email
+      - name
+      properties:
+        id:
+          type: string
+          description: User ID.
+        email:
+          type: string
+          description: User email address.
+        name:
+          type: string
+          description: User's full name.
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    LogoutRequest:
+      type: object
+      description: Request to log out by revoking a refresh token.
+      required:
+      - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: Refresh token to revoke.
+          x-lint-ignore: snake-case-properties
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'
+x-refined-from:
+- timescale-ghost-openapi-original.yml
+- timescale-tiger-cloud-openapi-original.yml

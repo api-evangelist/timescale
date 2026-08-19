@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Ghost Invites API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List received invites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/invites"
+          },
+          "docs": "Lists the pending invites the authenticated user has received, across\nall spaces. Requires user authentication (JWT).\n"
+        },
+        {
+          "info": {
+            "name": "Accept a received invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/invites/:space_id/accept",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Accepts the invite the authenticated user has received to the given\nspace, joining it. Requires user authentication (JWT).\n"
+        },
+        {
+          "info": {
+            "name": "Decline a received invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/invites/:space_id/decline",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Declines the invite the authenticated user has received to the given\nspace. Requires user authentication (JWT).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

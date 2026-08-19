@@ -1,0 +1,162 @@
+{
+  "item": [
+    {
+      "id": "81657c49-7c3f-44b2-919d-88d6b3a02bb1",
+      "name": "Pricing",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "09c366ae-bd4b-4782-ada5-146159bda4a6",
+          "name": "Get pricing",
+          "request": {
+            "name": "Get pricing",
+            "description": {
+              "content": "Returns current pricing.\n\nThis endpoint is unauthenticated.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "pricing"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3daf73a7-c46f-445f-ac0e-1922f45f8bf6",
+              "name": "Pricing",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pricing"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dedicated\": {\n    \"compute\": [\n      {\n        \"size\": \"2x\",\n        \"milli_cpu\": 5800,\n        \"memory_gib\": 4539,\n        \"price_per_hour\": 3009.766150514982,\n        \"price_per_month\": 3920.4078357252947\n      },\n      {\n        \"size\": \"8x\",\n        \"milli_cpu\": 8840,\n        \"memory_gib\": 7916,\n        \"price_per_hour\": 479.7340891938806,\n        \"price_per_month\": 3166.1095423706442\n      }\n    ],\n    \"storage\": {\n      \"price_per_gib_hour\": 3843.963317279244,\n      \"price_per_gib_month\": 5824.4216666453285,\n      \"included_gib_per_database\": 690\n    }\n  },\n  \"standard\": {\n    \"compute\": {\n      \"price_per_hour\": 1885.9390373704898,\n      \"included_compute_hours_per_month\": 6379\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "585af67f-7360-44e2-b107-3d80c31d1d0f",
+              "name": "Error response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "pricing"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"code\": \"no_payment_method\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ghost.build/v0",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "de8c6731-6dc3-4cc9-a481-0749b695da9a",
+    "name": "Ghost Pricing API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Ghost database management API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,918 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Ghost Spaces API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Spaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List spaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces"
+          },
+          "docs": "Returns Ghost spaces accessible to the authenticated user.\nFor user JWTs, returns all Ghost spaces the user is a member of.\nFor API keys, returns the single space the key is scoped to.\n"
+        },
+        {
+          "info": {
+            "name": "Create a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Ghost space. Requires user authentication (JWT).\nAPI keys cannot be used to create spaces.\nWhen no name is provided, the space is named after its owner\n(e.g. \"Jane Doe's space\").\n"
+        },
+        {
+          "info": {
+            "name": "Get a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Returns details about a single space, including the owner and the\ncaller's role. For user JWTs the role and owner are populated; for API\nkeys they are omitted (the members lookup that resolves the owner is not\navailable to API keys).\n"
+        },
+        {
+          "info": {
+            "name": "Rename a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/rename",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renames a space. Requires user authentication (JWT).\nAPI keys cannot be used to rename spaces.\n"
+        },
+        {
+          "info": {
+            "name": "Get space usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/usage",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Returns compute usage, storage usage, and billing/cost information for a space."
+        },
+        {
+          "info": {
+            "name": "Get space usage (deprecated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/status",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Deprecated alias for `GET /spaces/{space_id}/usage`. Use the `/usage` endpoint instead."
+        },
+        {
+          "info": {
+            "name": "List space members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/members",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists the members of a space.\nRequires user authentication (JWT). API keys cannot manage members.\n"
+        },
+        {
+          "info": {
+            "name": "Remove a member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/members/:user_id",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "User ID of the space member."
+              }
+            ]
+          },
+          "docs": "Removes a member from a space. The space owner cannot be removed,\nand callers cannot remove themselves.\nRequires user authentication (JWT). API keys cannot manage members.\n"
+        },
+        {
+          "info": {
+            "name": "Update a member's role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/members/:user_id/role",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "User ID of the space member."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Changes a member's role within a space. The `owner` role cannot be\ngranted, the owner's role cannot be changed, and callers cannot\nchange their own role.\nRequires user authentication (JWT). API keys cannot manage members.\n"
+        },
+        {
+          "info": {
+            "name": "Leave a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/leave",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Removes the authenticated user from the space. Requires user\nauthentication (JWT). API keys cannot leave a space. The space owner\ncannot leave their own space.\n"
+        },
+        {
+          "info": {
+            "name": "List sent invites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/invites",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists the pending invites that have been sent for a space.\nRequires user authentication (JWT). API keys cannot manage invites.\n"
+        },
+        {
+          "info": {
+            "name": "Invite a user to a space",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/invites",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites a user to a space by email address. The invitee accepts the\ninvitation with their own Ghost account.\nRequires user authentication (JWT). API keys cannot manage invites.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel a sent invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/invites/:email",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "path",
+                "description": "Email address the invite was sent to."
+              }
+            ]
+          },
+          "docs": "Cancels the pending invite sent to the given email address for a space.\nRequires user authentication (JWT). API keys cannot manage invites.\n"
+        },
+        {
+          "info": {
+            "name": "List API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/api_keys",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists all API keys for the specified space.\nRequires user authentication (JWT). API keys cannot list other API keys.\n"
+        },
+        {
+          "info": {
+            "name": "Create an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/api_keys",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key (client credentials) for the specified space.\nRequires user authentication (JWT). API keys cannot create other API keys.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/api_keys/:prefix",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "path",
+                "description": "API key prefix (e.g. `gt_...`)."
+              }
+            ]
+          },
+          "docs": "Deletes an API key from the specified space.\nRequires user authentication (JWT). API keys cannot delete other API keys.\n"
+        },
+        {
+          "info": {
+            "name": "List databases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists all databases in a space."
+        },
+        {
+          "info": {
+            "name": "Create a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new database in a space."
+        },
+        {
+          "info": {
+            "name": "Get a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ]
+          },
+          "docs": "Gets a single database by ID or name."
+        },
+        {
+          "info": {
+            "name": "Delete a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ]
+          },
+          "docs": "Deletes a database."
+        },
+        {
+          "info": {
+            "name": "Fork a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/fork",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Forks an existing database."
+        },
+        {
+          "info": {
+            "name": "Pause a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/pause",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ]
+          },
+          "docs": "Pauses a running database."
+        },
+        {
+          "info": {
+            "name": "Resume a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/resume",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ]
+          },
+          "docs": "Resumes a paused database."
+        },
+        {
+          "info": {
+            "name": "Rename a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/rename",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Renames a database."
+        },
+        {
+          "info": {
+            "name": "Update database password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/password",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resets the database password."
+        },
+        {
+          "info": {
+            "name": "Get database logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/logs",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Opaque pagination cursor returned as `last_cursor` in a previous\nresponse. When provided, returns the next page of logs older than\nthe cursor position.\n"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query",
+                "description": "Upper bound timestamp — return logs at or before this time (RFC3339 format, e.g., 2024-01-15T10:00:00Z). Defaults to now."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Lower bound timestamp — fetch logs after this time (RFC3339 format, e.g., 2024-01-15T09:00:00Z)"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Full-text search terms to filter log lines. Repeat the parameter\nfor multiple values (e.g. `?search=slow+query&search=ERROR`).\n"
+              },
+              {
+                "name": "severity",
+                "value": "",
+                "type": "query",
+                "description": "Severity levels to filter results. Repeat the parameter for multiple\nvalues (e.g. `?severity=ERROR&severity=WARNING`). Common values\ninclude `LOG`, `WARNING`, `ERROR`, and `FATAL`; PostgreSQL may also\nemit `DEBUG*`, `INFO`, `NOTICE`, and `PANIC`.\n"
+              }
+            ]
+          },
+          "docs": "Fetch logs for a specific database. Returns up to 500 log entries in\nreverse chronological order. Supports cursor-based pagination via the\n`cursor` parameter and the `last_cursor` field in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Share a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/databases/:database_ref/share",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "database_ref",
+                "value": "",
+                "type": "path",
+                "description": "Database ID or name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a shareable snapshot of a database. Returns a share token that can be used to create a new database from the snapshot in another space."
+        },
+        {
+          "info": {
+            "name": "List database shares",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/shares",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists all shared snapshots for a space."
+        },
+        {
+          "info": {
+            "name": "Revoke a database share",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/shares/:share_token",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "share_token",
+                "value": "",
+                "type": "path",
+                "description": "Share token returned from `listShares` or `shareDatabase` (begins with `gs_`)."
+              }
+            ]
+          },
+          "docs": "Revokes a shared snapshot, deleting the underlying storage snapshot. The share is identified by its share token."
+        },
+        {
+          "info": {
+            "name": "List invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/invoices",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists the most recent invoices for a space.\nRequires a user JWT; API keys are not authorized.\n"
+        },
+        {
+          "info": {
+            "name": "Get invoice detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/invoices/:invoice_id",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "invoice_id",
+                "value": "",
+                "type": "path",
+                "description": "Invoice ID returned from `listInvoices`."
+              }
+            ]
+          },
+          "docs": "Returns the line-item breakdown for a single invoice, looked up by the\ninvoice ID returned from `listInvoices`.\nRequires a user JWT; API keys are not authorized.\n"
+        },
+        {
+          "info": {
+            "name": "List payment methods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Lists payment methods on file for a space."
+        },
+        {
+          "info": {
+            "name": "Create payment method setup",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ]
+          },
+          "docs": "Creates a Stripe Setup Intent for payment method collection and returns the client secret and payment page URL."
+        },
+        {
+          "info": {
+            "name": "Get a payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment/:payment_id",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "payment_id",
+                "value": "",
+                "type": "path",
+                "description": "Payment method ID."
+              }
+            ]
+          },
+          "docs": "Returns a single payment method by ID."
+        },
+        {
+          "info": {
+            "name": "Delete a payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment/:payment_id",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "payment_id",
+                "value": "",
+                "type": "path",
+                "description": "Payment method ID."
+              }
+            ]
+          },
+          "docs": "Deletes a payment method."
+        },
+        {
+          "info": {
+            "name": "Set primary payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment/:payment_id/primary",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "payment_id",
+                "value": "",
+                "type": "path",
+                "description": "Payment method ID."
+              }
+            ]
+          },
+          "docs": "Sets a payment method as the primary payment method for the space."
+        },
+        {
+          "info": {
+            "name": "Cancel pending payment method deletion",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/payment/:payment_id/deletion",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              },
+              {
+                "name": "payment_id",
+                "value": "",
+                "type": "path",
+                "description": "Payment method ID."
+              }
+            ]
+          },
+          "docs": "Cancels a pending deletion for a payment method."
+        },
+        {
+          "info": {
+            "name": "Update compute overage settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.ghost.build/v0/spaces/:space_id/overages",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "",
+                "type": "path",
+                "description": "Ghost space ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enables or disables compute overage billing for the space, optionally\nsetting a monthly compute-minute cap above which standard databases\nauto-pause. Requires a user JWT and a payment method on file.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

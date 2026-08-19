@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Timescale Auth API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get authentication info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.ghost.build/v0/auth/info",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns info about the authenticated API key."
+        },
+        {
+          "info": {
+            "name": "Log out",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.ghost.build/v0/auth/logout",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Logs the user out by revoking the given refresh token.\nRequires user authentication (JWT). API keys and project access tokens\ncannot be used with this endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

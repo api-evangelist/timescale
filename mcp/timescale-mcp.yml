@@ -9,10 +9,8 @@ x-evidence:
   http_status: 200
   content_type: text/event-stream
   authenticated: false
-  note: >-
-    tools/list and prompts/list both answer anonymously — no OAuth challenge, no
-    invalid_token. The returned inputSchema blocks are the real, live tool contracts
-    and are saved verbatim to mcp/timescale-docs-mcp-tools.json.
+  note: tools/list and prompts/list both answer anonymously — no OAuth challenge, no invalid_token. The
+    returned inputSchema blocks are the real, live tool contracts and are saved verbatim to mcp/timescale-docs-mcp-tools.json.
 servers:
 - name: tiger-docs-mcp
   server_info:
@@ -32,17 +30,22 @@ servers:
   tools:
   - name: search_docs
     title: Search Documentation
-    description: >-
-      Search documentation with hybrid semantic (vector) and keyword (BM25) search.
-      Use semanticWeight to choose keyword-only (0), semantic-only (1), or a blend;
-      mid values fuse rankings with RRF. Supports Tiger Cloud (TimescaleDB),
-      PostgreSQL, and PostGIS.
-    required_inputs: [source, query, limit, semanticWeight]
-    annotations: {readOnlyHint: true, idempotentHint: true}
+    description: Search documentation with hybrid semantic (vector) and keyword (BM25) search. Use semanticWeight
+      to choose keyword-only (0), semantic-only (1), or a blend; mid values fuse rankings with RRF. Supports
+      Tiger Cloud (TimescaleDB), PostgreSQL, and PostGIS.
+    required_inputs:
+    - source
+    - query
+    - limit
+    - semanticWeight
+    annotations:
+      readOnlyHint: true
+      idempotentHint: true
   - name: view_skill
     title: View Skill
     description: Retrieve detailed skills for TimescaleDB operations and best practices.
-    annotations: {readOnlyHint: true}
+    annotations:
+      readOnlyHint: true
   prompts:
   - design-postgis-tables
   - design-postgres-tables
@@ -59,28 +62,53 @@ servers:
   install: tiger mcp install
   source_repo: https://github.com/timescale/tiger-cli
   docs: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
-  note: >-
-    Ships inside the Tiger CLI binary. Proxies the hosted docs server above for
-    search_docs/view_skill and adds typed service + database tools backed by the
-    Tiger Cloud REST API. Six tools are withheld in --read-only mode
-    (service_create, service_fork, service_start, service_stop, service_resize,
-    service_update_password). Two metrics tools are gated behind an experimental flag.
+  note: Ships inside the Tiger CLI binary. Proxies the hosted docs server above for search_docs/view_skill
+    and adds typed service + database tools backed by the Tiger Cloud REST API. Six tools are withheld
+    in --read-only mode (service_create, service_fork, service_start, service_stop, service_resize, service_update_password).
+    Two metrics tools are gated behind an experimental flag.
   tools:
-  - {name: service_list, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#getServices'}
-  - {name: service_get, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#getService'}
-  - {name: service_create, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#createService', read_only_gated: true}
-  - {name: service_fork, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#forkService', read_only_gated: true}
-  - {name: service_resize, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#resizeService', read_only_gated: true}
-  - {name: service_start, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#startService', read_only_gated: true}
-  - {name: service_stop, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#stopService', read_only_gated: true}
-  - {name: service_update_password, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#updatePassword', read_only_gated: true}
-  - {name: service_logs, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#getServiceLogs'}
-  - {name: service_metrics_available, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#getServiceMetricsAvailableSeries', experimental: true}
-  - {name: service_metrics_series, source_operation: 'openapi/timescale-tiger-cloud-openapi-original.yml#getServiceMetricsSeries', experimental: true}
-  - {name: db_execute_query, source_operation: null, note: direct PostgreSQL wire protocol, not a REST operation}
-  - {name: db_schema, source_operation: null, note: direct PostgreSQL wire protocol, not a REST operation}
-  - {name: search_docs, note: proxied from https://mcp.tigerdata.com/docs}
-  - {name: view_skill, note: proxied from https://mcp.tigerdata.com/docs}
+  - name: service_list
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#getServices
+  - name: service_get
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#getService
+  - name: service_create
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#createService
+    read_only_gated: true
+  - name: service_fork
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#forkService
+    read_only_gated: true
+  - name: service_resize
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#resizeService
+    read_only_gated: true
+  - name: service_start
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#startService
+    read_only_gated: true
+  - name: service_stop
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#stopService
+    read_only_gated: true
+  - name: service_update_password
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#updatePassword
+    read_only_gated: true
+  - name: service_logs
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#getServiceLogs
+  - name: service_metrics_available
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#getServiceMetricsAvailableSeries
+    experimental: true
+  - name: service_metrics_series
+    source_operation: openapi/timescale-tiger-cloud-openapi-original.yml#getServiceMetricsSeries
+    experimental: true
+  - name: db_execute_query
+    source_operation: null
+    note: direct PostgreSQL wire protocol
+    not a REST operation: null
+  - name: db_schema
+    source_operation: null
+    note: direct PostgreSQL wire protocol
+    not a REST operation: null
+  - name: search_docs
+    note: proxied from https://mcp.tigerdata.com/docs
+  - name: view_skill
+    note: proxied from https://mcp.tigerdata.com/docs
 - name: ghost-mcp
   transport: stdio
   url: null
@@ -88,37 +116,55 @@ servers:
   install: ghost mcp install
   source: https://ghost.build/llms.txt
   docs: https://ghost.build/docs/#ghost-mcp-install
-  note: >-
-    Ships inside the Ghost CLI. Tool names are published in ghost.build/llms.txt
-    (names only — inputSchema requires an authenticated local introspection, which
-    this pass did not perform).
+  note: Ships inside the Ghost CLI. Tool names are published in ghost.build/llms.txt (names only — inputSchema
+    requires an authenticated local introspection, which this pass did not perform).
   tools:
-  - {name: ghost_connect}
-  - {name: ghost_create, source_operation: 'openapi/timescale-ghost-openapi-original.yml#createDatabase'}
-  - {name: ghost_create_dedicated, source_operation: 'openapi/timescale-ghost-openapi-original.yml#createDatabase'}
-  - {name: ghost_delete, source_operation: 'openapi/timescale-ghost-openapi-original.yml#deleteDatabase'}
-  - {name: ghost_feedback, source_operation: 'openapi/timescale-ghost-openapi-original.yml#submitFeedback'}
-  - {name: ghost_fork, source_operation: 'openapi/timescale-ghost-openapi-original.yml#forkDatabase'}
-  - {name: ghost_fork_dedicated, source_operation: 'openapi/timescale-ghost-openapi-original.yml#forkDatabase'}
-  - {name: ghost_id, source_operation: 'openapi/timescale-ghost-openapi-original.yml#authInfo'}
-  - {name: ghost_invoice, source_operation: 'openapi/timescale-ghost-openapi-original.yml#getInvoice'}
-  - {name: ghost_invoice_list, source_operation: 'openapi/timescale-ghost-openapi-original.yml#listInvoices'}
-  - {name: ghost_list, source_operation: 'openapi/timescale-ghost-openapi-original.yml#listDatabases'}
-  - {name: ghost_login}
-  - {name: ghost_logs, source_operation: 'openapi/timescale-ghost-openapi-original.yml#databaseLogs'}
-  - {name: ghost_password, source_operation: 'openapi/timescale-ghost-openapi-original.yml#updatePassword'}
-  - {name: ghost_pause, source_operation: 'openapi/timescale-ghost-openapi-original.yml#pauseDatabase'}
-  - {name: ghost_pricing, source_operation: 'openapi/timescale-ghost-openapi-original.yml#getPricing'}
-  - {name: ghost_rename, source_operation: 'openapi/timescale-ghost-openapi-original.yml#renameDatabase'}
-  - {name: ghost_resume, source_operation: 'openapi/timescale-ghost-openapi-original.yml#resumeDatabase'}
-  - {name: ghost_schema}
-  - {name: ghost_share, source_operation: 'openapi/timescale-ghost-openapi-original.yml#shareDatabase'}
-  - {name: ghost_share_list, source_operation: 'openapi/timescale-ghost-openapi-original.yml#listShares'}
-  - {name: ghost_share_revoke, source_operation: 'openapi/timescale-ghost-openapi-original.yml#revokeShare'}
-  - {name: ghost_sql}
-  - {name: ghost_usage, source_operation: 'openapi/timescale-ghost-openapi-original.yml#spaceUsage'}
-  - {name: search_docs}
-  - {name: view_skill}
+  - name: ghost_connect
+  - name: ghost_create
+    source_operation: openapi/timescale-ghost-openapi-original.yml#createDatabase
+  - name: ghost_create_dedicated
+    source_operation: openapi/timescale-ghost-openapi-original.yml#createDatabase
+  - name: ghost_delete
+    source_operation: openapi/timescale-ghost-openapi-original.yml#deleteDatabase
+  - name: ghost_feedback
+    source_operation: openapi/timescale-ghost-openapi-original.yml#submitFeedback
+  - name: ghost_fork
+    source_operation: openapi/timescale-ghost-openapi-original.yml#forkDatabase
+  - name: ghost_fork_dedicated
+    source_operation: openapi/timescale-ghost-openapi-original.yml#forkDatabase
+  - name: ghost_id
+    source_operation: openapi/timescale-ghost-openapi-original.yml#authInfo
+  - name: ghost_invoice
+    source_operation: openapi/timescale-ghost-openapi-original.yml#getInvoice
+  - name: ghost_invoice_list
+    source_operation: openapi/timescale-ghost-openapi-original.yml#listInvoices
+  - name: ghost_list
+    source_operation: openapi/timescale-ghost-openapi-original.yml#listDatabases
+  - name: ghost_login
+  - name: ghost_logs
+    source_operation: openapi/timescale-ghost-openapi-original.yml#databaseLogs
+  - name: ghost_password
+    source_operation: openapi/timescale-ghost-openapi-original.yml#updatePassword
+  - name: ghost_pause
+    source_operation: openapi/timescale-ghost-openapi-original.yml#pauseDatabase
+  - name: ghost_pricing
+    source_operation: openapi/timescale-ghost-openapi-original.yml#getPricing
+  - name: ghost_rename
+    source_operation: openapi/timescale-ghost-openapi-original.yml#renameDatabase
+  - name: ghost_resume
+    source_operation: openapi/timescale-ghost-openapi-original.yml#resumeDatabase
+  - name: ghost_schema
+  - name: ghost_share
+    source_operation: openapi/timescale-ghost-openapi-original.yml#shareDatabase
+  - name: ghost_share_list
+    source_operation: openapi/timescale-ghost-openapi-original.yml#listShares
+  - name: ghost_share_revoke
+    source_operation: openapi/timescale-ghost-openapi-original.yml#revokeShare
+  - name: ghost_sql
+  - name: ghost_usage
+    source_operation: openapi/timescale-ghost-openapi-original.yml#spaceUsage
+  - name: search_docs
+  - name: view_skill
   prompts:
   - design-postgis-tables
   - design-postgres-tables
@@ -131,3 +177,11 @@ servers:
 artifacts:
   live_tools_list: mcp/timescale-docs-mcp-tools.json
   crosswalk: mcp/timescale-tool-crosswalk.yml
+deployment:
+  mode: remote
+  endpoint: https://mcp.tigerdata.com/docs
+  verified: probed
+  probe: live
+  tools: 2
+  checked: '2026-08-12'
+  source: catalog MCP census

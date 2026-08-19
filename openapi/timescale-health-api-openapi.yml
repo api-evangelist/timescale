@@ -1,0 +1,30 @@
+openapi: 3.2.0
+info:
+  title: Ghost Health API
+  version: 0.1.0
+  description: Ghost database management API
+servers:
+- url: https://api.ghost.build/v0
+  description: Production
+security:
+- BearerAuth: []
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      operationId: health
+      summary: Health check
+      description: Returns 200 OK if the service is healthy.
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+      tags:
+      - Health
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User JWT or API key token (e.g. `gt_...`) sent as `Authorization: Bearer <token>`.'
