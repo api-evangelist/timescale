@@ -13,7 +13,7 @@ description: 'Timescale — rebranded as Tiger Data in 2025 — is the PostgreSQ
 url: https://raw.githubusercontent.com/api-evangelist/timescale/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-05'
 modified: '2026-08-05'
 image: https://www.tigerdata.com/favicon.ico
