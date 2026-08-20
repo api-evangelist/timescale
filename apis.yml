@@ -27,6 +27,17 @@ tags:
 - Data Platform
 - Vector Search
 - Developer Tools
+- Open-Source
+tags_raw:
+- Company
+- Database
+- PostgreSQL
+- Time Series
+- Analytics
+- Cloud Infrastructure
+- Data Platform
+- Vector Search
+- Developer Tools
 - Open Source
 apis:
 - name: Tiger Docs MCP Server
@@ -65,6 +76,8 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
@@ -135,6 +148,8 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -191,6 +206,8 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
+  - VPC
+  tags_raw:
   - VPCs
   properties:
   - type: OpenAPI
