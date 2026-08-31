@@ -218,7 +218,7 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
-  - VPC
+  - VPCs
   tags_raw:
   - VPCs
   properties:
