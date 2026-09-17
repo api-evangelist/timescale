@@ -227,16 +227,16 @@ apis:
     url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   - type: Documentation
     url: https://ghost.build/docs/
-- aid: timescale:timescale-vp-cs-api
+- aid: timescale:timescale-vpcs-api
   name: Timescale VP Cs API
   description: Manage VPCs and their peering connections.
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
   baseURL: https://mcp.tigerdata.com/docs
   tags:
-  - VP Cs
+  - VPCs
   properties:
   - type: OpenAPI
-    url: openapi/timescale-vp-cs-api-openapi.yml
+    url: openapi/timescale-vpcs-api-openapi.yml
   - type: Documentation
     url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   - type: Documentation
