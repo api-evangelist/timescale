@@ -219,6 +219,8 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
+  - Space
+  tags_raw:
   - Spaces
   properties:
   - type: OpenAPI
@@ -233,6 +235,8 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
   baseURL: https://mcp.tigerdata.com/docs
   tags:
+  - VPC
+  tags_raw:
   - VPCs
   properties:
   - type: OpenAPI
