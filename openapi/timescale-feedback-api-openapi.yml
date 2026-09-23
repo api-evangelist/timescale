@@ -35,29 +35,17 @@ paths:
       - Feedback
 components:
   schemas:
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    StatusResponse:
+    Error:
       type: object
-      description: Generic success response.
+      description: Standard error response.
       required:
-      - status
+      - message
       properties:
-        status:
+        message:
           type: string
-          description: Status string (e.g. `success`).
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
     FeedbackRequest:
       type: object
       description: User-submitted feedback or bug report.
@@ -79,17 +67,29 @@ components:
         os:
           type: string
           description: Operating system of the client submitting the feedback.
-    Error:
+    StatusResponse:
       type: object
-      description: Standard error response.
+      description: Generic success response.
       required:
-      - message
+      - status
       properties:
-        message:
+        status:
           type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
+          description: Status string (e.g. `success`).
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
   responses:
     Error:
       description: Error response

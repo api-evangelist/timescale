@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: Tiger Cloud Projects API
-  description: 'A RESTful API for Tiger Cloud platform.
-
-    '
+  description: A RESTful API for Tiger Cloud platform.
   version: 1.0.0
   license:
     name: Proprietary
@@ -27,9 +25,7 @@ paths:
 
         project their PAT is scoped to; OAuth user callers see all projects
 
-        they belong to.
-
-        '
+        they belong to.'
       responses:
         '200':
           description: List of accessible projects.
@@ -43,6 +39,18 @@ paths:
           $ref: '#/components/responses/ClientError'
 components:
   schemas:
+    Project:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: rp1pz7uyae
+        name:
+          type: string
+          example: My Production Project
     Error:
       type: object
       properties:
@@ -61,18 +69,6 @@ components:
             extra detail.
 
             '
-    Project:
-      type: object
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          example: rp1pz7uyae
-        name:
-          type: string
-          example: My Production Project
   responses:
     ClientError:
       description: Client error response (4xx status codes).

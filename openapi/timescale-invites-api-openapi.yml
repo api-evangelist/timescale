@@ -17,9 +17,7 @@ paths:
       summary: List received invites
       description: 'Lists the pending invites the authenticated user has received, across
 
-        all spaces. Requires user authentication (JWT).
-
-        '
+        all spaces. Requires user authentication (JWT).'
       responses:
         '200':
           description: List of pending received invites
@@ -39,9 +37,7 @@ paths:
       summary: Accept a received invite
       description: 'Accepts the invite the authenticated user has received to the given
 
-        space, joining it. Requires user authentication (JWT).
-
-        '
+        space, joining it. Requires user authentication (JWT).'
       parameters:
       - $ref: '#/components/parameters/SpaceId'
       responses:
@@ -61,9 +57,7 @@ paths:
       summary: Decline a received invite
       description: 'Declines the invite the authenticated user has received to the given
 
-        space. Requires user authentication (JWT).
-
-        '
+        space. Requires user authentication (JWT).'
       parameters:
       - $ref: '#/components/parameters/SpaceId'
       responses:
@@ -79,20 +73,6 @@ paths:
       - Invites
 components:
   schemas:
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
     MemberRole:
       type: string
       description: 'A member''s role within a space. The `owner` role belongs to the user
@@ -113,6 +93,30 @@ components:
       - admin
       - developer
       - viewer
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    InviteActionResult:
+      type: object
+      description: Result of accepting or declining a received invite.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the invite was for.
+        space_name:
+          type: string
+          description: Name of the space the invite was for.
     ReceivedInvite:
       type: object
       description: A pending invite the authenticated user has received.
@@ -142,30 +146,27 @@ components:
           type: string
           format: date-time
           description: When the invite was created.
-    InviteActionResult:
-      type: object
-      description: Result of accepting or declining a received invite.
-      required:
-      - space_id
-      - space_name
-      properties:
-        space_id:
-          type: string
-          description: ID of the space the invite was for.
-        space_name:
-          type: string
-          description: Name of the space the invite was for.
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+  responses:
     Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     SpaceId:
       name: space_id
@@ -174,13 +175,6 @@ components:
       description: Ghost space ID.
       schema:
         type: string
-  responses:
-    Error:
-      description: Error response
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     BearerAuth:
       type: http

@@ -12,9 +12,6 @@ tags:
 - name: Auth
 paths:
   /auth/info:
-    servers:
-    - url: https://api.ghost.build/v0
-      description: Production
     get:
       operationId: authInfo
       summary: Get authentication info
@@ -32,10 +29,10 @@ paths:
       - Auth
       security:
       - BearerAuth: []
-  /auth/logout:
     servers:
     - url: https://api.ghost.build/v0
       description: Production
+  /auth/logout:
     post:
       operationId: logout
       summary: Log out
@@ -43,9 +40,7 @@ paths:
 
         Requires user authentication (JWT). API keys and project access tokens
 
-        cannot be used with this endpoint.
-
-        '
+        cannot be used with this endpoint.'
       requestBody:
         required: true
         content:
@@ -61,22 +56,65 @@ paths:
       - Auth
       security:
       - BearerAuth: []
+    servers:
+    - url: https://api.ghost.build/v0
+      description: Production
 components:
   schemas:
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    UserInfo:
+      type: object
+      description: Authenticated user details.
+      required:
+      - id
+      - email
+      - name
+      properties:
+        id:
+          type: string
+          description: User ID.
+        email:
+          type: string
+          description: User email address.
+        name:
+          type: string
+          description: User's full name.
+    LogoutRequest:
+      type: object
+      description: Request to log out by revoking a refresh token.
+      required:
+      - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: Refresh token to revoke.
+          x-lint-ignore: snake-case-properties
+    AuthInfo:
+      type: object
+      description: Information about the authenticated caller.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: Type of authentication used.
+          enum:
+          - api_key
+          - user
+        api_key:
+          $ref: '#/components/schemas/ApiKeyInfo'
+        user:
+          $ref: '#/components/schemas/UserInfo'
     ApiKeyInfo:
       type: object
       description: Information about the API key used for authentication.
@@ -115,60 +153,149 @@ components:
         user_name:
           type: string
           description: Name of the user who created the API key.
-    AuthInfo:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    Error_2:
       type: object
-      description: Information about the authenticated caller.
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
+    AuthInfo_2:
+      type: object
+      description: 'Information about the authentication credentials being used. Exactly one
+
+        of `apiKey` or `oauth` is populated; the `type` field discriminates.
+
+        '
       required:
       - type
       properties:
         type:
           type: string
-          description: Type of authentication used.
+          description: 'Discriminator for the credential shape. `apiKey` for PAT callers;
+
+            `oauth` for OAuth user callers.
+
+            '
           enum:
-          - api_key
+          - apiKey
+          - oauth
+          example: apiKey
+        apiKey:
+          type: object
+          description: Information about the API key credentials
+          required:
+          - public_key
+          - name
+          - created
+          - project
+          - issuing_user
+          properties:
+            public_key:
+              type: string
+              description: The public key of the client credentials
+              example: tskey_abc123
+            name:
+              type: string
+              description: The name of the credential
+              example: my-production-token
+            created:
+              type: string
+              format: date-time
+              description: When the client credentials were created
+              example: '2024-01-15T10:30:00Z'
+            project:
+              type: object
+              description: Information about the project
+              required:
+              - id
+              - name
+              - plan_type
+              properties:
+                id:
+                  type: string
+                  description: The project ID
+                  example: rp1pz7uyae
+                name:
+                  type: string
+                  description: The name of the project
+                  example: My Production Project
+                plan_type:
+                  type: string
+                  description: The plan type for the project
+                  example: FREE
+            issuing_user:
+              type: object
+              description: Information about the user who created the credentials
+              required:
+              - id
+              - name
+              - email
+              properties:
+                id:
+                  type: string
+                  description: The user ID
+                  example: user123
+                name:
+                  type: string
+                  description: The user's name
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  description: The user's email
+                  example: john.doe@example.com
+        oauth:
+          type: object
+          description: OAuth user details. Present for OAuth user callers.
+          required:
           - user
-        api_key:
-          $ref: '#/components/schemas/ApiKeyInfo'
-        user:
-          $ref: '#/components/schemas/UserInfo'
-    UserInfo:
-      type: object
-      description: Authenticated user details.
-      required:
-      - id
-      - email
-      - name
-      properties:
-        id:
-          type: string
-          description: User ID.
-        email:
-          type: string
-          description: User email address.
-        name:
-          type: string
-          description: User's full name.
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
-    LogoutRequest:
-      type: object
-      description: Request to log out by revoking a refresh token.
-      required:
-      - refreshToken
-      properties:
-        refreshToken:
-          type: string
-          description: Refresh token to revoke.
-          x-lint-ignore: snake-case-properties
+          properties:
+            user:
+              type: object
+              required:
+              - id
+              - name
+              - email
+              properties:
+                id:
+                  type: string
+                  description: The numeric user ID
+                  example: '1234567'
+                name:
+                  type: string
+                  description: The user's name
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  description: The user's email
+                  example: john.doe@example.com
   responses:
     Error:
       description: Error response
@@ -176,6 +303,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
   securitySchemes:
     BearerAuth:
       type: http

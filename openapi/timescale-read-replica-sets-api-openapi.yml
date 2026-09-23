@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: Tiger Cloud Read Replica Sets API
-  description: 'A RESTful API for Tiger Cloud platform.
-
-    '
+  description: A RESTful API for Tiger Cloud platform.
   version: 1.0.0
   license:
     name: Proprietary
@@ -155,31 +153,23 @@ paths:
         4XX:
           $ref: '#/components/responses/ClientError'
 components:
-  parameters:
-    ServiceId:
-      name: service_id
-      in: path
-      required: true
-      description: The unique identifier of the service.
-      schema:
-        type: string
-        example: d1k5vk7hf2
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
-    ReplicaSetId:
-      name: replica_set_id
-      in: path
-      required: true
-      description: The unique identifier of the read replica set.
-      schema:
-        type: string
-        example: alb8jicdpr
+  responses:
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     ReadReplicaSet:
       type: object
@@ -222,19 +212,24 @@ components:
           $ref: '#/components/schemas/Endpoint'
         connection_pooler:
           $ref: '#/components/schemas/ConnectionPooler'
-    SetEnvironmentInput:
+    Error:
       type: object
-      required:
-      - environment
       properties:
-        environment:
+        code:
           type: string
-          description: The target environment for the service.
-          enum:
-          - PROD
-          - DEV
-      example:
-        environment: PROD
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
     ResizeInput:
       type: object
       required:
@@ -254,24 +249,6 @@ components:
       properties:
         endpoint:
           $ref: '#/components/schemas/Endpoint'
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-          description: 'Additional context about the failure. Often the actionable part
-
-            of the error (e.g. "bearer auth is not enabled on this server"
-
-            for a generic UNAUTHORIZED). Optional; absent on errors with no
-
-            extra detail.
-
-            '
     Endpoint:
       type: object
       properties:
@@ -305,20 +282,41 @@ components:
           type: integer
           description: The initial memory allocation in gigabytes.
           example: 1
-  responses:
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    SuccessMessage:
-      description: The action was completed successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Action completed successfully.
+    SetEnvironmentInput:
+      type: object
+      required:
+      - environment
+      properties:
+        environment:
+          type: string
+          description: The target environment for the service.
+          enum:
+          - PROD
+          - DEV
+      example:
+        environment: PROD
+  parameters:
+    ReplicaSetId:
+      name: replica_set_id
+      in: path
+      required: true
+      description: The unique identifier of the read replica set.
+      schema:
+        type: string
+        example: alb8jicdpr
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
+    ServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: The unique identifier of the service.
+      schema:
+        type: string
+        example: d1k5vk7hf2

@@ -1,9 +1,7 @@
 openapi: 3.2.0
 info:
   title: Tiger Cloud VP Cs API
-  description: 'A RESTful API for Tiger Cloud platform.
-
-    '
+  description: A RESTful API for Tiger Cloud platform.
   version: 1.0.0
   license:
     name: Proprietary
@@ -200,48 +198,32 @@ paths:
         4XX:
           $ref: '#/components/responses/ClientError'
 components:
+  parameters:
+    PeeringId:
+      name: peering_id
+      in: path
+      required: true
+      description: The unique identifier of the VPC peering connection.
+      schema:
+        type: string
+        example: '1234567890'
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
+    VPCId:
+      name: vpc_id
+      in: path
+      required: true
+      description: The unique identifier of the VPC.
+      schema:
+        type: string
+        example: '1234567890'
   schemas:
-    VPCRename:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: The new name for the VPC.
-          example: my-renamed-vpc
-    VPCCreate:
-      type: object
-      required:
-      - name
-      - cidr
-      - region_code
-      properties:
-        name:
-          type: string
-          example: my-production-vpc
-        cidr:
-          type: string
-          example: 10.0.0.0/16
-        region_code:
-          type: string
-          example: us-east-1
-    VPC:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-          example: '1234567890'
-        name:
-          type: string
-          example: my-production-vpc
-        cidr:
-          type: string
-          example: 10.0.0.0/16
-        region_code:
-          type: string
-          example: us-east-1
     Error:
       type: object
       properties:
@@ -260,22 +242,22 @@ components:
             extra detail.
 
             '
-    PeeringCreate:
+    VPC:
       type: object
-      required:
-      - peer_account_id
-      - peer_region_code
-      - peer_vpc_id
       properties:
-        peer_account_id:
+        id:
           type: string
-          example: acc-12345
-        peer_region_code:
-          type: string
-          example: aws-us-east-1
-        peer_vpc_id:
-          type: string
+          readOnly: true
           example: '1234567890'
+        name:
+          type: string
+          example: my-production-vpc
+        cidr:
+          type: string
+          example: 10.0.0.0/16
+        region_code:
+          type: string
+          example: us-east-1
     Peering:
       type: object
       properties:
@@ -301,31 +283,47 @@ components:
         error_message:
           type: string
           example: VPC not found
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
-    PeeringId:
-      name: peering_id
-      in: path
-      required: true
-      description: The unique identifier of the VPC peering connection.
-      schema:
-        type: string
-        example: '1234567890'
-    VPCId:
-      name: vpc_id
-      in: path
-      required: true
-      description: The unique identifier of the VPC.
-      schema:
-        type: string
-        example: '1234567890'
+    PeeringCreate:
+      type: object
+      required:
+      - peer_account_id
+      - peer_region_code
+      - peer_vpc_id
+      properties:
+        peer_account_id:
+          type: string
+          example: acc-12345
+        peer_region_code:
+          type: string
+          example: aws-us-east-1
+        peer_vpc_id:
+          type: string
+          example: '1234567890'
+    VPCCreate:
+      type: object
+      required:
+      - name
+      - cidr
+      - region_code
+      properties:
+        name:
+          type: string
+          example: my-production-vpc
+        cidr:
+          type: string
+          example: 10.0.0.0/16
+        region_code:
+          type: string
+          example: us-east-1
+    VPCRename:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The new name for the VPC.
+          example: my-renamed-vpc
   responses:
     ClientError:
       description: Client error response (4xx status codes).

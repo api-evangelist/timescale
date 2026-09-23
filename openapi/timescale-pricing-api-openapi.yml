@@ -18,9 +18,7 @@ paths:
       description: 'Returns current pricing.
 
 
-        This endpoint is unauthenticated.
-
-        '
+        This endpoint is unauthenticated.'
       security: []
       responses:
         '200':
@@ -35,41 +33,17 @@ paths:
       - Pricing
 components:
   schemas:
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    Pricing:
+    Error:
       type: object
-      description: 'Pricing data grouped by category.
-
-        '
+      description: Standard error response.
       required:
-      - dedicated
-      - standard
+      - message
       properties:
-        dedicated:
-          $ref: '#/components/schemas/DedicatedPricing'
-        standard:
-          $ref: '#/components/schemas/StandardPricing'
-    DatabaseSize:
-      type: string
-      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
-      enum:
-      - 1x
-      - 2x
-      - 4x
-      - 8x
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
     StoragePrice:
       type: object
       description: Storage pricing.
@@ -93,34 +67,19 @@ components:
             storage above this amount is billed at `price_per_gib_hour`.
 
             '
-    ComputePrice:
+    Pricing:
       type: object
-      description: Compute price for one size.
-      required:
-      - size
-      - milli_cpu
-      - memory_gib
-      - price_per_hour
-      - price_per_month
-      properties:
-        size:
-          $ref: '#/components/schemas/DatabaseSize'
-        milli_cpu:
-          type: integer
-          description: 'CPU allocation in millicores (1000 = 1 vCPU).
+      description: 'Pricing data grouped by category.
 
-            '
-        memory_gib:
-          type: integer
-          description: Memory allocation in GiB.
-        price_per_hour:
-          type: number
-          format: double
-          description: Price per hour while the database is running.
-        price_per_month:
-          type: number
-          format: double
-          description: Price per month while the database is running.
+        '
+      required:
+      - dedicated
+      - standard
+      properties:
+        dedicated:
+          $ref: '#/components/schemas/DedicatedPricing'
+        standard:
+          $ref: '#/components/schemas/StandardPricing'
     StandardPricing:
       type: object
       description: 'Pricing for standard (non-dedicated) databases, which share a
@@ -133,6 +92,14 @@ components:
       properties:
         compute:
           $ref: '#/components/schemas/StandardComputePrice'
+    DatabaseSize:
+      type: string
+      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
+      enum:
+      - 1x
+      - 2x
+      - 4x
+      - 8x
     DedicatedPricing:
       type: object
       description: Pricing for dedicated databases.
@@ -175,17 +142,48 @@ components:
             amount is billed at `price_per_hour`.
 
             '
-    Error:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    ComputePrice:
       type: object
-      description: Standard error response.
+      description: Compute price for one size.
       required:
-      - message
+      - size
+      - milli_cpu
+      - memory_gib
+      - price_per_hour
+      - price_per_month
       properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+        milli_cpu:
+          type: integer
+          description: 'CPU allocation in millicores (1000 = 1 vCPU).
+
+            '
+        memory_gib:
+          type: integer
+          description: Memory allocation in GiB.
+        price_per_hour:
+          type: number
+          format: double
+          description: Price per hour while the database is running.
+        price_per_month:
+          type: number
+          format: double
+          description: Price per month while the database is running.
   responses:
     Error:
       description: Error response
