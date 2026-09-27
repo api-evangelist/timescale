@@ -441,111 +441,71 @@ paths:
         4XX:
           $ref: '#/components/responses/ClientError'
 components:
+  responses:
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    ResizeInput:
-      type: object
-      required:
-      - cpu_millis
-      - memory_gbs
-      properties:
-        cpu_millis:
-          type: string
-          description: The new CPU allocation in milli-cores.
-          example: '1000'
-        memory_gbs:
-          type: string
-          description: The new memory allocation in gigabytes.
-          example: '4'
-    ConnectionPooler:
+    HAReplica:
       type: object
       properties:
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-    ServiceLogEntry:
+        sync_replica_count:
+          type: integer
+          description: Number of synchronous high-availability replicas.
+          example: 1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas (all replicas are asynchronous by default).
+          example: 1
+    Error:
       type: object
-      required:
-      - timestamp
-      - message
-      - severity
       properties:
-        timestamp:
+        code:
           type: string
-          format: date-time
-          description: Timestamp of the log entry (RFC3339 format)
         message:
           type: string
-          description: Log message text
-        severity:
+        details:
           type: string
-          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
-    MetricDataPoint:
-      x-preview: true
-      type: object
-      description: A single time/value pair within a MetricSeries.
-      required:
-      - time
-      properties:
-        time:
-          type: string
-          format: date-time
-          description: The bucket start timestamp.
-          example: '2026-06-25T10:00:00Z'
-        value:
-          type: number
-          format: double
-          description: 'The aggregated value at this bucket. Buckets without collected
+          description: 'Additional context about the failure. Often the actionable part
 
-            data are omitted from the parent series'' `data` array; the API
+            of the error (e.g. "bearer auth is not enabled on this server"
 
-            does not currently emit null values.
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
 
             '
-          example: 247.5
-    ForkStrategy:
-      type: string
-      enum:
-      - LAST_SNAPSHOT
-      - NOW
-      - PITR
-      description: 'Strategy for creating the fork:
-
-        - LAST_SNAPSHOT: Use existing snapshot for fast fork
-
-        - NOW: Create new snapshot for up-to-date fork
-
-        - PITR: Point-in-time recovery using target_time
-
-        '
-    DeployStatus:
-      type: string
-      enum:
-      - QUEUED
-      - DELETING
-      - CONFIGURING
-      - READY
-      - DELETED
-      - UNSTABLE
-      - PAUSING
-      - PAUSED
-      - RESUMING
-      - UPGRADING
-      - OPTIMIZING
-    MetricLabelFilter:
-      x-preview: true
+    Endpoint:
       type: object
-      description: A single key/value label match applied to a metric series query.
-      required:
-      - key
-      - value
       properties:
-        key:
+        host:
           type: string
-          description: Label key to match against, e.g. `role` or `job_id`.
-          example: role
-        value:
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
+    ServiceVPCInput:
+      type: object
+      required:
+      - vpc_id
+      properties:
+        vpc_id:
           type: string
-          description: Label value to match. Case sensitivity follows the underlying metric's storage convention.
-          example: primary
+          description: The ID of the VPC to attach the service to.
+          example: '1234567890'
     ForkServiceCreate:
       type: object
       required:
@@ -580,6 +540,12 @@ components:
         HA replica count is always set to 0 for forked services.
 
         '
+    EnvironmentTag:
+      type: string
+      enum:
+      - DEV
+      - PROD
+      description: The environment tag for the service.
     MetricSeries:
       x-preview: true
       type: object
@@ -602,184 +568,85 @@ components:
           description: Per-bucket data points for this label set.
           items:
             $ref: '#/components/schemas/MetricDataPoint'
-    ServiceCreate:
+    MetricLabelFilter:
+      x-preview: true
+      type: object
+      description: A single key/value label match applied to a metric series query.
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          description: Label key to match against, e.g. `role` or `job_id`.
+          example: role
+        value:
+          type: string
+          description: Label value to match. Case sensitivity follows the underlying metric's storage convention.
+          example: primary
+    ForkSpec:
+      type: object
+      properties:
+        project_id:
+          type: string
+          example: asda1b2c3
+        service_id:
+          type: string
+          example: bbss422fg
+        is_standby:
+          type: boolean
+          example: false
+    ResizeInput:
       type: object
       required:
-      - name
+      - cpu_millis
+      - memory_gbs
       properties:
-        name:
-          type: string
-          description: A human-readable name for the service.
-          example: my-production-db
-        addons:
-          type: array
-          items:
-            type: string
-            enum:
-            - time-series
-            - ai
-          description: List of addons to enable for the service. 'time-series' enables TimescaleDB, 'ai' enables AI/vector extensions.
-          example:
-          - time-series
-          - ai
-        region_code:
-          type: string
-          description: The region where the service will be created. If not provided, we'll choose the best region for you.
-          example: us-east-1
-        replica_count:
-          type: integer
-          description: Number of high-availability replicas to create (all replicas are asynchronous by default).
-          example: 2
         cpu_millis:
           type: string
-          description: The initial CPU allocation in milli-cores, or 'shared' for a shared-resource service.
+          description: The new CPU allocation in milli-cores.
           example: '1000'
         memory_gbs:
           type: string
-          description: The initial memory allocation in gigabytes, or 'shared' for a shared-resource service.
+          description: The new memory allocation in gigabytes.
           example: '4'
-        environment_tag:
-          $ref: '#/components/schemas/EnvironmentTag'
-          description: The environment tag for the service, 'DEV' by default.
-          default: DEV
-    HAReplica:
+    MetricDataPoint:
+      x-preview: true
       type: object
-      properties:
-        sync_replica_count:
-          type: integer
-          description: Number of synchronous high-availability replicas.
-          example: 1
-        replica_count:
-          type: integer
-          description: Number of high-availability replicas (all replicas are asynchronous by default).
-          example: 1
-    ServiceType:
-      type: string
-      enum:
-      - TIMESCALEDB
-      - POSTGRES
-      - VECTOR
-    ServiceLogs:
-      type: object
+      description: A single time/value pair within a MetricSeries.
       required:
-      - logs
+      - time
       properties:
-        logs:
-          type: array
-          items:
-            type: string
-          description: Array of log message strings. Preserved for backwards compatibility.
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/ServiceLogEntry'
-          description: Structured log entries with timestamp and severity metadata. Only present on the cursor-based path.
-        lastCursor:
+        time:
           type: string
-          description: Opaque cursor for the next page of results. Present when more log entries exist older than the last entry in this response. Absent when there are no further results.
-    ReadReplicaSet:
-      type: object
-      properties:
-        id:
-          type: string
-          example: alb8jicdpr
-        name:
-          type: string
-          example: reporting-replica-1
-        status:
-          type: string
-          enum:
-          - creating
-          - active
-          - resizing
-          - deleting
-          - error
-          example: active
-        nodes:
-          type: integer
-          description: Number of nodes in the replica set.
-          example: 2
-        cpu_millis:
-          type: integer
-          description: CPU allocation in milli-cores.
-          example: 250
-        memory_gbs:
-          type: integer
-          description: Memory allocation in gigabytes.
-          example: 1
-        metadata:
-          type: object
-          description: Additional metadata for the read replica set
-          properties:
-            environment:
-              type: string
-              description: Environment tag for the read replica set
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-        connection_pooler:
-          $ref: '#/components/schemas/ConnectionPooler'
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-          description: 'Additional context about the failure. Often the actionable part
+          format: date-time
+          description: The bucket start timestamp.
+          example: '2026-06-25T10:00:00Z'
+        value:
+          type: number
+          format: double
+          description: 'The aggregated value at this bucket. Buckets without collected
 
-            of the error (e.g. "bearer auth is not enabled on this server"
+            data are omitted from the parent series'' `data` array; the API
 
-            for a generic UNAUTHORIZED). Optional; absent on errors with no
-
-            extra detail.
+            does not currently emit null values.
 
             '
-    Endpoint:
-      type: object
-      properties:
-        host:
-          type: string
-          example: my-service.com
-        port:
-          type: integer
-          example: 8080
-    SetHAReplicaInput:
-      type: object
-      properties:
-        sync_replica_count:
-          type: integer
-          description: Number of synchronous high-availability replicas.
-          example: 1
-        replica_count:
-          type: integer
-          description: Number of high-availability replicas (all replicas are asynchronous by default).
-          example: 1
-      description: At least one of sync_replica_count or replica_count must be provided.
-    SetEnvironmentInput:
-      type: object
-      required:
-      - environment
-      properties:
-        environment:
-          type: string
-          description: The target environment for the service.
-          enum:
-          - PROD
-          - DEV
-      example:
-        environment: PROD
-    UpdatePasswordInput:
-      type: object
-      required:
-      - password
-      properties:
-        password:
-          type: string
-          description: The new password.
-          format: password
-          example: a-very-secure-new-password
+          example: 247.5
+    DeployStatus:
+      type: string
+      enum:
+      - QUEUED
+      - DELETING
+      - CONFIGURING
+      - READY
+      - DELETED
+      - UNSTABLE
+      - PAUSING
+      - PAUSED
+      - RESUMING
+      - UPGRADING
+      - OPTIMIZING
     MetricsSeriesRequest:
       x-preview: true
       type: object
@@ -859,33 +726,52 @@ components:
             '
           items:
             $ref: '#/components/schemas/MetricLabelFilter'
-    ServiceVPCInput:
+    SetEnvironmentInput:
       type: object
       required:
-      - vpc_id
+      - environment
       properties:
-        vpc_id:
+        environment:
           type: string
-          description: The ID of the VPC to attach the service to.
-          example: '1234567890'
-    EnvironmentTag:
-      type: string
-      enum:
-      - DEV
-      - PROD
-      description: The environment tag for the service.
-    ForkSpec:
+          description: The target environment for the service.
+          enum:
+          - PROD
+          - DEV
+      example:
+        environment: PROD
+    UpdatePasswordInput:
+      type: object
+      required:
+      - password
+      properties:
+        password:
+          type: string
+          description: The new password.
+          format: password
+          example: a-very-secure-new-password
+    ServiceLogs:
+      type: object
+      required:
+      - logs
+      properties:
+        logs:
+          type: array
+          items:
+            type: string
+          description: Array of log message strings. Preserved for backwards compatibility.
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceLogEntry'
+          description: Structured log entries with timestamp and severity metadata. Only present on the cursor-based path.
+        lastCursor:
+          type: string
+          description: Opaque cursor for the next page of results. Present when more log entries exist older than the last entry in this response. Absent when there are no further results.
+    ConnectionPooler:
       type: object
       properties:
-        project_id:
-          type: string
-          example: asda1b2c3
-        service_id:
-          type: string
-          example: bbss422fg
-        is_standby:
-          type: boolean
-          example: false
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
     Service:
       type: object
       properties:
@@ -963,6 +849,137 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ReadReplicaSet'
+    ServiceType:
+      type: string
+      enum:
+      - TIMESCALEDB
+      - POSTGRES
+      - VECTOR
+    ReadReplicaSet:
+      type: object
+      properties:
+        id:
+          type: string
+          example: alb8jicdpr
+        name:
+          type: string
+          example: reporting-replica-1
+        status:
+          type: string
+          enum:
+          - creating
+          - active
+          - resizing
+          - deleting
+          - error
+          example: active
+        nodes:
+          type: integer
+          description: Number of nodes in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: Memory allocation in gigabytes.
+          example: 1
+        metadata:
+          type: object
+          description: Additional metadata for the read replica set
+          properties:
+            environment:
+              type: string
+              description: Environment tag for the read replica set
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
+        connection_pooler:
+          $ref: '#/components/schemas/ConnectionPooler'
+    ForkStrategy:
+      type: string
+      enum:
+      - LAST_SNAPSHOT
+      - NOW
+      - PITR
+      description: 'Strategy for creating the fork:
+
+        - LAST_SNAPSHOT: Use existing snapshot for fast fork
+
+        - NOW: Create new snapshot for up-to-date fork
+
+        - PITR: Point-in-time recovery using target_time
+
+        '
+    ServiceCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the service.
+          example: my-production-db
+        addons:
+          type: array
+          items:
+            type: string
+            enum:
+            - time-series
+            - ai
+          description: List of addons to enable for the service. 'time-series' enables TimescaleDB, 'ai' enables AI/vector extensions.
+          example:
+          - time-series
+          - ai
+        region_code:
+          type: string
+          description: The region where the service will be created. If not provided, we'll choose the best region for you.
+          example: us-east-1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas to create (all replicas are asynchronous by default).
+          example: 2
+        cpu_millis:
+          type: string
+          description: The initial CPU allocation in milli-cores, or 'shared' for a shared-resource service.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The initial memory allocation in gigabytes, or 'shared' for a shared-resource service.
+          example: '4'
+        environment_tag:
+          $ref: '#/components/schemas/EnvironmentTag'
+          description: The environment tag for the service, 'DEV' by default.
+          default: DEV
+    SetHAReplicaInput:
+      type: object
+      properties:
+        sync_replica_count:
+          type: integer
+          description: Number of synchronous high-availability replicas.
+          example: 1
+        replica_count:
+          type: integer
+          description: Number of high-availability replicas (all replicas are asynchronous by default).
+          example: 1
+      description: At least one of sync_replica_count or replica_count must be provided.
+    ServiceLogEntry:
+      type: object
+      required:
+      - timestamp
+      - message
+      - severity
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the log entry (RFC3339 format)
+        message:
+          type: string
+          description: Log message text
+        severity:
+          type: string
+          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
   parameters:
     ProjectId:
       name: project_id
@@ -980,20 +997,3 @@ components:
       schema:
         type: string
         example: d1k5vk7hf2
-  responses:
-    SuccessMessage:
-      description: The action was completed successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Action completed successfully.
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'

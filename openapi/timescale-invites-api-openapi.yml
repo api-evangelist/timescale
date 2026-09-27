@@ -72,51 +72,29 @@ paths:
       tags:
       - Invites
 components:
+  parameters:
+    SpaceId:
+      name: space_id
+      in: path
+      required: true
+      description: Ghost space ID.
+      schema:
+        type: string
   schemas:
-    MemberRole:
+    ErrorCode:
       type: string
-      description: 'A member''s role within a space. The `owner` role belongs to the user
+      description: 'Machine-readable error code identifying a specific, client-actionable
 
-        who created the space; every space has exactly one owner, so `owner`
+        error condition. Clients can match on this to react to specific errors
 
-        is never accepted as an input when granting a role. On the `Space`
+        without parsing the human-readable message. Errors without a recognized
 
-        schema, this is the caller''s own role in the space, omitted for
-
-        API-key authentication (API keys are space-scoped and carry no
-
-        member identity).
+        code omit this field.
 
         '
       enum:
-      - owner
-      - admin
-      - developer
-      - viewer
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
-    InviteActionResult:
-      type: object
-      description: Result of accepting or declining a received invite.
-      required:
-      - space_id
-      - space_name
-      properties:
-        space_id:
-          type: string
-          description: ID of the space the invite was for.
-        space_name:
-          type: string
-          description: Name of the space the invite was for.
+      - no_payment_method
+      - compute_limit_exceeded
     ReceivedInvite:
       type: object
       description: A pending invite the authenticated user has received.
@@ -146,20 +124,50 @@ components:
           type: string
           format: date-time
           description: When the invite was created.
-    ErrorCode:
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    InviteActionResult:
+      type: object
+      description: Result of accepting or declining a received invite.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the invite was for.
+        space_name:
+          type: string
+          description: Name of the space the invite was for.
+    MemberRole:
       type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
+      description: 'A member''s role within a space. The `owner` role belongs to the user
 
-        error condition. Clients can match on this to react to specific errors
+        who created the space; every space has exactly one owner, so `owner`
 
-        without parsing the human-readable message. Errors without a recognized
+        is never accepted as an input when granting a role. On the `Space`
 
-        code omit this field.
+        schema, this is the caller''s own role in the space, omitted for
+
+        API-key authentication (API keys are space-scoped and carry no
+
+        member identity).
 
         '
       enum:
-      - no_payment_method
-      - compute_limit_exceeded
+      - owner
+      - admin
+      - developer
+      - viewer
   responses:
     Error:
       description: Error response
@@ -167,14 +175,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    SpaceId:
-      name: space_id
-      in: path
-      required: true
-      description: Ghost space ID.
-      schema:
-        type: string
   securitySchemes:
     BearerAuth:
       type: http

@@ -67,6 +67,30 @@ paths:
       description: Production
 components:
   schemas:
+    IdentifyRequest:
+      type: object
+      description: User properties to associate with the authenticated user in analytics.
+      required:
+      - properties
+      properties:
+        properties:
+          type: object
+          additionalProperties: true
+          description: Free-form user properties.
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
     Error:
       type: object
       description: Standard error response.
@@ -78,16 +102,6 @@ components:
           description: Human-readable error message.
         code:
           $ref: '#/components/schemas/ErrorCode'
-    IdentifyRequest:
-      type: object
-      description: User properties to associate with the authenticated user in analytics.
-      required:
-      - properties
-      properties:
-        properties:
-          type: object
-          additionalProperties: true
-          description: Free-form user properties.
     TrackRequest:
       type: object
       description: An analytics event to record.
@@ -110,20 +124,6 @@ components:
         status:
           type: string
           description: Status string (e.g. `success`).
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
     Error_2:
       type: object
       properties:
@@ -149,6 +149,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error_2'
     AnalyticsResponse:
       description: Analytics action completed successfully.
       content:
@@ -160,12 +166,6 @@ components:
                 type: string
                 description: Status of the analytics operation
                 example: success
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error_2'
   securitySchemes:
     BearerAuth:
       type: http

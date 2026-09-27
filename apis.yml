@@ -54,7 +54,7 @@ tags:
 - Data Platform
 - Vector Search
 - Developer Tools
-- Open-Source
+- Open Source
 tags_raw:
 - Company
 - Database
@@ -66,6 +66,7 @@ tags_raw:
 - Vector Search
 - Developer Tools
 - Open Source
+- Open-Source
 apis:
 - name: Tiger Docs MCP Server
   description: >-
@@ -219,9 +220,11 @@ apis:
   humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
   baseURL: https://console.cloud.tigerdata.com/public/api/v1
   tags:
+  - Spaces
   - Space
   tags_raw:
   - Spaces
+  - Space
   properties:
   - type: OpenAPI
     url: openapi/timescale-spaces-api-openapi.yml

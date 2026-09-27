@@ -153,24 +153,12 @@ paths:
         4XX:
           $ref: '#/components/responses/ClientError'
 components:
-  responses:
-    SuccessMessage:
-      description: The action was completed successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Action completed successfully.
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    ConnectionPooler:
+      type: object
+      properties:
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
     ReadReplicaSet:
       type: object
       properties:
@@ -230,6 +218,15 @@ components:
             extra detail.
 
             '
+    Endpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
     ResizeInput:
       type: object
       required:
@@ -244,20 +241,19 @@ components:
           type: string
           description: The new memory allocation in gigabytes.
           example: '4'
-    ConnectionPooler:
+    SetEnvironmentInput:
       type: object
+      required:
+      - environment
       properties:
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
-    Endpoint:
-      type: object
-      properties:
-        host:
+        environment:
           type: string
-          example: my-service.com
-        port:
-          type: integer
-          example: 8080
+          description: The target environment for the service.
+          enum:
+          - PROD
+          - DEV
+      example:
+        environment: PROD
     ReadReplicaSetCreate:
       type: object
       required:
@@ -282,19 +278,23 @@ components:
           type: integer
           description: The initial memory allocation in gigabytes.
           example: 1
-    SetEnvironmentInput:
-      type: object
-      required:
-      - environment
-      properties:
-        environment:
-          type: string
-          description: The target environment for the service.
-          enum:
-          - PROD
-          - DEV
-      example:
-        environment: PROD
+  responses:
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     ReplicaSetId:
       name: replica_set_id
@@ -304,14 +304,6 @@ components:
       schema:
         type: string
         example: alb8jicdpr
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
     ServiceId:
       name: service_id
       in: path
@@ -320,3 +312,11 @@ components:
       schema:
         type: string
         example: d1k5vk7hf2
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae

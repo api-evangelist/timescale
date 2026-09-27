@@ -17,9 +17,7 @@
     "timescale-services-api-openapi.yml",
     "timescale-vpcs-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -85,8 +83,7 @@
     "timescale-tiger-cloud-openapi-original.yml: declared missing tag: Read Replica Sets",
     "tag 'Analytics' spans 2 source specs (timescale-ghost-openapi-original.yml, timescale-tiger-cloud-openapi-original.yml): per-path servers applied",
     "tag 'Auth' spans 2 source specs (timescale-ghost-openapi-original.yml, timescale-tiger-cloud-openapi-original.yml): per-path servers applied",
-    "superseded outputs removed: timescale-vp-cs-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 12 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "timescale-analytics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -99,6 +96,6 @@
     "timescale-read-replica-sets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "timescale-services-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "timescale-spaces-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "timescale-vp-cs-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "timescale-vpcs-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

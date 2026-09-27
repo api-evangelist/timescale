@@ -33,6 +33,28 @@ paths:
       - Pricing
 components:
   schemas:
+    DatabaseSize:
+      type: string
+      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
+      enum:
+      - 1x
+      - 2x
+      - 4x
+      - 8x
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
     Error:
       type: object
       description: Standard error response.
@@ -80,40 +102,6 @@ components:
           $ref: '#/components/schemas/DedicatedPricing'
         standard:
           $ref: '#/components/schemas/StandardPricing'
-    StandardPricing:
-      type: object
-      description: 'Pricing for standard (non-dedicated) databases, which share a
-
-        space-wide compute allowance.
-
-        '
-      required:
-      - compute
-      properties:
-        compute:
-          $ref: '#/components/schemas/StandardComputePrice'
-    DatabaseSize:
-      type: string
-      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
-      enum:
-      - 1x
-      - 2x
-      - 4x
-      - 8x
-    DedicatedPricing:
-      type: object
-      description: Pricing for dedicated databases.
-      required:
-      - compute
-      - storage
-      properties:
-        compute:
-          type: array
-          description: Per-size compute pricing, ordered smallest to largest.
-          items:
-            $ref: '#/components/schemas/ComputePrice'
-        storage:
-          $ref: '#/components/schemas/StoragePrice'
     StandardComputePrice:
       type: object
       description: 'Pricing for standard (shared) compute used beyond the free monthly
@@ -142,20 +130,32 @@ components:
             amount is billed at `price_per_hour`.
 
             '
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
+    StandardPricing:
+      type: object
+      description: 'Pricing for standard (non-dedicated) databases, which share a
 
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
+        space-wide compute allowance.
 
         '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
+      required:
+      - compute
+      properties:
+        compute:
+          $ref: '#/components/schemas/StandardComputePrice'
+    DedicatedPricing:
+      type: object
+      description: Pricing for dedicated databases.
+      required:
+      - compute
+      - storage
+      properties:
+        compute:
+          type: array
+          description: Per-size compute pricing, ordered smallest to largest.
+          items:
+            $ref: '#/components/schemas/ComputePrice'
+        storage:
+          $ref: '#/components/schemas/StoragePrice'
     ComputePrice:
       type: object
       description: Compute price for one size.

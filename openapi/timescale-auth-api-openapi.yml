@@ -61,17 +61,6 @@ paths:
       description: Production
 components:
   schemas:
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
     UserInfo:
       type: object
       description: Authenticated user details.
@@ -89,6 +78,20 @@ components:
         name:
           type: string
           description: User's full name.
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
     LogoutRequest:
       type: object
       description: Request to log out by revoking a refresh token.
@@ -99,6 +102,17 @@ components:
           type: string
           description: Refresh token to revoke.
           x-lint-ignore: snake-case-properties
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
     AuthInfo:
       type: object
       description: Information about the authenticated caller.
@@ -153,38 +167,6 @@ components:
         user_name:
           type: string
           description: Name of the user who created the API key.
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    Error_2:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-          description: 'Additional context about the failure. Often the actionable part
-
-            of the error (e.g. "bearer auth is not enabled on this server"
-
-            for a generic UNAUTHORIZED). Optional; absent on errors with no
-
-            extra detail.
-
-            '
     AuthInfo_2:
       type: object
       description: 'Information about the authentication credentials being used. Exactly one
@@ -296,6 +278,24 @@ components:
                   format: email
                   description: The user's email
                   example: john.doe@example.com
+    Error_2:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
   responses:
     Error:
       description: Error response
