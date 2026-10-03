@@ -72,14 +72,6 @@ paths:
       tags:
       - Invites
 components:
-  parameters:
-    SpaceId:
-      name: space_id
-      in: path
-      required: true
-      description: Ghost space ID.
-      schema:
-        type: string
   schemas:
     ErrorCode:
       type: string
@@ -95,6 +87,26 @@ components:
       enum:
       - no_payment_method
       - compute_limit_exceeded
+    MemberRole:
+      type: string
+      description: 'A member''s role within a space. The `owner` role belongs to the user
+
+        who created the space; every space has exactly one owner, so `owner`
+
+        is never accepted as an input when granting a role. On the `Space`
+
+        schema, this is the caller''s own role in the space, omitted for
+
+        API-key authentication (API keys are space-scoped and carry no
+
+        member identity).
+
+        '
+      enum:
+      - owner
+      - admin
+      - developer
+      - viewer
     ReceivedInvite:
       type: object
       description: A pending invite the authenticated user has received.
@@ -148,26 +160,6 @@ components:
         space_name:
           type: string
           description: Name of the space the invite was for.
-    MemberRole:
-      type: string
-      description: 'A member''s role within a space. The `owner` role belongs to the user
-
-        who created the space; every space has exactly one owner, so `owner`
-
-        is never accepted as an input when granting a role. On the `Space`
-
-        schema, this is the caller''s own role in the space, omitted for
-
-        API-key authentication (API keys are space-scoped and carry no
-
-        member identity).
-
-        '
-      enum:
-      - owner
-      - admin
-      - developer
-      - viewer
   responses:
     Error:
       description: Error response
@@ -175,6 +167,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    SpaceId:
+      name: space_id
+      in: path
+      required: true
+      description: Ghost space ID.
+      schema:
+        type: string
   securitySchemes:
     BearerAuth:
       type: http

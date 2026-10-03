@@ -67,16 +67,6 @@ paths:
       description: Production
 components:
   schemas:
-    IdentifyRequest:
-      type: object
-      description: User properties to associate with the authenticated user in analytics.
-      required:
-      - properties
-      properties:
-        properties:
-          type: object
-          additionalProperties: true
-          description: Free-form user properties.
     ErrorCode:
       type: string
       description: 'Machine-readable error code identifying a specific, client-actionable
@@ -91,6 +81,15 @@ components:
       enum:
       - no_payment_method
       - compute_limit_exceeded
+    StatusResponse:
+      type: object
+      description: Generic success response.
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Status string (e.g. `success`).
     Error:
       type: object
       description: Standard error response.
@@ -115,15 +114,16 @@ components:
           type: object
           additionalProperties: true
           description: Free-form event properties.
-    StatusResponse:
+    IdentifyRequest:
       type: object
-      description: Generic success response.
+      description: User properties to associate with the authenticated user in analytics.
       required:
-      - status
+      - properties
       properties:
-        status:
-          type: string
-          description: Status string (e.g. `success`).
+        properties:
+          type: object
+          additionalProperties: true
+          description: Free-form user properties.
     Error_2:
       type: object
       properties:

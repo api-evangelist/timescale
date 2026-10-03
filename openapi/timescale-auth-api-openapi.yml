@@ -167,6 +167,24 @@ components:
         user_name:
           type: string
           description: Name of the user who created the API key.
+    Error_2:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
     AuthInfo_2:
       type: object
       description: 'Information about the authentication credentials being used. Exactly one
@@ -278,24 +296,6 @@ components:
                   format: email
                   description: The user's email
                   example: john.doe@example.com
-    Error_2:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-          description: 'Additional context about the failure. Often the actionable part
-
-            of the error (e.g. "bearer auth is not enabled on this server"
-
-            for a generic UNAUTHORIZED). Optional; absent on errors with no
-
-            extra detail.
-
-            '
   responses:
     Error:
       description: Error response

@@ -154,11 +154,71 @@ paths:
           $ref: '#/components/responses/ClientError'
 components:
   schemas:
-    ConnectionPooler:
+    ReadReplicaSetCreate:
+      type: object
+      required:
+      - name
+      - nodes
+      - cpu_millis
+      - memory_gbs
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the read replica.
+          example: my-reporting-replica
+        nodes:
+          type: integer
+          description: Number of nodes to create in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: The initial CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: The initial memory allocation in gigabytes.
+          example: 1
+    Endpoint:
       type: object
       properties:
-        endpoint:
-          $ref: '#/components/schemas/Endpoint'
+        host:
+          type: string
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
+    ResizeInput:
+      type: object
+      required:
+      - cpu_millis
+      - memory_gbs
+      properties:
+        cpu_millis:
+          type: string
+          description: The new CPU allocation in milli-cores.
+          example: '1000'
+        memory_gbs:
+          type: string
+          description: The new memory allocation in gigabytes.
+          example: '4'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: string
+          description: 'Additional context about the failure. Often the actionable part
+
+            of the error (e.g. "bearer auth is not enabled on this server"
+
+            for a generic UNAUTHORIZED). Optional; absent on errors with no
+
+            extra detail.
+
+            '
     ReadReplicaSet:
       type: object
       properties:
@@ -200,47 +260,11 @@ components:
           $ref: '#/components/schemas/Endpoint'
         connection_pooler:
           $ref: '#/components/schemas/ConnectionPooler'
-    Error:
+    ConnectionPooler:
       type: object
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: string
-          description: 'Additional context about the failure. Often the actionable part
-
-            of the error (e.g. "bearer auth is not enabled on this server"
-
-            for a generic UNAUTHORIZED). Optional; absent on errors with no
-
-            extra detail.
-
-            '
-    Endpoint:
-      type: object
-      properties:
-        host:
-          type: string
-          example: my-service.com
-        port:
-          type: integer
-          example: 8080
-    ResizeInput:
-      type: object
-      required:
-      - cpu_millis
-      - memory_gbs
-      properties:
-        cpu_millis:
-          type: string
-          description: The new CPU allocation in milli-cores.
-          example: '1000'
-        memory_gbs:
-          type: string
-          description: The new memory allocation in gigabytes.
-          example: '4'
+        endpoint:
+          $ref: '#/components/schemas/Endpoint'
     SetEnvironmentInput:
       type: object
       required:
@@ -254,48 +278,15 @@ components:
           - DEV
       example:
         environment: PROD
-    ReadReplicaSetCreate:
-      type: object
-      required:
-      - name
-      - nodes
-      - cpu_millis
-      - memory_gbs
-      properties:
-        name:
-          type: string
-          description: A human-readable name for the read replica.
-          example: my-reporting-replica
-        nodes:
-          type: integer
-          description: Number of nodes to create in the replica set.
-          example: 2
-        cpu_millis:
-          type: integer
-          description: The initial CPU allocation in milli-cores.
-          example: 250
-        memory_gbs:
-          type: integer
-          description: The initial memory allocation in gigabytes.
-          example: 1
-  responses:
-    SuccessMessage:
-      description: The action was completed successfully.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Action completed successfully.
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
     ReplicaSetId:
       name: replica_set_id
       in: path
@@ -312,11 +303,20 @@ components:
       schema:
         type: string
         example: d1k5vk7hf2
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
+  responses:
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    SuccessMessage:
+      description: The action was completed successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Action completed successfully.

@@ -49,6 +49,15 @@ components:
       enum:
       - no_payment_method
       - compute_limit_exceeded
+    StatusResponse:
+      type: object
+      description: Generic success response.
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: Status string (e.g. `success`).
     Error:
       type: object
       description: Standard error response.
@@ -81,15 +90,6 @@ components:
         os:
           type: string
           description: Operating system of the client submitting the feedback.
-    StatusResponse:
-      type: object
-      description: Generic success response.
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: Status string (e.g. `success`).
   responses:
     Error:
       description: Error response
