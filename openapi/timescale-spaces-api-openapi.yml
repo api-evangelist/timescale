@@ -872,249 +872,22 @@ paths:
       - Spaces
 components:
   schemas:
-    CreateDatabaseRequest:
+    CreateSpaceRequest:
       type: object
-      description: Request to create a new database in a space.
+      description: Request to create a new space.
       properties:
         name:
           type: string
-          description: Name for the new database. Auto-generated if omitted.
-        type:
-          $ref: '#/components/schemas/DatabaseType'
-        size:
-          $ref: '#/components/schemas/DatabaseSize'
-        share_token:
-          type: string
-          description: Share token from a database share (begins with `gs_`). When provided, creates the new database from the shared snapshot.
-    MemberRole:
-      type: string
-      description: 'A member''s role within a space. The `owner` role belongs to the user
-
-        who created the space; every space has exactly one owner, so `owner`
-
-        is never accepted as an input when granting a role. On the `Space`
-
-        schema, this is the caller''s own role in the space, omitted for
-
-        API-key authentication (API keys are space-scoped and carry no
-
-        member identity).
-
-        '
-      enum:
-      - owner
-      - admin
-      - developer
-      - viewer
-    RenameDatabaseRequest:
+          description: Name for the new space. When omitted, the space is named after its owner (e.g. "Jane Doe's space").
+    CreateApiKeyRequest:
       type: object
-      description: Request to rename a database.
+      description: Request to create a new API key in a space.
       required:
       - name
       properties:
         name:
           type: string
-          description: New name for the database.
-    InvoiceStatus:
-      type: string
-      description: 'Invoice status:
-
-        - `paid` — invoice has been paid.
-
-        - `issued` — invoice has been issued and is within its net-terms payment window (not yet paid, not yet delinquent).
-
-        - `delinquent` — payment has failed and the invoice needs to be resolved by the user.
-
-        '
-      enum:
-      - paid
-      - issued
-      - delinquent
-    RenameSpaceRequest:
-      type: object
-      description: Request to rename a space.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: New name for the space.
-    InvoiceDetail:
-      type: object
-      description: Line-item breakdown of an invoice.
-      required:
-      - line_items
-      properties:
-        line_items:
-          type: array
-          description: Line items that make up the invoice.
-          items:
-            $ref: '#/components/schemas/InvoiceLineItem'
-    Database:
-      type: object
-      description: A Ghost database.
-      required:
-      - id
-      - name
-      - type
-      - status
-      - host
-      - port
-      properties:
-        id:
-          type: string
-          description: Database ID.
-        name:
-          type: string
-          description: Database name. Unique within the space.
-        type:
-          $ref: '#/components/schemas/DatabaseType'
-        size:
-          $ref: '#/components/schemas/DatabaseSize'
-        status:
-          $ref: '#/components/schemas/DatabaseStatus'
-        host:
-          type: string
-          description: PostgreSQL hostname for connections.
-        port:
-          type: integer
-          description: PostgreSQL port for connections.
-        password:
-          type:
-          - string
-          - 'null'
-          description: PostgreSQL password for the default user. Returned on every GET for authorized callers.
-        storage_mib:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: Current disk usage in MiB. Null if not yet available.
-    CreateInviteRequest:
-      type: object
-      description: Request to invite a user to a space.
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          description: Email address to invite.
-        role:
-          $ref: '#/components/schemas/MemberRole'
-    SpaceDetail:
-      type: object
-      description: Detailed information about a single Ghost space.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: Space ID.
-        name:
-          type: string
-          description: Space name.
-        role:
-          allOf:
-          - $ref: '#/components/schemas/MemberRole'
-          description: The caller's role in the space. Populated for user authentication; omitted for API key authentication.
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Member'
-          description: The space owner. Populated for user authentication; omitted for API key authentication.
-    Invite:
-      type: object
-      description: An invite sent for a space.
-      required:
-      - email
-      - role
-      - status
-      - created_at
-      properties:
-        email:
-          type: string
-          description: Email address the invite was sent to.
-        role:
-          $ref: '#/components/schemas/MemberRole'
-        status:
-          $ref: '#/components/schemas/InviteStatus'
-        created_at:
-          type: string
-          format: date-time
-          description: When the invite was created.
-    UpdateOverageSettingsRequest:
-      type: object
-      description: Request body for updating compute overage settings on a space.
-      required:
-      - enabled
-      properties:
-        enabled:
-          type: boolean
-          description: Set to true to enable overages, false to disable.
-        compute_limit_minutes:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          minimum: 6001
-          description: 'Optional when `enabled` is true: the monthly compute-minute limit
-
-            above which standard databases auto-pause. Must be greater than
-
-            the free-tier limit (6000 minutes). Omit or set to `null` for no
-
-            limit — the user is billed for all overage usage with no upper
-
-            bound. Must be omitted (or `null`) when `enabled` is false; on
-
-            disable the server resets the limit to the free-tier default.
-
-            '
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
-    InvoicesResponse:
-      type: object
-      description: A list of invoices for a space.
-      required:
-      - invoices
-      properties:
-        invoices:
-          type: array
-          description: Recent invoices, most recent first.
-          items:
-            $ref: '#/components/schemas/Invoice'
-    DatabaseWithUsage:
-      description: A Ghost database with current billing-cycle usage included.
-      allOf:
-      - $ref: '#/components/schemas/Database'
-      - type: object
-        properties:
-          compute_minutes:
-            type:
-            - integer
-            - 'null'
-            format: int64
-            description: Compute minutes used by this database during the current billing cycle. Only populated for `standard` databases.
-    PaymentMethodsResponse:
-      type: object
-      description: A list of payment methods on file for a space.
-      required:
-      - payment_methods
-      properties:
-        payment_methods:
-          type: array
-          description: Payment methods on file for the space.
-          items:
-            $ref: '#/components/schemas/PaymentMethod'
+          description: User-provided label for the new API key.
     Member:
       type: object
       description: A member of a Ghost space.
@@ -1136,45 +909,150 @@ components:
           description: Email address of the member.
         role:
           $ref: '#/components/schemas/MemberRole'
-    Invoice:
+    Space:
       type: object
-      description: Invoice summary.
+      description: A Ghost space.
       required:
       - id
-      - invoice_number
-      - invoice_date
-      - total
-      - status
+      - name
       properties:
         id:
           type: string
-          description: Opaque invoice ID used to look up invoice details.
-        invoice_number:
+          description: Space ID.
+        name:
           type: string
-          description: Human-readable invoice number (e.g. "INV-12345").
-        invoice_date:
+          description: Space name.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    RenameDatabaseRequest:
+      type: object
+      description: Request to rename a database.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: New name for the database.
+    DatabaseType:
+      type: string
+      description: 'Database deployment model.
+
+        - `standard` — shared-resource databases subject to the space''s compute and storage limits.
+
+        - `dedicated` — per-instance paid databases with guaranteed resources, exempt from space-level auto-pause.
+
+        '
+      enum:
+      - standard
+      - dedicated
+      default: standard
+    ApiKeyCredentials:
+      type: object
+      description: Credentials for a newly created API key. The secret portion cannot be retrieved again later.
+      required:
+      - api_key
+      - access_key
+      - secret_key
+      properties:
+        api_key:
+          type: string
+          description: 'Bearer token for the key. Use as `Authorization: Bearer <api_key>`.'
+        access_key:
+          type: string
+          deprecated: true
+          description: Use as the username in HTTP Basic auth.
+        secret_key:
+          type: string
+          deprecated: true
+          description: Use as the password in HTTP Basic auth.
+    UpdateMemberRoleRequest:
+      type: object
+      description: Request to change a member's role within a space.
+      required:
+      - role
+      properties:
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    LogsResponse:
+      type: object
+      description: A page of database log entries.
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogEntry'
+          description: Log entries, most recent first.
+        last_cursor:
+          type: string
+          description: 'Opaque cursor for the next page of results. Present when more log
+
+            entries exist older than the last entry in this response. Pass
+
+            this value as the `cursor` query parameter to retrieve the next
+
+            page. Absent when there are no further results.
+
+            '
+    DatabaseSize:
+      type: string
+      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
+      enum:
+      - 1x
+      - 2x
+      - 4x
+      - 8x
+    UpdatePasswordRequest:
+      type: object
+      description: Request to reset the database password.
+      required:
+      - password
+      properties:
+        password:
+          type: string
+          description: New PostgreSQL password for the default user.
+    ShareDatabaseRequest:
+      type: object
+      description: Options for creating a database share.
+      properties:
+        expires_at:
           type: string
           format: date-time
-          description: Date the invoice was issued.
-        total:
-          type: number
-          format: double
-          description: Invoice total.
-        status:
-          $ref: '#/components/schemas/InvoiceStatus'
-    PaymentSetupResponse:
+          description: Time after which the share expires. If omitted, the share does not expire.
+    Invite:
       type: object
-      description: Stripe Setup Intent details for collecting a new payment method.
+      description: An invite sent for a space.
       required:
-      - client_secret
-      - payment_url
+      - email
+      - role
+      - status
+      - created_at
       properties:
-        client_secret:
+        email:
           type: string
-          description: Stripe Setup Intent client secret.
-        payment_url:
+          description: Email address the invite was sent to.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        created_at:
           type: string
-          description: URL of the hosted payment page for collecting card details.
+          format: date-time
+          description: When the invite was created.
+    LeaveSpaceResult:
+      type: object
+      description: Result of leaving a space.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the user left.
+        space_name:
+          type: string
+          description: Name of the space the user left.
     PaymentMethod:
       type: object
       description: A payment method on file for a space.
@@ -1208,21 +1086,17 @@ components:
         exp_year:
           type: integer
           description: Card expiration year (four digits).
-    DatabaseStatus:
-      type: string
-      description: Current lifecycle status of the database.
-      enum:
-      - queued
-      - configuring
-      - running
-      - pausing
-      - paused
-      - resuming
-      - deleting
-      - deleted
-      - upgrading
-      - unstable
-      - unknown
+    InvoiceDetail:
+      type: object
+      description: Line-item breakdown of an invoice.
+      required:
+      - line_items
+      properties:
+        line_items:
+          type: array
+          description: Line items that make up the invoice.
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
     InvoiceLineItem:
       type: object
       description: A single line item on an invoice.
@@ -1253,19 +1127,68 @@ components:
           type: number
           format: double
           description: Total charge for this line (`quantity` × `unit_price`).
-    LeaveSpaceResult:
+    MemberRole:
+      type: string
+      description: 'A member''s role within a space. The `owner` role belongs to the user
+
+        who created the space; every space has exactly one owner, so `owner`
+
+        is never accepted as an input when granting a role. On the `Space`
+
+        schema, this is the caller''s own role in the space, omitted for
+
+        API-key authentication (API keys are space-scoped and carry no
+
+        member identity).
+
+        '
+      enum:
+      - owner
+      - admin
+      - developer
+      - viewer
+    RenameSpaceRequest:
       type: object
-      description: Result of leaving a space.
+      description: Request to rename a space.
       required:
-      - space_id
-      - space_name
+      - name
       properties:
-        space_id:
+        name:
           type: string
-          description: ID of the space the user left.
-        space_name:
+          description: New name for the space.
+    DatabaseStatus:
+      type: string
+      description: Current lifecycle status of the database.
+      enum:
+      - queued
+      - configuring
+      - running
+      - pausing
+      - paused
+      - resuming
+      - deleting
+      - deleted
+      - upgrading
+      - unstable
+      - unknown
+    ApiKey:
+      type: object
+      description: An API key in a space.
+      required:
+      - prefix
+      - name
+      - created_at
+      properties:
+        prefix:
           type: string
-          description: Name of the space the user left.
+          description: Stable prefix identifier for the API key (starts with `gt_`), identifying the key without exposing the secret.
+        name:
+          type: string
+          description: User-provided label for the API key.
+        created_at:
+          type: string
+          format: date-time
+          description: Time the API key was created.
     RenameSpaceResult:
       type: object
       description: Result of renaming a space.
@@ -1283,6 +1206,257 @@ components:
         new_name:
           type: string
           description: Space name after the rename.
+    DatabaseShare:
+      type: object
+      description: A shareable snapshot of a database. Can be used to create a new database from the snapshot in another space.
+      required:
+      - share_token
+      - database_id
+      - database_name
+      - created_at
+      properties:
+        share_token:
+          type: string
+          description: Token passed to `createDatabase` (via `share_token`) to create a new database from the shared snapshot in another space. Also used to revoke the share via `revokeShare`. Always begins with `gs_`.
+        database_id:
+          type: string
+          description: ID of the source database.
+        database_name:
+          type: string
+          description: Name of the source database.
+        created_at:
+          type: string
+          format: date-time
+          description: Time the share was created.
+        expires_at:
+          type: string
+          format: date-time
+          description: Time the share expires. Absent if the share does not expire.
+        revoked_at:
+          type: string
+          format: date-time
+          description: Time the share was revoked. Absent if the share is still active.
+    PaymentSetupResponse:
+      type: object
+      description: Stripe Setup Intent details for collecting a new payment method.
+      required:
+      - client_secret
+      - payment_url
+      properties:
+        client_secret:
+          type: string
+          description: Stripe Setup Intent client secret.
+        payment_url:
+          type: string
+          description: URL of the hosted payment page for collecting card details.
+    DatabaseWithUsage:
+      description: A Ghost database with current billing-cycle usage included.
+      allOf:
+      - $ref: '#/components/schemas/Database'
+      - type: object
+        properties:
+          compute_minutes:
+            type:
+            - integer
+            - 'null'
+            format: int64
+            description: Compute minutes used by this database during the current billing cycle. Only populated for `standard` databases.
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    PaymentMethodsResponse:
+      type: object
+      description: A list of payment methods on file for a space.
+      required:
+      - payment_methods
+      properties:
+        payment_methods:
+          type: array
+          description: Payment methods on file for the space.
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+    LogEntry:
+      type: object
+      description: A single database log entry.
+      required:
+      - timestamp
+      - message
+      - severity
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the log entry (RFC3339 format, with nanosecond precision)
+        message:
+          type: string
+          description: Log message text
+        severity:
+          type: string
+          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
+    Invoice:
+      type: object
+      description: Invoice summary.
+      required:
+      - id
+      - invoice_number
+      - invoice_date
+      - total
+      - status
+      properties:
+        id:
+          type: string
+          description: Opaque invoice ID used to look up invoice details.
+        invoice_number:
+          type: string
+          description: Human-readable invoice number (e.g. "INV-12345").
+        invoice_date:
+          type: string
+          format: date-time
+          description: Date the invoice was issued.
+        total:
+          type: number
+          format: double
+          description: Invoice total.
+        status:
+          $ref: '#/components/schemas/InvoiceStatus'
+    InviteStatus:
+      type: string
+      description: 'Status of a sent invite. `pending` means it''s still awaiting a
+
+        response; `declined` means the invitee declined it. A declined invite
+
+        still occupies the email''s slot for the space (one pending-or-declined
+
+        invite per email), so it must be cancelled before that email can be
+
+        re-invited.
+
+        '
+      enum:
+      - pending
+      - declined
+    ForkDatabaseRequest:
+      type: object
+      description: Request body for forking a database. Fields default to the source database's values when omitted.
+      properties:
+        name:
+          type: string
+          description: Name for the forked database. Auto-generated from the source name if omitted.
+        type:
+          $ref: '#/components/schemas/DatabaseType'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+    InvoicesResponse:
+      type: object
+      description: A list of invoices for a space.
+      required:
+      - invoices
+      properties:
+        invoices:
+          type: array
+          description: Recent invoices, most recent first.
+          items:
+            $ref: '#/components/schemas/Invoice'
+    CreateDatabaseRequest:
+      type: object
+      description: Request to create a new database in a space.
+      properties:
+        name:
+          type: string
+          description: Name for the new database. Auto-generated if omitted.
+        type:
+          $ref: '#/components/schemas/DatabaseType'
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+        share_token:
+          type: string
+          description: Share token from a database share (begins with `gs_`). When provided, creates the new database from the shared snapshot.
+    CreateInviteRequest:
+      type: object
+      description: Request to invite a user to a space.
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          description: Email address to invite.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+    UpdateOverageSettingsRequest:
+      type: object
+      description: Request body for updating compute overage settings on a space.
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+          description: Set to true to enable overages, false to disable.
+        compute_limit_minutes:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 6001
+          description: 'Optional when `enabled` is true: the monthly compute-minute limit
+
+            above which standard databases auto-pause. Must be greater than
+
+            the free-tier limit (6000 minutes). Omit or set to `null` for no
+
+            limit — the user is billed for all overage usage with no upper
+
+            bound. Must be omitted (or `null`) when `enabled` is false; on
+
+            disable the server resets the limit to the free-tier default.
+
+            '
+    InvoiceStatus:
+      type: string
+      description: 'Invoice status:
+
+        - `paid` — invoice has been paid.
+
+        - `issued` — invoice has been issued and is within its net-terms payment window (not yet paid, not yet delinquent).
+
+        - `delinquent` — payment has failed and the invoice needs to be resolved by the user.
+
+        '
+      enum:
+      - paid
+      - issued
+      - delinquent
+    SpaceDetail:
+      type: object
+      description: Detailed information about a single Ghost space.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Space ID.
+        name:
+          type: string
+          description: Space name.
+        role:
+          allOf:
+          - $ref: '#/components/schemas/MemberRole'
+          description: The caller's role in the space. Populated for user authentication; omitted for API key authentication.
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Member'
+          description: The space owner. Populated for user authentication; omitted for API key authentication.
     SpaceUsage:
       type: object
       description: Space-level usage and cost for the current billing cycle.
@@ -1346,259 +1520,63 @@ components:
           type: string
           format: date-time
           description: End of the current billing cycle.
-    LogsResponse:
+    Error:
       type: object
-      description: A page of database log entries.
+      description: Standard error response.
       required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/LogEntry'
-          description: Log entries, most recent first.
-        last_cursor:
-          type: string
-          description: 'Opaque cursor for the next page of results. Present when more log
-
-            entries exist older than the last entry in this response. Pass
-
-            this value as the `cursor` query parameter to retrieve the next
-
-            page. Absent when there are no further results.
-
-            '
-    DatabaseShare:
-      type: object
-      description: A shareable snapshot of a database. Can be used to create a new database from the snapshot in another space.
-      required:
-      - share_token
-      - database_id
-      - database_name
-      - created_at
-      properties:
-        share_token:
-          type: string
-          description: Token passed to `createDatabase` (via `share_token`) to create a new database from the shared snapshot in another space. Also used to revoke the share via `revokeShare`. Always begins with `gs_`.
-        database_id:
-          type: string
-          description: ID of the source database.
-        database_name:
-          type: string
-          description: Name of the source database.
-        created_at:
-          type: string
-          format: date-time
-          description: Time the share was created.
-        expires_at:
-          type: string
-          format: date-time
-          description: Time the share expires. Absent if the share does not expire.
-        revoked_at:
-          type: string
-          format: date-time
-          description: Time the share was revoked. Absent if the share is still active.
-    ShareDatabaseRequest:
-      type: object
-      description: Options for creating a database share.
-      properties:
-        expires_at:
-          type: string
-          format: date-time
-          description: Time after which the share expires. If omitted, the share does not expire.
-    ApiKey:
-      type: object
-      description: An API key in a space.
-      required:
-      - prefix
-      - name
-      - created_at
-      properties:
-        prefix:
-          type: string
-          description: Stable prefix identifier for the API key (starts with `gt_`), identifying the key without exposing the secret.
-        name:
-          type: string
-          description: User-provided label for the API key.
-        created_at:
-          type: string
-          format: date-time
-          description: Time the API key was created.
-    CreateSpaceRequest:
-      type: object
-      description: Request to create a new space.
-      properties:
-        name:
-          type: string
-          description: Name for the new space. When omitted, the space is named after its owner (e.g. "Jane Doe's space").
-    CreateApiKeyRequest:
-      type: object
-      description: Request to create a new API key in a space.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: User-provided label for the new API key.
-    ApiKeyCredentials:
-      type: object
-      description: Credentials for a newly created API key. The secret portion cannot be retrieved again later.
-      required:
-      - api_key
-      - access_key
-      - secret_key
-      properties:
-        api_key:
-          type: string
-          description: 'Bearer token for the key. Use as `Authorization: Bearer <api_key>`.'
-        access_key:
-          type: string
-          deprecated: true
-          description: Use as the username in HTTP Basic auth.
-        secret_key:
-          type: string
-          deprecated: true
-          description: Use as the password in HTTP Basic auth.
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    InviteStatus:
-      type: string
-      description: 'Status of a sent invite. `pending` means it''s still awaiting a
-
-        response; `declined` means the invitee declined it. A declined invite
-
-        still occupies the email''s slot for the space (one pending-or-declined
-
-        invite per email), so it must be cancelled before that email can be
-
-        re-invited.
-
-        '
-      enum:
-      - pending
-      - declined
-    DatabaseSize:
-      type: string
-      description: Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.
-      enum:
-      - 1x
-      - 2x
-      - 4x
-      - 8x
-    UpdateMemberRoleRequest:
-      type: object
-      description: Request to change a member's role within a space.
-      required:
-      - role
-      properties:
-        role:
-          $ref: '#/components/schemas/MemberRole'
-    UpdatePasswordRequest:
-      type: object
-      description: Request to reset the database password.
-      required:
-      - password
-      properties:
-        password:
-          type: string
-          description: New PostgreSQL password for the default user.
-    LogEntry:
-      type: object
-      description: A single database log entry.
-      required:
-      - timestamp
       - message
-      - severity
       properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: Timestamp of the log entry (RFC3339 format, with nanosecond precision)
         message:
           type: string
-          description: Log message text
-        severity:
-          type: string
-          description: PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)
-    DatabaseType:
-      type: string
-      description: 'Database deployment model.
-
-        - `standard` — shared-resource databases subject to the space''s compute and storage limits.
-
-        - `dedicated` — per-instance paid databases with guaranteed resources, exempt from space-level auto-pause.
-
-        '
-      enum:
-      - standard
-      - dedicated
-      default: standard
-    Space:
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+    Database:
       type: object
-      description: A Ghost space.
+      description: A Ghost database.
       required:
       - id
       - name
+      - type
+      - status
+      - host
+      - port
       properties:
         id:
           type: string
-          description: Space ID.
+          description: Database ID.
         name:
           type: string
-          description: Space name.
-        role:
-          $ref: '#/components/schemas/MemberRole'
-    ForkDatabaseRequest:
-      type: object
-      description: Request body for forking a database. Fields default to the source database's values when omitted.
-      properties:
-        name:
-          type: string
-          description: Name for the forked database. Auto-generated from the source name if omitted.
+          description: Database name. Unique within the space.
         type:
           $ref: '#/components/schemas/DatabaseType'
         size:
           $ref: '#/components/schemas/DatabaseSize'
+        status:
+          $ref: '#/components/schemas/DatabaseStatus'
+        host:
+          type: string
+          description: PostgreSQL hostname for connections.
+        port:
+          type: integer
+          description: PostgreSQL port for connections.
+        password:
+          type:
+          - string
+          - 'null'
+          description: PostgreSQL password for the default user. Returned on every GET for authorized callers.
+        storage_mib:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Current disk usage in MiB. Null if not yet available.
   parameters:
     InvoiceId:
       name: invoice_id
       in: path
       required: true
       description: Invoice ID returned from `listInvoices`.
-      schema:
-        type: string
-    ShareToken:
-      name: share_token
-      in: path
-      required: true
-      description: Share token returned from `listShares` or `shareDatabase` (begins with `gs_`).
-      schema:
-        type: string
-        pattern: ^gs_[A-Za-z0-9_-]+$
-    InviteEmail:
-      name: email
-      in: path
-      required: true
-      description: Email address the invite was sent to.
-      schema:
-        type: string
-    ApiKeyPrefix:
-      name: prefix
-      in: path
-      required: true
-      description: API key prefix (e.g. `gt_...`).
       schema:
         type: string
     DatabaseRef:
@@ -1616,11 +1594,33 @@ components:
       schema:
         type: integer
         format: int64
+    ApiKeyPrefix:
+      name: prefix
+      in: path
+      required: true
+      description: API key prefix (e.g. `gt_...`).
+      schema:
+        type: string
+    ShareToken:
+      name: share_token
+      in: path
+      required: true
+      description: Share token returned from `listShares` or `shareDatabase` (begins with `gs_`).
+      schema:
+        type: string
+        pattern: ^gs_[A-Za-z0-9_-]+$
     SpaceId:
       name: space_id
       in: path
       required: true
       description: Ghost space ID.
+      schema:
+        type: string
+    InviteEmail:
+      name: email
+      in: path
+      required: true
+      description: Email address the invite was sent to.
       schema:
         type: string
     PaymentId:

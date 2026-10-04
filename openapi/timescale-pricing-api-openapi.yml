@@ -33,33 +33,6 @@ paths:
       - Pricing
 components:
   schemas:
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    Pricing:
-      type: object
-      description: 'Pricing data grouped by category.
-
-        '
-      required:
-      - dedicated
-      - standard
-      properties:
-        dedicated:
-          $ref: '#/components/schemas/DedicatedPricing'
-        standard:
-          $ref: '#/components/schemas/StandardPricing'
     StandardComputePrice:
       type: object
       description: 'Pricing for standard (shared) compute used beyond the free monthly
@@ -88,6 +61,34 @@ components:
             amount is billed at `price_per_hour`.
 
             '
+    ComputePrice:
+      type: object
+      description: Compute price for one size.
+      required:
+      - size
+      - milli_cpu
+      - memory_gib
+      - price_per_hour
+      - price_per_month
+      properties:
+        size:
+          $ref: '#/components/schemas/DatabaseSize'
+        milli_cpu:
+          type: integer
+          description: 'CPU allocation in millicores (1000 = 1 vCPU).
+
+            '
+        memory_gib:
+          type: integer
+          description: Memory allocation in GiB.
+        price_per_hour:
+          type: number
+          format: double
+          description: Price per hour while the database is running.
+        price_per_month:
+          type: number
+          format: double
+          description: Price per month while the database is running.
     Error:
       type: object
       description: Standard error response.
@@ -121,34 +122,20 @@ components:
             $ref: '#/components/schemas/ComputePrice'
         storage:
           $ref: '#/components/schemas/StoragePrice'
-    ComputePrice:
-      type: object
-      description: Compute price for one size.
-      required:
-      - size
-      - milli_cpu
-      - memory_gib
-      - price_per_hour
-      - price_per_month
-      properties:
-        size:
-          $ref: '#/components/schemas/DatabaseSize'
-        milli_cpu:
-          type: integer
-          description: 'CPU allocation in millicores (1000 = 1 vCPU).
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
 
-            '
-        memory_gib:
-          type: integer
-          description: Memory allocation in GiB.
-        price_per_hour:
-          type: number
-          format: double
-          description: Price per hour while the database is running.
-        price_per_month:
-          type: number
-          format: double
-          description: Price per month while the database is running.
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
     StandardPricing:
       type: object
       description: 'Pricing for standard (non-dedicated) databases, which share a
@@ -161,6 +148,19 @@ components:
       properties:
         compute:
           $ref: '#/components/schemas/StandardComputePrice'
+    Pricing:
+      type: object
+      description: 'Pricing data grouped by category.
+
+        '
+      required:
+      - dedicated
+      - standard
+      properties:
+        dedicated:
+          $ref: '#/components/schemas/DedicatedPricing'
+        standard:
+          $ref: '#/components/schemas/StandardPricing'
     StoragePrice:
       type: object
       description: Storage pricing.

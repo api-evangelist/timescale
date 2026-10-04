@@ -154,39 +154,6 @@ paths:
           $ref: '#/components/responses/ClientError'
 components:
   schemas:
-    ReadReplicaSetCreate:
-      type: object
-      required:
-      - name
-      - nodes
-      - cpu_millis
-      - memory_gbs
-      properties:
-        name:
-          type: string
-          description: A human-readable name for the read replica.
-          example: my-reporting-replica
-        nodes:
-          type: integer
-          description: Number of nodes to create in the replica set.
-          example: 2
-        cpu_millis:
-          type: integer
-          description: The initial CPU allocation in milli-cores.
-          example: 250
-        memory_gbs:
-          type: integer
-          description: The initial memory allocation in gigabytes.
-          example: 1
-    Endpoint:
-      type: object
-      properties:
-        host:
-          type: string
-          example: my-service.com
-        port:
-          type: integer
-          example: 8080
     ResizeInput:
       type: object
       required:
@@ -260,11 +227,44 @@ components:
           $ref: '#/components/schemas/Endpoint'
         connection_pooler:
           $ref: '#/components/schemas/ConnectionPooler'
+    Endpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          example: my-service.com
+        port:
+          type: integer
+          example: 8080
     ConnectionPooler:
       type: object
       properties:
         endpoint:
           $ref: '#/components/schemas/Endpoint'
+    ReadReplicaSetCreate:
+      type: object
+      required:
+      - name
+      - nodes
+      - cpu_millis
+      - memory_gbs
+      properties:
+        name:
+          type: string
+          description: A human-readable name for the read replica.
+          example: my-reporting-replica
+        nodes:
+          type: integer
+          description: Number of nodes to create in the replica set.
+          example: 2
+        cpu_millis:
+          type: integer
+          description: The initial CPU allocation in milli-cores.
+          example: 250
+        memory_gbs:
+          type: integer
+          description: The initial memory allocation in gigabytes.
+          example: 1
     SetEnvironmentInput:
       type: object
       required:
@@ -279,14 +279,6 @@ components:
       example:
         environment: PROD
   parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
     ReplicaSetId:
       name: replica_set_id
       in: path
@@ -303,6 +295,14 @@ components:
       schema:
         type: string
         example: d1k5vk7hf2
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
   responses:
     ClientError:
       description: Client error response (4xx status codes).

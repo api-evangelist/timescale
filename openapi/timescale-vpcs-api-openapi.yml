@@ -224,38 +224,15 @@ components:
         error_message:
           type: string
           example: VPC not found
-    PeeringCreate:
-      type: object
-      required:
-      - peer_account_id
-      - peer_region_code
-      - peer_vpc_id
-      properties:
-        peer_account_id:
-          type: string
-          example: acc-12345
-        peer_region_code:
-          type: string
-          example: aws-us-east-1
-        peer_vpc_id:
-          type: string
-          example: '1234567890'
-    VPCCreate:
+    VPCRename:
       type: object
       required:
       - name
-      - cidr
-      - region_code
       properties:
         name:
           type: string
-          example: my-production-vpc
-        cidr:
-          type: string
-          example: 10.0.0.0/16
-        region_code:
-          type: string
-          example: us-east-1
+          description: The new name for the VPC.
+          example: my-renamed-vpc
     Error:
       type: object
       properties:
@@ -290,24 +267,39 @@ components:
         region_code:
           type: string
           example: us-east-1
-    VPCRename:
+    PeeringCreate:
+      type: object
+      required:
+      - peer_account_id
+      - peer_region_code
+      - peer_vpc_id
+      properties:
+        peer_account_id:
+          type: string
+          example: acc-12345
+        peer_region_code:
+          type: string
+          example: aws-us-east-1
+        peer_vpc_id:
+          type: string
+          example: '1234567890'
+    VPCCreate:
       type: object
       required:
       - name
+      - cidr
+      - region_code
       properties:
         name:
           type: string
-          description: The new name for the VPC.
-          example: my-renamed-vpc
+          example: my-production-vpc
+        cidr:
+          type: string
+          example: 10.0.0.0/16
+        region_code:
+          type: string
+          example: us-east-1
   parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      description: The unique identifier of the project.
-      schema:
-        type: string
-        example: rp1pz7uyae
     VPCId:
       name: vpc_id
       in: path
@@ -324,6 +316,14 @@ components:
       schema:
         type: string
         example: '1234567890'
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      description: The unique identifier of the project.
+      schema:
+        type: string
+        example: rp1pz7uyae
   responses:
     ClientError:
       description: Client error response (4xx status codes).
