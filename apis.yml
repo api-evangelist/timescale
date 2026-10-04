@@ -254,6 +254,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/timescale-capability-edges.yml
+  name: Timescale Business Capability Map
 - type: AgenticAccess
   url: agentic-access/timescale-agentic-access.yml
 - type: TrustCenter

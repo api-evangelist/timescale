@@ -1,0 +1,59 @@
+slug: timescale
+provider: Timescale
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: VPCs
+  spec_file: timescale-vpcs-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.85
+  evidence: POST /projects/{project_id}/vpcs  createVPC  Create a VPC; POST /projects/{project_id}/vpcs/{vpc_id}/peerings  createVPCPeering  Create
+    a VPC Peering
+  reason: 'Purely network infrastructure: creation, naming and peering of virtual private clouds. This
+    is cloud network infrastructure provisioning — IT Infrastructure Management — with no plausible alternative
+    business reading.'
+- tag: Services
+  spec_file: timescale-services-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.8
+  evidence: createService  Create a Service; startService/stopService; resizeService  Resize a Service;
+    attachServiceToVPC  Attach Service to VPC
+  reason: '''Services'' here are managed PostgreSQL database instances: create, start/stop, resize, fork,
+    attach to VPC. That is lifecycle management of cloud database infrastructure (compute/storage/network),
+    mapping to IT Infrastructure Management rather than any customer-facing business capability.'
+- tag: Read Replica Sets
+  spec_file: timescale-read-replica-sets-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.75
+  evidence: POST /projects/{project_id}/services/{service_id}/replicaSets  createReplicaSet  Create a
+    Read Replica Set; resizeReplicaSet  Resize a Read Replica Set
+  reason: Operations provision, resize and delete managed database read replicas and connection poolers
+    in a cloud service — this is cloud compute/storage infrastructure provisioning for the consuming organisation,
+    i.e. IT Infrastructure Management. No business-domain reading fits; 'replica set' is a database topology
+    object, not a business entity.
+- tag: Analytics
+  spec_file: timescale-analytics-api-openapi.yml
+  capability_id: BC-4280.10
+  capability_id_l1: BC-4280
+  capability_name: Product Telemetry Instrumentation
+  confidence: 0.7
+  evidence: POST /analytics/track 'Track event'; POST /analytics/identify 'Identify user'; schemas TrackRequest,
+    IdentifyRequest
+  reason: Identify/track event ingestion against a product runtime is product usage telemetry instrumentation,
+    not business analytics. Thin surface (two operations) so confidence is moderate.
