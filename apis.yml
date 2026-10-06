@@ -42,7 +42,7 @@ accessModel:
   method: derived
 specificationVersion: '0.23'
 created: '2026-08-05'
-modified: '2026-08-05'
+modified: '2026-10-06'
 image: https://www.tigerdata.com/favicon.ico
 tags:
 - Company
@@ -254,6 +254,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://www.tigerdata.com/blog/rss
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/timescale-capability-edges.yml
   name: Timescale Business Capability Map
