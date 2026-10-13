@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-metrics-series-request-schema.json",
+  "title": "MetricsSeriesRequest",
+  "description": "Parameters for a single getServiceMetricsSeries query. Sent as a JSON\nbody so callers can pass an unbounded filter set without query-string\nlength pressure.\n",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-services-api-openapi.yml#/components/schemas/MetricsSeriesRequest",
+  "x-preview": true,
+  "type": "object",
+  "required": [
+    "name",
+    "from",
+    "to"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Metric series name. Use getServiceMetricsAvailableSeries to discover valid values."
+    },
+    "from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start of the time window (RFC3339; nanosecond precision accepted)."
+    },
+    "to": {
+      "type": "string",
+      "format": "date-time",
+      "description": "End of the time window (RFC3339; nanosecond precision accepted)."
+    },
+    "bucket_seconds": {
+      "type": "integer",
+      "minimum": 60,
+      "description": "Aggregation bucket size in seconds. Optional: when omitted the\nserver picks a default that matches the window (roughly 1m for\nwindows up to 1h, 1h for up to 30d, 1d beyond that). Minimum is\n60s (finer buckets don't add resolution given scrape intervals).\nMust be coarse enough for the window's tier; requests that ask\nfor a finer bucket than the tier can produce are rejected.\n"
+    },
+    "fn": {
+      "type": "string",
+      "enum": [
+        "RATE",
+        "INCREASE",
+        "SUM",
+        "AVG",
+        "MIN",
+        "MAX",
+        "COUNT",
+        "P50",
+        "P90",
+        "P99",
+        "LAST"
+      ],
+      "description": "Aggregation function applied per bucket. Optional: when omitted,\nthe server picks the default for the metric (currently `LAST`).\n\nNot accepted on the following metrics — requests are rejected\nwith `INVALID_REQUEST`:\n  - `timescale_cloud_system_cpu_total_millicores`\n  - `timescale_cloud_system_cpu_usage_millicores`\n  - `timescale_cloud_system_disk_io_read_bytes`\n  - `timescale_cloud_system_disk_io_read_ops`\n  - `timescale_cloud_system_disk_io_total_bytes`\n  - `timescale_cloud_system_disk_io_total_ops`\n  - `timescale_cloud_system_disk_io_write_bytes`\n  - `timescale_cloud_system_disk_io_write_ops`\n  - `timescale_cloud_system_disk_usage_bytes`\n  - `timescale_cloud_system_memory_total_bytes`\n  - `timescale_cloud_system_memory_usage_bytes`\n  - `timescale_cloud_database_qps`\n  - `timescale_cloud_database_num_connections`\n  - `timescale_cloud_database_job_duration_usecs`\n  - `timescale_cloud_database_job_success`\n"
+    },
+    "filters": {
+      "type": "array",
+      "description": "Label filters applied to the series query. Recognized label names\ndepend on the metric. The most common is `role` (value `primary` or\n`replica`). When `role` is omitted, some metrics default to primary\nand others return data for all roles (one series per role); pass an\nexplicit role for deterministic results. Role label values in the\nresponse are lowercased.\n",
+      "items": {
+        "$ref": "#/$defs/MetricLabelFilter"
+      }
+    }
+  },
+  "$defs": {
+    "MetricLabelFilter": {
+      "x-preview": true,
+      "type": "object",
+      "description": "A single key/value label match applied to a metric series query.",
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Label key to match against, e.g. `role` or `job_id`."
+        },
+        "value": {
+          "type": "string",
+          "description": "Label value to match. Case sensitivity follows the underlying metric's storage convention."
+        }
+      }
+    }
+  }
+}

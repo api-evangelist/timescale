@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-metric-series-schema.json",
+  "title": "MetricSeries",
+  "description": "One labeled time series — the label set plus its per-bucket data points.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-services-api-openapi.yml#/components/schemas/MetricSeries",
+  "x-preview": true,
+  "type": "object",
+  "required": [
+    "labels",
+    "data"
+  ],
+  "properties": {
+    "labels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Label set identifying this series. The key set depends on the\nmetric (e.g. `role`, `ordinal`).\n"
+    },
+    "data": {
+      "type": "array",
+      "description": "Per-bucket data points for this label set.",
+      "items": {
+        "$ref": "#/$defs/MetricDataPoint"
+      }
+    }
+  },
+  "$defs": {
+    "MetricDataPoint": {
+      "x-preview": true,
+      "type": "object",
+      "description": "A single time/value pair within a MetricSeries.",
+      "required": [
+        "time"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The bucket start timestamp."
+        },
+        "value": {
+          "type": "number",
+          "format": "double",
+          "description": "The aggregated value at this bucket. Buckets without collected\ndata are omitted from the parent series' `data` array; the API\ndoes not currently emit null values.\n"
+        }
+      }
+    }
+  }
+}

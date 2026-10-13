@@ -1,0 +1,190 @@
+name: Timescale API Plans
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: TimescaleDB / Tiger Data
+providerId: timescaledb
+created: '2026-05-08'
+# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
+# bulk sweep dated 2026-05-08, not harvested from the provider. See roadmap#35.
+method: generated
+modified: '2026-05-08'
+reconciled: true
+tags:
+- Database
+- Time-Series
+- PostgreSQL
+- Open Source
+- Cloud
+- Plans
+- Pricing
+description: >-
+  Tiger Cloud (formerly Timescale Cloud) is the managed offering for TimescaleDB.
+  It uses consumption-based hourly billing for compute and average-GB-hour
+  metering for storage. The community edition of TimescaleDB remains free under
+  Apache 2.0; the Tiger / TimescaleDB Community License governs some features.
+notes: >-
+  Public pricing on tigerdata.com/pricing lists three managed tiers.
+  Compute prices vary by region; storage prices are the same across regions.
+  Free 30-day Performance trial with no credit card.
+sources:
+- https://www.tigerdata.com/pricing
+- https://www.tigerdata.com/legal/terms
+- https://github.com/timescale/timescaledb
+plans:
+- id: timescaledb-community
+  name: TimescaleDB Community (Self-Hosted)
+  type: free
+  description: Apache 2.0 / Timescale License (TSL) self-managed PostgreSQL extension. Free to run on your own infrastructure.
+  entries:
+  - label: Self-hosted
+    name: self_hosted
+    type: flat
+    metric: license
+    limit: -1
+    timeFrame: perpetual
+    geo: global
+    unit: 1
+    price: 0
+    userMultiplied: false
+- id: tiger-cloud-trial
+  name: Tiger Cloud — Free Trial
+  type: free
+  description: 30-day free Performance-tier trial, no credit card required.
+  entries:
+  - label: Free trial
+    name: trial
+    type: flat
+    metric: trial-days
+    limit: 30
+    timeFrame: trial
+    geo: global
+    unit: 1
+    price: 0
+    userMultiplied: false
+- id: tiger-cloud-performance
+  name: Tiger Cloud — Performance
+  type: subscription
+  description: Performance tier; up to 8 vCPU, 32 GB memory, 5K IOPS, 250 Mbps bandwidth, up to 16 TB high-perf storage. Hourly compute billing.
+  entries:
+  - label: Starting price
+    name: starting_price
+    type: flat
+    metric: month
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 30
+    currency: USD
+    userMultiplied: false
+- id: tiger-cloud-scale
+  name: Tiger Cloud — Scale
+  type: subscription
+  description: Scale tier; up to 32 vCPU, 128 GB memory, 40K IOPS, 1,000 Mbps bandwidth, up to 64 TB high-perf storage.
+  entries:
+  - label: Starting price
+    name: starting_price
+    type: flat
+    metric: month
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: 36
+    currency: USD
+    userMultiplied: false
+- id: tiger-cloud-enterprise
+  name: Tiger Cloud — Enterprise
+  type: enterprise
+  description: Enterprise tier; up to 64 vCPU, 256 GB memory, 80K IOPS, 4,000 Mbps bandwidth, up to 64 TB high-perf storage. Custom contracts.
+  entries:
+  - label: Custom contract
+    name: enterprise_contract
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: annual
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+- id: tiger-cloud-storage
+  name: Tiger Cloud — Storage Add-On
+  type: addOn
+  description: Storage metered by average GB per hour; flat across regions; tiered/object storage available unlimited.
+  entries:
+  - label: High-performance storage
+    name: storage_gb_hour
+    type: usage
+    metric: GB-hour
+    limit: -1
+    timeFrame: hour
+    geo: global
+    unit: 1
+    price: see https://www.tigerdata.com/pricing
+    userMultiplied: false
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  - seat
+  - subscription
+  units:
+  - data
+  - negotiated
+  - period
+  - seat
+  plans:
+  - name: TimescaleDB Community (Self-Hosted)
+    access: free
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - one-time
+  - name: Tiger Cloud — Free Trial
+    access: free
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - term
+  - name: Tiger Cloud — Performance
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - period
+    periods:
+    - month
+  - name: Tiger Cloud — Scale
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - period
+    periods:
+    - month
+  - name: Tiger Cloud — Enterprise
+    access: enterprise
+    model: subscription
+    model_how: derived
+    units:
+    - negotiated
+    periods:
+    - year
+  - name: Tiger Cloud — Storage Add-On
+    access: addon
+    model: metered
+    model_how: derived
+    units:
+    - data
+    periods:
+    - hour

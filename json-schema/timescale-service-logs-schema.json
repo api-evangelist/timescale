@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-service-logs-schema.json",
+  "title": "ServiceLogs",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-services-api-openapi.yml#/components/schemas/ServiceLogs",
+  "type": "object",
+  "required": [
+    "logs"
+  ],
+  "properties": {
+    "logs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of log message strings. Preserved for backwards compatibility."
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ServiceLogEntry"
+      },
+      "description": "Structured log entries with timestamp and severity metadata. Only present on the cursor-based path."
+    },
+    "lastCursor": {
+      "type": "string",
+      "description": "Opaque cursor for the next page of results. Present when more log entries exist older than the last entry in this response. Absent when there are no further results."
+    }
+  },
+  "$defs": {
+    "ServiceLogEntry": {
+      "type": "object",
+      "required": [
+        "timestamp",
+        "message",
+        "severity"
+      ],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the log entry (RFC3339 format)"
+        },
+        "message": {
+          "type": "string",
+          "description": "Log message text"
+        },
+        "severity": {
+          "type": "string",
+          "description": "PostgreSQL severity level (e.g. LOG, WARNING, ERROR, FATAL)"
+        }
+      }
+    }
+  }
+}

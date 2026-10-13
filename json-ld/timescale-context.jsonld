@@ -1,0 +1,628 @@
+{
+  "@context": {
+    "@vocab": "https://tigerdata.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "timescale": "https://tigerdata.com/schema#",
+    "IdentifyRequest": "timescale:IdentifyRequest",
+    "properties": {
+      "@id": "timescale:properties"
+    },
+    "Error": "timescale:Error",
+    "message": {
+      "@id": "timescale:message",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "timescale:code",
+      "@type": "@id"
+    },
+    "ErrorCode": "timescale:ErrorCode",
+    "StatusResponse": "timescale:StatusResponse",
+    "status": {
+      "@id": "timescale:status",
+      "@type": "xsd:string"
+    },
+    "TrackRequest": "timescale:TrackRequest",
+    "event": {
+      "@id": "timescale:event",
+      "@type": "xsd:string"
+    },
+    "Error_2": "timescale:Error_2",
+    "details": {
+      "@id": "timescale:details",
+      "@type": "xsd:string"
+    },
+    "UserInfo": "timescale:UserInfo",
+    "id": {
+      "@id": "timescale:id",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "timescale:email",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "timescale:name",
+      "@type": "xsd:string"
+    },
+    "ApiKeyInfo": "timescale:ApiKeyInfo",
+    "prefix": {
+      "@id": "timescale:prefix",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "timescale:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "space_id": {
+      "@id": "timescale:space_id",
+      "@type": "xsd:string"
+    },
+    "space_name": {
+      "@id": "timescale:space_name",
+      "@type": "xsd:string"
+    },
+    "user_id": {
+      "@id": "timescale:user_id",
+      "@type": "xsd:string"
+    },
+    "user_email": {
+      "@id": "timescale:user_email",
+      "@type": "xsd:string"
+    },
+    "user_name": {
+      "@id": "timescale:user_name",
+      "@type": "xsd:string"
+    },
+    "LogoutRequest": "timescale:LogoutRequest",
+    "refreshToken": {
+      "@id": "timescale:refreshToken",
+      "@type": "xsd:string"
+    },
+    "AuthInfo": "timescale:AuthInfo",
+    "type": {
+      "@id": "timescale:type",
+      "@type": "xsd:string"
+    },
+    "api_key": {
+      "@id": "timescale:api_key",
+      "@type": "@id"
+    },
+    "user": {
+      "@id": "timescale:user",
+      "@type": "@id"
+    },
+    "AuthInfo_2": "timescale:AuthInfo_2",
+    "apiKey": {
+      "@id": "timescale:apiKey"
+    },
+    "oauth": {
+      "@id": "timescale:oauth"
+    },
+    "FeedbackRequest": "timescale:FeedbackRequest",
+    "source": {
+      "@id": "timescale:source",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "timescale:version",
+      "@type": "xsd:string"
+    },
+    "os": {
+      "@id": "timescale:os",
+      "@type": "xsd:string"
+    },
+    "MemberRole": "timescale:MemberRole",
+    "ReceivedInvite": "timescale:ReceivedInvite",
+    "inviter_email": {
+      "@id": "timescale:inviter_email",
+      "@type": "xsd:string"
+    },
+    "inviter_name": {
+      "@id": "timescale:inviter_name",
+      "@type": "xsd:string"
+    },
+    "role": {
+      "@id": "timescale:role",
+      "@type": "@id"
+    },
+    "InviteActionResult": "timescale:InviteActionResult",
+    "StandardComputePrice": "timescale:StandardComputePrice",
+    "price_per_hour": {
+      "@id": "timescale:price_per_hour",
+      "@type": "xsd:decimal"
+    },
+    "included_compute_hours_per_month": {
+      "@id": "timescale:included_compute_hours_per_month",
+      "@type": "xsd:integer"
+    },
+    "ComputePrice": "timescale:ComputePrice",
+    "size": {
+      "@id": "timescale:size",
+      "@type": "@id"
+    },
+    "milli_cpu": {
+      "@id": "timescale:milli_cpu",
+      "@type": "xsd:integer"
+    },
+    "memory_gib": {
+      "@id": "timescale:memory_gib",
+      "@type": "xsd:integer"
+    },
+    "price_per_month": {
+      "@id": "timescale:price_per_month",
+      "@type": "xsd:decimal"
+    },
+    "DatabaseSize": "timescale:DatabaseSize",
+    "DedicatedPricing": "timescale:DedicatedPricing",
+    "compute": {
+      "@id": "timescale:compute",
+      "@container": "@list"
+    },
+    "storage": {
+      "@id": "timescale:storage",
+      "@type": "@id"
+    },
+    "StandardPricing": "timescale:StandardPricing",
+    "Pricing": "timescale:Pricing",
+    "dedicated": {
+      "@id": "timescale:dedicated",
+      "@type": "@id"
+    },
+    "standard": {
+      "@id": "timescale:standard",
+      "@type": "@id"
+    },
+    "StoragePrice": "timescale:StoragePrice",
+    "price_per_gib_hour": {
+      "@id": "timescale:price_per_gib_hour",
+      "@type": "xsd:decimal"
+    },
+    "price_per_gib_month": {
+      "@id": "timescale:price_per_gib_month",
+      "@type": "xsd:decimal"
+    },
+    "included_gib_per_database": {
+      "@id": "timescale:included_gib_per_database",
+      "@type": "xsd:integer"
+    },
+    "Project": "timescale:Project",
+    "ResizeInput": "timescale:ResizeInput",
+    "cpu_millis": {
+      "@id": "timescale:cpu_millis",
+      "@type": "xsd:string"
+    },
+    "memory_gbs": {
+      "@id": "timescale:memory_gbs",
+      "@type": "xsd:string"
+    },
+    "ReadReplicaSet": "timescale:ReadReplicaSet",
+    "nodes": {
+      "@id": "timescale:nodes",
+      "@type": "xsd:integer"
+    },
+    "metadata": {
+      "@id": "timescale:metadata"
+    },
+    "endpoint": {
+      "@id": "timescale:endpoint",
+      "@type": "@id"
+    },
+    "connection_pooler": {
+      "@id": "timescale:connection_pooler",
+      "@type": "@id"
+    },
+    "Endpoint": "timescale:Endpoint",
+    "host": {
+      "@id": "timescale:host",
+      "@type": "xsd:string"
+    },
+    "port": {
+      "@id": "timescale:port",
+      "@type": "xsd:integer"
+    },
+    "ConnectionPooler": "timescale:ConnectionPooler",
+    "ReadReplicaSetCreate": "timescale:ReadReplicaSetCreate",
+    "SetEnvironmentInput": "timescale:SetEnvironmentInput",
+    "environment": {
+      "@id": "timescale:environment",
+      "@type": "xsd:string"
+    },
+    "ForkStrategy": "timescale:ForkStrategy",
+    "UpdatePasswordInput": "timescale:UpdatePasswordInput",
+    "password": {
+      "@id": "timescale:password",
+      "@type": "xsd:string"
+    },
+    "MetricSeries": "timescale:MetricSeries",
+    "labels": {
+      "@id": "timescale:labels"
+    },
+    "data": {
+      "@id": "timescale:data",
+      "@container": "@list"
+    },
+    "DeployStatus": "timescale:DeployStatus",
+    "MetricsSeriesRequest": "timescale:MetricsSeriesRequest",
+    "from": {
+      "@id": "timescale:from",
+      "@type": "xsd:dateTime"
+    },
+    "to": {
+      "@id": "timescale:to",
+      "@type": "xsd:dateTime"
+    },
+    "bucket_seconds": {
+      "@id": "timescale:bucket_seconds",
+      "@type": "xsd:integer"
+    },
+    "fn": {
+      "@id": "timescale:fn",
+      "@type": "xsd:string"
+    },
+    "filters": {
+      "@id": "timescale:filters",
+      "@container": "@list"
+    },
+    "EnvironmentTag": "timescale:EnvironmentTag",
+    "ForkSpec": "timescale:ForkSpec",
+    "project_id": {
+      "@id": "timescale:project_id",
+      "@type": "xsd:string"
+    },
+    "service_id": {
+      "@id": "timescale:service_id",
+      "@type": "xsd:string"
+    },
+    "is_standby": {
+      "@id": "timescale:is_standby",
+      "@type": "xsd:boolean"
+    },
+    "ServiceLogEntry": "timescale:ServiceLogEntry",
+    "timestamp": {
+      "@id": "timescale:timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "severity": {
+      "@id": "timescale:severity",
+      "@type": "xsd:string"
+    },
+    "ServiceVPCInput": "timescale:ServiceVPCInput",
+    "vpc_id": {
+      "@id": "timescale:vpc_id",
+      "@type": "xsd:string"
+    },
+    "SetHAReplicaInput": "timescale:SetHAReplicaInput",
+    "sync_replica_count": {
+      "@id": "timescale:sync_replica_count",
+      "@type": "xsd:integer"
+    },
+    "replica_count": {
+      "@id": "timescale:replica_count",
+      "@type": "xsd:integer"
+    },
+    "ServiceType": "timescale:ServiceType",
+    "MetricLabelFilter": "timescale:MetricLabelFilter",
+    "key": {
+      "@id": "timescale:key",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "timescale:value",
+      "@type": "xsd:string"
+    },
+    "ServiceLogs": "timescale:ServiceLogs",
+    "logs": {
+      "@id": "timescale:logs",
+      "@container": "@list"
+    },
+    "entries": {
+      "@id": "timescale:entries",
+      "@container": "@list"
+    },
+    "lastCursor": {
+      "@id": "timescale:lastCursor",
+      "@type": "xsd:string"
+    },
+    "ServiceCreate": "timescale:ServiceCreate",
+    "addons": {
+      "@id": "timescale:addons",
+      "@container": "@list"
+    },
+    "region_code": {
+      "@id": "timescale:region_code",
+      "@type": "xsd:string"
+    },
+    "environment_tag": {
+      "@id": "timescale:environment_tag",
+      "@type": "@id"
+    },
+    "HAReplica": "timescale:HAReplica",
+    "ForkServiceCreate": "timescale:ForkServiceCreate",
+    "fork_strategy": {
+      "@id": "timescale:fork_strategy",
+      "@type": "@id"
+    },
+    "target_time": {
+      "@id": "timescale:target_time",
+      "@type": "xsd:dateTime"
+    },
+    "MetricDataPoint": "timescale:MetricDataPoint",
+    "time": {
+      "@id": "timescale:time",
+      "@type": "xsd:dateTime"
+    },
+    "Service": "timescale:Service",
+    "service_type": {
+      "@id": "timescale:service_type",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "timescale:created",
+      "@type": "xsd:dateTime"
+    },
+    "initial_password": {
+      "@id": "timescale:initial_password",
+      "@type": "xsd:string"
+    },
+    "resources": {
+      "@id": "timescale:resources",
+      "@container": "@list"
+    },
+    "vpcEndpoint": {
+      "@id": "timescale:vpcEndpoint"
+    },
+    "forked_from": {
+      "@id": "timescale:forked_from",
+      "@type": "@id"
+    },
+    "ha_replicas": {
+      "@id": "timescale:ha_replicas",
+      "@type": "@id"
+    },
+    "read_replica_sets": {
+      "@id": "timescale:read_replica_sets",
+      "@container": "@list"
+    },
+    "CreateSpaceRequest": "timescale:CreateSpaceRequest",
+    "CreateApiKeyRequest": "timescale:CreateApiKeyRequest",
+    "Member": "timescale:Member",
+    "Space": "timescale:Space",
+    "RenameDatabaseRequest": "timescale:RenameDatabaseRequest",
+    "DatabaseType": "timescale:DatabaseType",
+    "ApiKeyCredentials": "timescale:ApiKeyCredentials",
+    "access_key": {
+      "@id": "timescale:access_key",
+      "@type": "xsd:string"
+    },
+    "secret_key": {
+      "@id": "timescale:secret_key",
+      "@type": "xsd:string"
+    },
+    "UpdateMemberRoleRequest": "timescale:UpdateMemberRoleRequest",
+    "LogsResponse": "timescale:LogsResponse",
+    "last_cursor": {
+      "@id": "timescale:last_cursor",
+      "@type": "xsd:string"
+    },
+    "UpdatePasswordRequest": "timescale:UpdatePasswordRequest",
+    "ShareDatabaseRequest": "timescale:ShareDatabaseRequest",
+    "expires_at": {
+      "@id": "timescale:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "Invite": "timescale:Invite",
+    "LeaveSpaceResult": "timescale:LeaveSpaceResult",
+    "PaymentMethod": "timescale:PaymentMethod",
+    "primary": {
+      "@id": "timescale:primary",
+      "@type": "xsd:boolean"
+    },
+    "pending_deletion": {
+      "@id": "timescale:pending_deletion",
+      "@type": "xsd:boolean"
+    },
+    "brand": {
+      "@id": "timescale:brand",
+      "@type": "xsd:string"
+    },
+    "last4": {
+      "@id": "timescale:last4",
+      "@type": "xsd:string"
+    },
+    "exp_month": {
+      "@id": "timescale:exp_month",
+      "@type": "xsd:integer"
+    },
+    "exp_year": {
+      "@id": "timescale:exp_year",
+      "@type": "xsd:integer"
+    },
+    "InvoiceDetail": "timescale:InvoiceDetail",
+    "line_items": {
+      "@id": "timescale:line_items",
+      "@container": "@list"
+    },
+    "InvoiceLineItem": "timescale:InvoiceLineItem",
+    "database_id": {
+      "@id": "timescale:database_id",
+      "@type": "xsd:string"
+    },
+    "product_type": {
+      "@id": "timescale:product_type",
+      "@type": "xsd:string"
+    },
+    "detailed_spec": {
+      "@id": "timescale:detailed_spec",
+      "@type": "xsd:string"
+    },
+    "quantity": {
+      "@id": "timescale:quantity",
+      "@type": "xsd:decimal"
+    },
+    "unit_price": {
+      "@id": "timescale:unit_price",
+      "@type": "xsd:decimal"
+    },
+    "line_total": {
+      "@id": "timescale:line_total",
+      "@type": "xsd:decimal"
+    },
+    "RenameSpaceRequest": "timescale:RenameSpaceRequest",
+    "DatabaseStatus": "timescale:DatabaseStatus",
+    "ApiKey": "timescale:ApiKey",
+    "RenameSpaceResult": "timescale:RenameSpaceResult",
+    "old_name": {
+      "@id": "timescale:old_name",
+      "@type": "xsd:string"
+    },
+    "new_name": {
+      "@id": "timescale:new_name",
+      "@type": "xsd:string"
+    },
+    "DatabaseShare": "timescale:DatabaseShare",
+    "share_token": {
+      "@id": "timescale:share_token",
+      "@type": "xsd:string"
+    },
+    "database_name": {
+      "@id": "timescale:database_name",
+      "@type": "xsd:string"
+    },
+    "revoked_at": {
+      "@id": "timescale:revoked_at",
+      "@type": "xsd:dateTime"
+    },
+    "PaymentSetupResponse": "timescale:PaymentSetupResponse",
+    "client_secret": {
+      "@id": "timescale:client_secret",
+      "@type": "xsd:string"
+    },
+    "payment_url": {
+      "@id": "timescale:payment_url",
+      "@type": "xsd:string"
+    },
+    "PaymentMethodsResponse": "timescale:PaymentMethodsResponse",
+    "payment_methods": {
+      "@id": "timescale:payment_methods",
+      "@container": "@list"
+    },
+    "LogEntry": "timescale:LogEntry",
+    "Invoice": "timescale:Invoice",
+    "invoice_number": {
+      "@id": "timescale:invoice_number",
+      "@type": "xsd:string"
+    },
+    "invoice_date": {
+      "@id": "timescale:invoice_date",
+      "@type": "xsd:dateTime"
+    },
+    "total": {
+      "@id": "timescale:total",
+      "@type": "xsd:decimal"
+    },
+    "InviteStatus": "timescale:InviteStatus",
+    "ForkDatabaseRequest": "timescale:ForkDatabaseRequest",
+    "InvoicesResponse": "timescale:InvoicesResponse",
+    "invoices": {
+      "@id": "timescale:invoices",
+      "@container": "@list"
+    },
+    "CreateDatabaseRequest": "timescale:CreateDatabaseRequest",
+    "CreateInviteRequest": "timescale:CreateInviteRequest",
+    "UpdateOverageSettingsRequest": "timescale:UpdateOverageSettingsRequest",
+    "enabled": {
+      "@id": "timescale:enabled",
+      "@type": "xsd:boolean"
+    },
+    "compute_limit_minutes": {
+      "@id": "timescale:compute_limit_minutes",
+      "@type": "xsd:integer"
+    },
+    "InvoiceStatus": "timescale:InvoiceStatus",
+    "SpaceDetail": "timescale:SpaceDetail",
+    "owner": {
+      "@id": "timescale:owner"
+    },
+    "SpaceUsage": "timescale:SpaceUsage",
+    "storage_mib": {
+      "@id": "timescale:storage_mib",
+      "@type": "xsd:integer"
+    },
+    "storage_limit_mib": {
+      "@id": "timescale:storage_limit_mib",
+      "@type": "xsd:integer"
+    },
+    "compute_minutes": {
+      "@id": "timescale:compute_minutes",
+      "@type": "xsd:integer"
+    },
+    "free_compute_minutes": {
+      "@id": "timescale:free_compute_minutes",
+      "@type": "xsd:integer"
+    },
+    "overages_enabled": {
+      "@id": "timescale:overages_enabled",
+      "@type": "xsd:boolean"
+    },
+    "cost_to_date": {
+      "@id": "timescale:cost_to_date",
+      "@type": "xsd:decimal"
+    },
+    "estimated_total_cost": {
+      "@id": "timescale:estimated_total_cost",
+      "@type": "xsd:decimal"
+    },
+    "billing_period_start": {
+      "@id": "timescale:billing_period_start",
+      "@type": "xsd:dateTime"
+    },
+    "billing_period_end": {
+      "@id": "timescale:billing_period_end",
+      "@type": "xsd:dateTime"
+    },
+    "Database": "timescale:Database",
+    "Peering": "timescale:Peering",
+    "peer_account_id": {
+      "@id": "timescale:peer_account_id",
+      "@type": "xsd:string"
+    },
+    "peer_region_code": {
+      "@id": "timescale:peer_region_code",
+      "@type": "xsd:string"
+    },
+    "peer_vpc_id": {
+      "@id": "timescale:peer_vpc_id",
+      "@type": "xsd:string"
+    },
+    "provisioned_id": {
+      "@id": "timescale:provisioned_id",
+      "@type": "xsd:string"
+    },
+    "error_message": {
+      "@id": "timescale:error_message",
+      "@type": "xsd:string"
+    },
+    "VPCRename": "timescale:VPCRename",
+    "VPC": "timescale:VPC",
+    "cidr": {
+      "@id": "timescale:cidr",
+      "@type": "xsd:string"
+    },
+    "PeeringCreate": "timescale:PeeringCreate",
+    "VPCCreate": "timescale:VPCCreate"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Timescale API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Timescale's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-13) from openapi/timescale-analytics-api-openapi.yml, openapi/timescale-auth-api-openapi.yml, openapi/timescale-feedback-api-openapi.yml.",
+  "dcterms:created": "2026-10-13",
+  "dcterms:source": [
+    "openapi/timescale-analytics-api-openapi.yml",
+    "openapi/timescale-auth-api-openapi.yml",
+    "openapi/timescale-feedback-api-openapi.yml",
+    "openapi/timescale-health-api-openapi.yml",
+    "openapi/timescale-invites-api-openapi.yml"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-update-overage-settings-request-schema.json",
+  "title": "UpdateOverageSettingsRequest",
+  "description": "Request body for updating compute overage settings on a space.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/UpdateOverageSettingsRequest",
+  "type": "object",
+  "required": [
+    "enabled"
+  ],
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Set to true to enable overages, false to disable."
+    },
+    "compute_limit_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64",
+      "minimum": 6001,
+      "description": "Optional when `enabled` is true: the monthly compute-minute limit\nabove which standard databases auto-pause. Must be greater than\nthe free-tier limit (6000 minutes). Omit or set to `null` for no\nlimit — the user is billed for all overage usage with no upper\nbound. Must be omitted (or `null`) when `enabled` is false; on\ndisable the server resets the limit to the free-tier default.\n"
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-database-schema.json",
+  "title": "Database",
+  "description": "A Ghost database.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/Database",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "type",
+    "status",
+    "host",
+    "port"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Database ID."
+    },
+    "name": {
+      "type": "string",
+      "description": "Database name. Unique within the space."
+    },
+    "type": {
+      "$ref": "#/$defs/DatabaseType"
+    },
+    "size": {
+      "$ref": "#/$defs/DatabaseSize"
+    },
+    "status": {
+      "$ref": "#/$defs/DatabaseStatus"
+    },
+    "host": {
+      "type": "string",
+      "description": "PostgreSQL hostname for connections."
+    },
+    "port": {
+      "type": "integer",
+      "description": "PostgreSQL port for connections."
+    },
+    "password": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "PostgreSQL password for the default user. Returned on every GET for authorized callers."
+    },
+    "storage_mib": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64",
+      "description": "Current disk usage in MiB. Null if not yet available."
+    }
+  },
+  "$defs": {
+    "DatabaseSize": {
+      "type": "string",
+      "description": "Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.",
+      "enum": [
+        "1x",
+        "2x",
+        "4x",
+        "8x"
+      ]
+    },
+    "DatabaseStatus": {
+      "type": "string",
+      "description": "Current lifecycle status of the database.",
+      "enum": [
+        "queued",
+        "configuring",
+        "running",
+        "pausing",
+        "paused",
+        "resuming",
+        "deleting",
+        "deleted",
+        "upgrading",
+        "unstable",
+        "unknown"
+      ]
+    },
+    "DatabaseType": {
+      "type": "string",
+      "description": "Database deployment model.\n- `standard` — shared-resource databases subject to the space's compute and storage limits.\n- `dedicated` — per-instance paid databases with guaranteed resources, exempt from space-level auto-pause.\n",
+      "enum": [
+        "standard",
+        "dedicated"
+      ],
+      "default": "standard"
+    }
+  }
+}

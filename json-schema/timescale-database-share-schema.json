@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-database-share-schema.json",
+  "title": "DatabaseShare",
+  "description": "A shareable snapshot of a database. Can be used to create a new database from the snapshot in another space.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/DatabaseShare",
+  "type": "object",
+  "required": [
+    "share_token",
+    "database_id",
+    "database_name",
+    "created_at"
+  ],
+  "properties": {
+    "share_token": {
+      "type": "string",
+      "description": "Token passed to `createDatabase` (via `share_token`) to create a new database from the shared snapshot in another space. Also used to revoke the share via `revokeShare`. Always begins with `gs_`."
+    },
+    "database_id": {
+      "type": "string",
+      "description": "ID of the source database."
+    },
+    "database_name": {
+      "type": "string",
+      "description": "Name of the source database."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the share was created."
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the share expires. Absent if the share does not expire."
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the share was revoked. Absent if the share is still active."
+    }
+  }
+}

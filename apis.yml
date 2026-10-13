@@ -1,18 +1,20 @@
 aid: timescale
+
 name: Timescale
-description: 'Timescale — rebranded as Tiger Data in 2025 — is the PostgreSQL data
-  platform company behind TimescaleDB, the open-source PostgreSQL extension for time-series
-  and real-time analytics, and Tiger Cloud, a fully managed PostgreSQL cloud service
-  on AWS and Azure. The platform adds hypertables (automatic time-based partitioning),
-  Hypercore hybrid row-columnar storage, native columnar compression, continuous aggregates,
-  tiered storage to S3, database forks, read replica sets and connection pooling on
-  top of standard PostgreSQL. The company also ships pg_textsearch (BM25 full-text
-  search in Postgres), pgvectorscale and pgai for vector and AI workloads, the Tiger
-  Cloud REST API for programmatic service management, the Tiger CLI with a built-in
-  MCP server, and Ghost, an agent-oriented Postgres provisioning service at ghost.build.'
+
+description: Timescale — rebranded as Tiger Data in 2025 — is the PostgreSQL data platform company behind TimescaleDB, the open-source PostgreSQL
+  extension for time-series and real-time analytics, and Tiger Cloud, a fully managed PostgreSQL cloud service on AWS and Azure. The platform
+  adds hypertables (automatic time-based partitioning), Hypercore hybrid row-columnar storage, native columnar compression, continuous aggregates,
+  tiered storage to S3, database forks, read replica sets and connection pooling on top of standard PostgreSQL. The company also ships pg_textsearch
+  (BM25 full-text search in Postgres), pgvectorscale and pgai for vector and AI workloads, the Tiger Cloud REST API for programmatic service management,
+  the Tiger CLI with a built-in MCP server, and Ghost, an agent-oriented Postgres provisioning service at ghost.build.
+
 url: https://raw.githubusercontent.com/api-evangelist/timescale/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:secondary-market
+
 deliveryModel:
   model: saas
   open_source: false
@@ -25,6 +27,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -40,10 +43,15 @@ accessModel:
   - sandbox
   generated: '2026-09-03'
   method: derived
+
 specificationVersion: '0.23'
+
 created: '2026-08-05'
+
 modified: '2026-10-06'
+
 image: https://www.tigerdata.com/favicon.ico
+
 tags:
 - Company
 - Database
@@ -55,6 +63,7 @@ tags:
 - Vector Search
 - Developer Tools
 - Open Source
+
 tags_raw:
 - Company
 - Database
@@ -67,193 +76,26 @@ tags_raw:
 - Developer Tools
 - Open Source
 - Open-Source
-apis:
-- name: Tiger Docs MCP Server
-  description: >-
-    A publicly reachable, anonymous Model Context Protocol server (server name pg-aiguide) serving hybrid
-    semantic + BM25 search over Tiger Cloud, TimescaleDB, PostgreSQL and PostGIS documentation, plus a
-    skills catalog for PostgreSQL and TimescaleDB work. tools/list responds without credentials.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
-  baseURL: https://mcp.tigerdata.com/docs
-  tags:
-  - MCP
-  - Documentation
-  - Agents
-  properties:
-  - type: MCPServer
-    url: mcp/timescale-mcp.yml
-  - type: ToolCrosswalk
-    url: mcp/timescale-tool-crosswalk.yml
-- aid: timescale:timescale-analytics-api
-  name: Timescale Analytics API
-  description: The Analytics API from Timescale — 2 operation(s) for analytics.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Analytics
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-analytics-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-auth-api
-  name: Timescale Auth API
-  description: The Auth API from Timescale — 2 operation(s) for auth.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Authentication
-  tags_raw:
-  - Auth
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-auth-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-feedback-api
-  name: Timescale Feedback API
-  description: The Feedback API from Timescale — 1 operation(s) for feedback.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Feedback
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-feedback-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-health-api
-  name: Timescale Health API
-  description: The Health API from Timescale — 1 operation(s) for health.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Health
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-health-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-invites-api
-  name: Timescale Invites API
-  description: The Invites API from Timescale — 3 operation(s) for invites.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Invites
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-invites-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-pricing-api
-  name: Timescale Pricing API
-  description: The Pricing API from Timescale — 1 operation(s) for pricing.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Pricing
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-pricing-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-projects-api
-  name: Timescale Projects API
-  description: The Projects API from Timescale — 1 operation(s) for projects.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Project
-  tags_raw:
-  - Projects
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-projects-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-read-replica-sets-api
-  name: Timescale Read Replica Sets API
-  description: The Read Replica Sets API from Timescale — 6 operation(s) for read replica sets.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Read Replica Sets
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-read-replica-sets-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-services-api
-  name: Timescale Services API
-  description: Manage services, read replicas, and their associated actions.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Services
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-services-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-spaces-api
-  name: Timescale Spaces API
-  description: The Spaces API from Timescale — 31 operation(s) for spaces.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  baseURL: https://console.cloud.tigerdata.com/public/api/v1
-  tags:
-  - Spaces
-  - Space
-  tags_raw:
-  - Spaces
-  - Space
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-spaces-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
-- aid: timescale:timescale-vpcs-api
-  name: Timescale VP Cs API
-  description: Manage VPCs and their peering connections.
-  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
-  baseURL: https://mcp.tigerdata.com/docs
-  tags:
-  - VPC
-  tags_raw:
-  - VPCs
-  properties:
-  - type: OpenAPI
-    url: openapi/timescale-vpcs-api-openapi.yml
-  - type: Documentation
-    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
-  - type: Documentation
-    url: https://ghost.build/docs/
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: Spectral
+  url: rules/timescale-rules.yml
+- type: JSONLD
+  url: json-ld/timescale-context.jsonld
+- type: Vocabulary
+  url: vocabulary/timescale-vocabulary.yml
+- type: Deprecation
+  url: lifecycle/timescale-lifecycle.yml
+- type: LLMsTxt
+  url: llms/timescale-ghost-llms.txt
+- type: IntegrationEdges
+  url: integrations/timescale-integration-edges.yml
 - url: https://www.tigerdata.com/blog/rss
   type: BlogRSS
 - type: CapabilityMap
@@ -349,17 +191,290 @@ common:
   url: https://www.tigerdata.com/legal/service-level-agreement
 - type: SecondaryMarket
   url: https://forgeglobal.com/timescale_stock/
+- type: Plans
+  url: plans/timescale-plans-pricing.yml
+  x-moved-from: timescaledb (consolidated into timescale 2026-10-13, approved by Kin Lane)
+- type: RateLimits
+  url: rate-limits/timescale-rate-limits.yml
+  x-moved-from: timescaledb (consolidated into timescale 2026-10-13, approved by Kin Lane)
+- type: FinOps
+  url: finops/timescale-finops.yml
+  x-moved-from: timescaledb (consolidated into timescale 2026-10-13, approved by Kin Lane)
+
+apis:
+- name: Tiger Docs MCP Server
+  description: A publicly reachable, anonymous Model Context Protocol server (server name pg-aiguide) serving hybrid semantic + BM25 search over
+    Tiger Cloud, TimescaleDB, PostgreSQL and PostGIS documentation, plus a skills catalog for PostgreSQL and TimescaleDB work. tools/list responds
+    without credentials.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
+  baseURL: https://mcp.tigerdata.com/docs
+  tags:
+  - MCP
+  - Documentation
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/timescale-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/timescale-tool-crosswalk.yml
+  aid: timescale:tiger-docs-mcp-server
+- aid: timescale:timescale-analytics-api
+  name: Timescale Analytics API
+  description: The Analytics API from Timescale — 2 operation(s) for analytics.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-track-request-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-identify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-status-response-schema.json
+- aid: timescale:timescale-auth-api
+  name: Timescale Auth API
+  description: The Auth API from Timescale — 2 operation(s) for auth.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Authentication
+  tags_raw:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-auth-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-auth-info-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-logout-request-schema.json
+- aid: timescale:timescale-feedback-api
+  name: Timescale Feedback API
+  description: The Feedback API from Timescale — 1 operation(s) for feedback.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-feedback-request-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-status-response-schema.json
+- aid: timescale:timescale-health-api
+  name: Timescale Health API
+  description: The Health API from Timescale — 1 operation(s) for health.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-health-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+- aid: timescale:timescale-invites-api
+  name: Timescale Invites API
+  description: The Invites API from Timescale — 3 operation(s) for invites.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Invites
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-invites-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-received-invite-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-invite-action-result-schema.json
+- aid: timescale:timescale-pricing-api
+  name: Timescale Pricing API
+  description: The Pricing API from Timescale — 1 operation(s) for pricing.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Pricing
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-pricing-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-pricing-schema.json
+- aid: timescale:timescale-projects-api
+  name: Timescale Projects API
+  description: The Projects API from Timescale — 1 operation(s) for projects.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Project
+  tags_raw:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-projects-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-project-schema.json
+- aid: timescale:timescale-read-replica-sets-api
+  name: Timescale Read Replica Sets API
+  description: The Read Replica Sets API from Timescale — 6 operation(s) for read replica sets.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Read Replica Sets
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-read-replica-sets-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-read-replica-set-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-read-replica-set-create-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-resize-input-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-set-environment-input-schema.json
+- aid: timescale:timescale-services-api
+  name: Timescale Services API
+  description: Manage services, read replicas, and their associated actions.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Services
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-services-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-metrics-series-request-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-service-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-fork-service-create-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-service-create-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-service-logs-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-metric-series-schema.json
+- aid: timescale:timescale-spaces-api
+  name: Timescale Spaces API
+  description: The Spaces API from Timescale — 31 operation(s) for spaces.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  baseURL: https://console.cloud.tigerdata.com/public/api/v1
+  tags:
+  - Spaces
+  - Space
+  tags_raw:
+  - Spaces
+  - Space
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-spaces-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-space-usage-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-database-share-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-database-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-payment-method-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-update-overage-settings-request-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-space-detail-schema.json
+- aid: timescale:timescale-vpcs-api
+  name: Timescale VP Cs API
+  description: Manage VPCs and their peering connections.
+  humanURL: https://www.tigerdata.com/docs/reference/tiger-cloud/tiger-mcp
+  baseURL: https://mcp.tigerdata.com/docs
+  tags:
+  - VPC
+  tags_raw:
+  - VPCs
+  properties:
+  - type: OpenAPI
+    url: openapi/timescale-vpcs-api-openapi.yml
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+  - type: Documentation
+    url: https://ghost.build/docs/
+  - type: JSONSchema
+    url: json-schema/timescale-peering-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-peering-create-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-vpc-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-vpccreate-schema.json
+  - type: JSONSchema
+    url: json-schema/timescale-vpcrename-schema.json
+- aid: timescale:timescale-postgres-wire
+  name: Timescale PostgreSQL Wire Interface
+  description: The database itself is accessed via the PostgreSQL wire protocol (port 5432), with TimescaleDB SQL functions for hypertable management,
+    compression, continuous aggregates and hyperfunctions. Not a REST API.
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.tigerdata.com/docs/api/latest
+  baseURL: postgres://<host>:5432/<db>
+  tags:
+  - PostgreSQL
+  - SQL
+  - Wire Protocol
+  properties:
+  - type: Documentation
+    url: https://www.tigerdata.com/docs/api/latest
+  - type: SourceCode
+    url: https://github.com/timescale/timescaledb
+  x-moved-from: timescaledb:postgres-wire (consolidated into timescale 2026-10-13, approved by Kin Lane)
+
 x-enrichment:
   date: '2026-08-05'
   status: enriched
   artifacts_added: 24
   pass: local-v1
+
 x-coverage:
   state: covered
   reason: null
-  detail: Both OpenAPI specs were harvested from the company's own public GitHub repos
-    (tiger-cli, ghost) after the docs host returned HTML shells, and the hosted MCP server
-    at mcp.tigerdata.com/docs answered tools/list anonymously.
+  detail: Both OpenAPI specs were harvested from the company's own public GitHub repos (tiger-cli, ghost) after the docs host returned HTML shells,
+    and the hosted MCP server at mcp.tigerdata.com/docs answered tools/list anonymously.
   evidence:
   - url: https://raw.githubusercontent.com/timescale/tiger-cli/main/openapi.yaml
     status: 200

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-space-usage-schema.json",
+  "title": "SpaceUsage",
+  "description": "Space-level usage and cost for the current billing cycle.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/SpaceUsage",
+  "type": "object",
+  "required": [
+    "storage_mib",
+    "storage_limit_mib",
+    "compute_minutes",
+    "free_compute_minutes",
+    "overages_enabled"
+  ],
+  "properties": {
+    "storage_mib": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Total storage used across all databases in the space, in MiB."
+    },
+    "storage_limit_mib": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Storage quota for the space, in MiB."
+    },
+    "compute_minutes": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Total compute minutes used across all databases in the space during the current billing cycle."
+    },
+    "free_compute_minutes": {
+      "type": "integer",
+      "format": "int64",
+      "description": "Compute minutes included per billing cycle at no additional charge,\nshared across all standard databases in the space. Usage beyond this\nis billed only when `overages_enabled` is true.\n"
+    },
+    "compute_limit_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64",
+      "description": "Compute-minute quota for the space. When exceeded, all standard\ndatabases in the space are automatically paused. `null` means no\nlimit — only possible when `overages_enabled` is true.\n"
+    },
+    "overages_enabled": {
+      "type": "boolean",
+      "description": "Whether the space has compute overages enabled."
+    },
+    "cost_to_date": {
+      "type": "number",
+      "format": "double",
+      "description": "Gross cost accrued so far this billing cycle."
+    },
+    "estimated_total_cost": {
+      "type": "number",
+      "format": "double",
+      "description": "Projected gross total for the current billing cycle based on usage to date."
+    },
+    "billing_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start of the current billing cycle."
+    },
+    "billing_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "End of the current billing cycle."
+    }
+  }
+}

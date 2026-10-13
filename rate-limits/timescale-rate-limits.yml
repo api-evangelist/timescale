@@ -1,0 +1,65 @@
+name: Timescale API Rate Limits
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: TimescaleDB / Tiger Data
+providerId: timescaledb
+created: '2026-05-08'
+# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
+# bulk sweep dated 2026-05-08, not harvested from the provider. See roadmap#35.
+method: generated
+modified: '2026-05-08'
+reconciled: false
+tags:
+- Database
+- Time-Series
+- PostgreSQL
+- Open Source
+- Cloud
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Tiger Cloud's REST API governs control-plane operations (provisioning, scaling).
+  Public docs do not enumerate explicit per-second rate ceilings; standard HTTP
+  status codes including 429 are documented in the OpenAPI. Database-level
+  resource limits (max connections, IOPS, bandwidth) are enforced per service
+  tier, not as REST rate limits.
+notes: >-
+  Numeric REST rate limits are not published; they are enforced upstream and not
+  reconciled here. Per-tier resource caps (IOPS, bandwidth) are listed in plans.
+sources:
+- https://www.tigerdata.com/docs/reference/tiger-cloud-rest
+- https://www.tigerdata.com/pricing
+responseCodes:
+  throttled: 429
+limits:
+- name: Tiger Cloud REST control-plane
+  scope: api_key
+  metric: requests
+  limit: see Tiger Cloud documentation
+  timeFrame: window
+  notes: Limits are enforced for control-plane operations; specific numbers not publicly documented.
+- name: Performance tier — max IOPS
+  scope: service
+  metric: iops
+  limit: 5000
+  notes: Performance plan; 250 Mbps bandwidth.
+- name: Scale tier — max IOPS
+  scope: service
+  metric: iops
+  limit: 40000
+  notes: Scale plan; 1,000 Mbps bandwidth.
+- name: Enterprise tier — max IOPS
+  scope: service
+  metric: iops
+  limit: 80000
+  notes: Enterprise plan; 4,000 Mbps bandwidth.
+policies:
+- name: Backoff Strategy
+  description: Honor Retry-After on 429 responses; use exponential backoff with jitter.
+- name: Connection Pooling
+  description: Use Tiger's pooled endpoint or external poolers (PgBouncer) to stay under PostgreSQL max-connections.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

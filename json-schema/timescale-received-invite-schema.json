@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-received-invite-schema.json",
+  "title": "ReceivedInvite",
+  "description": "A pending invite the authenticated user has received.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-invites-api-openapi.yml#/components/schemas/ReceivedInvite",
+  "type": "object",
+  "required": [
+    "space_id",
+    "space_name",
+    "inviter_email",
+    "inviter_name",
+    "role",
+    "created_at"
+  ],
+  "properties": {
+    "space_id": {
+      "type": "string",
+      "description": "ID of the space the user is invited to."
+    },
+    "space_name": {
+      "type": "string",
+      "description": "Name of the space the user is invited to."
+    },
+    "inviter_email": {
+      "type": "string",
+      "description": "Email address of the user who sent the invite."
+    },
+    "inviter_name": {
+      "type": "string",
+      "description": "Display name of the user who sent the invite."
+    },
+    "role": {
+      "$ref": "#/$defs/MemberRole"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invite was created."
+    }
+  },
+  "$defs": {
+    "MemberRole": {
+      "type": "string",
+      "description": "A member's role within a space. The `owner` role belongs to the user\nwho created the space; every space has exactly one owner, so `owner`\nis never accepted as an input when granting a role. On the `Space`\nschema, this is the caller's own role in the space, omitted for\nAPI-key authentication (API keys are space-scoped and carry no\nmember identity).\n",
+      "enum": [
+        "owner",
+        "admin",
+        "developer",
+        "viewer"
+      ]
+    }
+  }
+}

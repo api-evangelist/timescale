@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-payment-method-schema.json",
+  "title": "PaymentMethod",
+  "description": "A payment method on file for a space.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/PaymentMethod",
+  "type": "object",
+  "required": [
+    "id",
+    "primary",
+    "pending_deletion",
+    "brand",
+    "last4",
+    "exp_month",
+    "exp_year"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Payment method ID."
+    },
+    "primary": {
+      "type": "boolean",
+      "description": "True if this is the primary payment method for the space."
+    },
+    "pending_deletion": {
+      "type": "boolean",
+      "description": "True if deletion has been scheduled for this payment method. The deletion can be cancelled until processed."
+    },
+    "brand": {
+      "type": "string",
+      "description": "Card brand (e.g. `visa`, `mastercard`)."
+    },
+    "last4": {
+      "type": "string",
+      "description": "Last four digits of the card number."
+    },
+    "exp_month": {
+      "type": "integer",
+      "description": "Card expiration month (1-12)."
+    },
+    "exp_year": {
+      "type": "integer",
+      "description": "Card expiration year (four digits)."
+    }
+  }
+}

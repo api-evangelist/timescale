@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-service-schema.json",
+  "title": "Service",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-services-api-openapi.yml#/components/schemas/Service",
+  "type": "object",
+  "properties": {
+    "service_id": {
+      "type": "string",
+      "description": "The unique identifier for the service."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "The project this service belongs to."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the service."
+    },
+    "region_code": {
+      "type": "string",
+      "description": "The cloud region where the service is hosted."
+    },
+    "service_type": {
+      "$ref": "#/$defs/ServiceType",
+      "description": "The type of the service."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "initial_password": {
+      "type": "string",
+      "description": "The initial password for the service.",
+      "format": "password"
+    },
+    "status": {
+      "$ref": "#/$defs/DeployStatus",
+      "description": "Current status of the service"
+    },
+    "resources": {
+      "type": "array",
+      "description": "List of resources allocated to the service",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Resource identifier"
+          },
+          "spec": {
+            "type": "object",
+            "description": "Resource specification",
+            "properties": {
+              "cpu_millis": {
+                "type": "integer",
+                "description": "CPU allocation in millicores"
+              },
+              "memory_gbs": {
+                "type": "integer",
+                "description": "Memory allocation in gigabytes"
+              },
+              "volume_type": {
+                "type": "string",
+                "description": "Type of storage volume"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata for the service",
+      "properties": {
+        "environment": {
+          "type": "string",
+          "description": "Environment tag for the service"
+        }
+      }
+    },
+    "endpoint": {
+      "$ref": "#/$defs/Endpoint"
+    },
+    "vpcEndpoint": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "VPC endpoint configuration if available"
+    },
+    "forked_from": {
+      "$ref": "#/$defs/ForkSpec"
+    },
+    "ha_replicas": {
+      "$ref": "#/$defs/HAReplica"
+    },
+    "connection_pooler": {
+      "$ref": "#/$defs/ConnectionPooler"
+    },
+    "read_replica_sets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReadReplicaSet"
+      }
+    }
+  },
+  "$defs": {
+    "ConnectionPooler": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "$ref": "#/$defs/Endpoint"
+        }
+      }
+    },
+    "DeployStatus": {
+      "type": "string",
+      "enum": [
+        "QUEUED",
+        "DELETING",
+        "CONFIGURING",
+        "READY",
+        "DELETED",
+        "UNSTABLE",
+        "PAUSING",
+        "PAUSED",
+        "RESUMING",
+        "UPGRADING",
+        "OPTIMIZING"
+      ]
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        }
+      }
+    },
+    "ForkSpec": {
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "type": "string"
+        },
+        "service_id": {
+          "type": "string"
+        },
+        "is_standby": {
+          "type": "boolean"
+        }
+      }
+    },
+    "HAReplica": {
+      "type": "object",
+      "properties": {
+        "sync_replica_count": {
+          "type": "integer",
+          "description": "Number of synchronous high-availability replicas."
+        },
+        "replica_count": {
+          "type": "integer",
+          "description": "Number of high-availability replicas (all replicas are asynchronous by default)."
+        }
+      }
+    },
+    "ReadReplicaSet": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "creating",
+            "active",
+            "resizing",
+            "deleting",
+            "error"
+          ]
+        },
+        "nodes": {
+          "type": "integer",
+          "description": "Number of nodes in the replica set."
+        },
+        "cpu_millis": {
+          "type": "integer",
+          "description": "CPU allocation in milli-cores."
+        },
+        "memory_gbs": {
+          "type": "integer",
+          "description": "Memory allocation in gigabytes."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Additional metadata for the read replica set",
+          "properties": {
+            "environment": {
+              "type": "string",
+              "description": "Environment tag for the read replica set"
+            }
+          }
+        },
+        "endpoint": {
+          "$ref": "#/$defs/Endpoint"
+        },
+        "connection_pooler": {
+          "$ref": "#/$defs/ConnectionPooler"
+        }
+      }
+    },
+    "ServiceType": {
+      "type": "string",
+      "enum": [
+        "TIMESCALEDB",
+        "POSTGRES",
+        "VECTOR"
+      ]
+    }
+  }
+}

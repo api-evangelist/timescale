@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-service-create-schema.json",
+  "title": "ServiceCreate",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-services-api-openapi.yml#/components/schemas/ServiceCreate",
+  "type": "object",
+  "required": [
+    "name"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "A human-readable name for the service."
+    },
+    "addons": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "time-series",
+          "ai"
+        ]
+      },
+      "description": "List of addons to enable for the service. 'time-series' enables TimescaleDB, 'ai' enables AI/vector extensions."
+    },
+    "region_code": {
+      "type": "string",
+      "description": "The region where the service will be created. If not provided, we'll choose the best region for you."
+    },
+    "replica_count": {
+      "type": "integer",
+      "description": "Number of high-availability replicas to create (all replicas are asynchronous by default)."
+    },
+    "cpu_millis": {
+      "type": "string",
+      "description": "The initial CPU allocation in milli-cores, or 'shared' for a shared-resource service."
+    },
+    "memory_gbs": {
+      "type": "string",
+      "description": "The initial memory allocation in gigabytes, or 'shared' for a shared-resource service."
+    },
+    "environment_tag": {
+      "$ref": "#/$defs/EnvironmentTag",
+      "description": "The environment tag for the service, 'DEV' by default.",
+      "default": "DEV"
+    }
+  },
+  "$defs": {
+    "EnvironmentTag": {
+      "type": "string",
+      "enum": [
+        "DEV",
+        "PROD"
+      ],
+      "description": "The environment tag for the service."
+    }
+  }
+}

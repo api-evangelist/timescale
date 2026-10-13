@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-space-detail-schema.json",
+  "title": "SpaceDetail",
+  "description": "Detailed information about a single Ghost space.",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-spaces-api-openapi.yml#/components/schemas/SpaceDetail",
+  "type": "object",
+  "required": [
+    "id",
+    "name"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Space ID."
+    },
+    "name": {
+      "type": "string",
+      "description": "Space name."
+    },
+    "role": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/MemberRole"
+        }
+      ],
+      "description": "The caller's role in the space. Populated for user authentication; omitted for API key authentication."
+    },
+    "owner": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Member"
+        }
+      ],
+      "description": "The space owner. Populated for user authentication; omitted for API key authentication."
+    }
+  },
+  "$defs": {
+    "Member": {
+      "type": "object",
+      "description": "A member of a Ghost space.",
+      "required": [
+        "user_id",
+        "name",
+        "email",
+        "role"
+      ],
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "User ID of the member."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the member."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the member."
+        },
+        "role": {
+          "$ref": "#/$defs/MemberRole"
+        }
+      }
+    },
+    "MemberRole": {
+      "type": "string",
+      "description": "A member's role within a space. The `owner` role belongs to the user\nwho created the space; every space has exactly one owner, so `owner`\nis never accepted as an input when granting a role. On the `Space`\nschema, this is the caller's own role in the space, omitted for\nAPI-key authentication (API keys are space-scoped and carry no\nmember identity).\n",
+      "enum": [
+        "owner",
+        "admin",
+        "developer",
+        "viewer"
+      ]
+    }
+  }
+}

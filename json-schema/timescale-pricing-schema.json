@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/timescale/main/json-schema/timescale-pricing-schema.json",
+  "title": "Pricing",
+  "description": "Pricing data grouped by category.\n",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/timescale-pricing-api-openapi.yml#/components/schemas/Pricing",
+  "type": "object",
+  "required": [
+    "dedicated",
+    "standard"
+  ],
+  "properties": {
+    "dedicated": {
+      "$ref": "#/$defs/DedicatedPricing"
+    },
+    "standard": {
+      "$ref": "#/$defs/StandardPricing"
+    }
+  },
+  "$defs": {
+    "ComputePrice": {
+      "type": "object",
+      "description": "Compute price for one size.",
+      "required": [
+        "size",
+        "milli_cpu",
+        "memory_gib",
+        "price_per_hour",
+        "price_per_month"
+      ],
+      "properties": {
+        "size": {
+          "$ref": "#/$defs/DatabaseSize"
+        },
+        "milli_cpu": {
+          "type": "integer",
+          "description": "CPU allocation in millicores (1000 = 1 vCPU).\n"
+        },
+        "memory_gib": {
+          "type": "integer",
+          "description": "Memory allocation in GiB."
+        },
+        "price_per_hour": {
+          "type": "number",
+          "format": "double",
+          "description": "Price per hour while the database is running."
+        },
+        "price_per_month": {
+          "type": "number",
+          "format": "double",
+          "description": "Price per month while the database is running."
+        }
+      }
+    },
+    "DatabaseSize": {
+      "type": "string",
+      "description": "Compute size for dedicated databases. Each step up allocates proportionally more vCPU and RAM.",
+      "enum": [
+        "1x",
+        "2x",
+        "4x",
+        "8x"
+      ]
+    },
+    "DedicatedPricing": {
+      "type": "object",
+      "description": "Pricing for dedicated databases.",
+      "required": [
+        "compute",
+        "storage"
+      ],
+      "properties": {
+        "compute": {
+          "type": "array",
+          "description": "Per-size compute pricing, ordered smallest to largest.",
+          "items": {
+            "$ref": "#/$defs/ComputePrice"
+          }
+        },
+        "storage": {
+          "$ref": "#/$defs/StoragePrice"
+        }
+      }
+    },
+    "StandardComputePrice": {
+      "type": "object",
+      "description": "Pricing for standard (shared) compute used beyond the free monthly\nallowance.\n",
+      "required": [
+        "price_per_hour",
+        "included_compute_hours_per_month"
+      ],
+      "properties": {
+        "price_per_hour": {
+          "type": "number",
+          "format": "double",
+          "description": "Price per compute-hour used beyond the included monthly allowance,\nmetered in 15-minute increments.\n"
+        },
+        "included_compute_hours_per_month": {
+          "type": "integer",
+          "description": "Compute-hours included per month at no additional charge, shared\nacross all standard databases in the space. Only usage above this\namount is billed at `price_per_hour`.\n"
+        }
+      }
+    },
+    "StandardPricing": {
+      "type": "object",
+      "description": "Pricing for standard (non-dedicated) databases, which share a\nspace-wide compute allowance.\n",
+      "required": [
+        "compute"
+      ],
+      "properties": {
+        "compute": {
+          "$ref": "#/$defs/StandardComputePrice"
+        }
+      }
+    },
+    "StoragePrice": {
+      "type": "object",
+      "description": "Storage pricing.",
+      "required": [
+        "price_per_gib_hour",
+        "price_per_gib_month",
+        "included_gib_per_database"
+      ],
+      "properties": {
+        "price_per_gib_hour": {
+          "type": "number",
+          "format": "double",
+          "description": "Price per GiB per hour of provisioned storage above the included amount."
+        },
+        "price_per_gib_month": {
+          "type": "number",
+          "format": "double",
+          "description": "Price per GiB per month of provisioned storage above the included amount."
+        },
+        "included_gib_per_database": {
+          "type": "integer",
+          "description": "GiB of storage included per database at no additional charge. Only\nstorage above this amount is billed at `price_per_gib_hour`.\n"
+        }
+      }
+    }
+  }
+}
