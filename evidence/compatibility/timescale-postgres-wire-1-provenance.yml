@@ -1,0 +1,14 @@
+fetched: '2026-10-13'
+method: fetched
+source: https://www.tigerdata.com/docs/
+page: https://www.tigerdata.com/docs/
+file: timescale-postgres-wire-1.md
+bytes: 39617
+sha256: cb7363265a040036765a636664c7031ae68262c379c4fb82f4d48be27dd6dbe0
+anchor: postgresql
+shape: postgres-wire
+classification: declares-compatibility
+quote: TimescaleDB is a PostgreSQL extension, not a separate database or fork, so you keep the same clients, drivers,
+  and SQL you use with plain PostgreSQL. On top of that, it adds objects and commands for time-partitioned tables,
+  rollups, compression, retention, and other time-series and analytics work.
+note: text extracted from the provider's own page (tags stripped), saved for evidence

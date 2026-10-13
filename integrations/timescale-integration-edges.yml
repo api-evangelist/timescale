@@ -1,0 +1,20 @@
+edges:
+- partner_name: PostgreSQL
+  partner: postgresql
+  partner_match: shape-anchor
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  shape: postgres-wire
+  type: docs
+  degree: full
+  evidence: https://www.tigerdata.com/docs/
+  evidence_kind: own-docs
+  evidence_file: https://github.com/api-evangelist/timescale/blob/main/evidence/compatibility/timescale-postgres-wire-1.md
+  quote: TimescaleDB is a PostgreSQL extension, not a separate database or fork, so you keep the same clients, drivers,
+    and SQL you use with plain PostgreSQL. On top of that, it adds objects and commands for time-partitioned tables,
+    rollups, compres
+  detected_by: sweep-shape-compat.py
+  first_seen: '2026-10-13'
+generated: '2026-10-13'
+method: searched
