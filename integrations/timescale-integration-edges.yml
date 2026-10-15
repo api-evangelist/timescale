@@ -48,7 +48,27 @@ edges:
   - remote-domain
   detected_by: sweep-agent-tools.py
   first_seen: '2026-10-14'
+- partner_name: LlamaIndex
+  partner: llamaindex
+  partner_match: framework
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: system-coverage
+  evidence: https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-timescalevector
+  coverage_role:
+  - vector-store
+  framework_signals:
+    packages:
+    - llama-index-vector-stores-timescalevector
+    roles:
+    - vector-store
+    vendor_domain: tigerdata.com
+  matched_by: verified-domain-table
+  detected_by: sweep-rag-vector.py
+  first_seen: '2026-10-15'
 generated: '2026-10-13'
 method: searched
 checked:
+- https://github.com/run-llama/llama_index/tree/main/llama-index-integrations
 - https://registry.modelcontextprotocol.io/v0/servers
