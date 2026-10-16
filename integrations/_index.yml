@@ -30,7 +30,7 @@
     registered_name: io.github.timescale/pg-aiguide
     register_id: io.github.timescale/pg-aiguide
     detected_by: sweep-agent-tools.py
-    detected: '2026-10-14'
+    detected: '2026-10-15'
   status: not-a-workflow
   arazzo: null
 - slug: timescale-llamaindex
