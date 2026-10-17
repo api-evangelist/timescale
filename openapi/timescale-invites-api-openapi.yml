@@ -73,6 +73,62 @@ paths:
       - Invites
 components:
   schemas:
+    ErrorCode:
+      type: string
+      description: 'Machine-readable error code identifying a specific, client-actionable
+
+        error condition. Clients can match on this to react to specific errors
+
+        without parsing the human-readable message. Errors without a recognized
+
+        code omit this field.
+
+        '
+      enum:
+      - no_payment_method
+      - compute_limit_exceeded
+    ReceivedInvite:
+      type: object
+      description: A pending invite the authenticated user has received.
+      required:
+      - space_id
+      - space_name
+      - inviter_email
+      - inviter_name
+      - role
+      - created_at
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the user is invited to.
+        space_name:
+          type: string
+          description: Name of the space the user is invited to.
+        inviter_email:
+          type: string
+          description: Email address of the user who sent the invite.
+        inviter_name:
+          type: string
+          description: Display name of the user who sent the invite.
+        role:
+          $ref: '#/components/schemas/MemberRole'
+        created_at:
+          type: string
+          format: date-time
+          description: When the invite was created.
+    InviteActionResult:
+      type: object
+      description: Result of accepting or declining a received invite.
+      required:
+      - space_id
+      - space_name
+      properties:
+        space_id:
+          type: string
+          description: ID of the space the invite was for.
+        space_name:
+          type: string
+          description: Name of the space the invite was for.
     MemberRole:
       type: string
       description: 'A member''s role within a space. The `owner` role belongs to the user
@@ -104,62 +160,6 @@ components:
           description: Human-readable error message.
         code:
           $ref: '#/components/schemas/ErrorCode'
-    ReceivedInvite:
-      type: object
-      description: A pending invite the authenticated user has received.
-      required:
-      - space_id
-      - space_name
-      - inviter_email
-      - inviter_name
-      - role
-      - created_at
-      properties:
-        space_id:
-          type: string
-          description: ID of the space the user is invited to.
-        space_name:
-          type: string
-          description: Name of the space the user is invited to.
-        inviter_email:
-          type: string
-          description: Email address of the user who sent the invite.
-        inviter_name:
-          type: string
-          description: Display name of the user who sent the invite.
-        role:
-          $ref: '#/components/schemas/MemberRole'
-        created_at:
-          type: string
-          format: date-time
-          description: When the invite was created.
-    ErrorCode:
-      type: string
-      description: 'Machine-readable error code identifying a specific, client-actionable
-
-        error condition. Clients can match on this to react to specific errors
-
-        without parsing the human-readable message. Errors without a recognized
-
-        code omit this field.
-
-        '
-      enum:
-      - no_payment_method
-      - compute_limit_exceeded
-    InviteActionResult:
-      type: object
-      description: Result of accepting or declining a received invite.
-      required:
-      - space_id
-      - space_name
-      properties:
-        space_id:
-          type: string
-          description: ID of the space the invite was for.
-        space_name:
-          type: string
-          description: Name of the space the invite was for.
   responses:
     Error:
       description: Error response

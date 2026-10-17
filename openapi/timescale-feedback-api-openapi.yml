@@ -35,17 +35,6 @@ paths:
       - Feedback
 components:
   schemas:
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
     ErrorCode:
       type: string
       description: 'Machine-readable error code identifying a specific, client-actionable
@@ -90,6 +79,17 @@ components:
         os:
           type: string
           description: Operating system of the client submitting the feedback.
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
   responses:
     Error:
       description: Error response

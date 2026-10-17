@@ -38,6 +38,13 @@ paths:
         4XX:
           $ref: '#/components/responses/ClientError'
 components:
+  responses:
+    ClientError:
+      description: Client error response (4xx status codes).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Project:
       type: object
@@ -69,10 +76,3 @@ components:
             extra detail.
 
             '
-  responses:
-    ClientError:
-      description: Client error response (4xx status codes).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'

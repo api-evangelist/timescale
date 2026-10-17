@@ -67,27 +67,6 @@ paths:
       description: Production
 components:
   schemas:
-    IdentifyRequest:
-      type: object
-      description: User properties to associate with the authenticated user in analytics.
-      required:
-      - properties
-      properties:
-        properties:
-          type: object
-          additionalProperties: true
-          description: Free-form user properties.
-    Error:
-      type: object
-      description: Standard error response.
-      required:
-      - message
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
-        code:
-          $ref: '#/components/schemas/ErrorCode'
     ErrorCode:
       type: string
       description: 'Machine-readable error code identifying a specific, client-actionable
@@ -124,6 +103,27 @@ components:
           type: object
           additionalProperties: true
           description: Free-form event properties.
+    IdentifyRequest:
+      type: object
+      description: User properties to associate with the authenticated user in analytics.
+      required:
+      - properties
+      properties:
+        properties:
+          type: object
+          additionalProperties: true
+          description: Free-form user properties.
+    Error:
+      type: object
+      description: Standard error response.
+      required:
+      - message
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+        code:
+          $ref: '#/components/schemas/ErrorCode'
     Error_2:
       type: object
       properties:
